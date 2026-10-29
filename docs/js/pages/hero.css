@@ -1,0 +1,518 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages/hero.css   (Masla 6: hero ka naya art-direction)
+   --------------------------------------------------------------------------
+   Is file mein Masla 1 (hero screen mein fit) aur Masla 2 (right side ka
+   overlap-free layout) ke rules bhi shamil hain.
+
+   Left : status pill, bara H1 (ek lafz hare marker .hl mein), lead, 2 CTA, note, tags
+   Right: grid-lanes (overlap structurally mumkin nahi):
+          lane A  status-cycle pill
+          lane B  report-card (+ ticket card ke kinare par, khali aasman par)
+          lane C  hero__float (card ke NEECHE alag row)
+   Peeche: bg-fx.css ki beams + neeche soft fade ticker mein.
+   Yaadgar lamha: pin gir kar ripple banata hai, phir card ubharta hai.
+   ========================================================================== */
+.hero {
+  --section-bg: var(--bg);
+  --hero-bar-h: var(--bar-h, 2.25rem);     /* emergency bar ki height */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(2rem, 1.2rem + 4vw, 5.5rem) clamp(4.5rem, 3rem + 6vw, 8rem);
+  background: var(--bg);
+  color: var(--gray-200);
+}
+
+/* Neeche halka fade: hero ticker (--bg-deep) mein ghul jata hai */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 0;
+  height: clamp(3rem, 2rem + 5vw, 6rem);
+  background: linear-gradient(to bottom, transparent, var(--bg-deep));
+  pointer-events: none;
+}
+
+/* ---------- Masla 1: laptop par poori pehli screen mein fit ---------- */
+@media (min-width: 62.5rem) {
+  .hero {
+    min-height: calc(100vh - var(--hero-bar-h) - var(--header-h));
+    min-height: calc(100svh - var(--hero-bar-h) - var(--header-h));
+    display: grid;
+    align-content: center;
+  }
+}
+
+@media (min-width: 62.5rem) and (max-height: 48rem) {
+  .hero {
+    padding-block: 1.5rem 3.5rem;
+  }
+
+  .hero__status { margin-block-end: var(--s-3); }
+  .hero__lead   { margin-block-start: var(--s-3); font-size: var(--fs-base); line-height: 1.5; }
+  .hero__actions { margin-block-start: var(--s-4); }
+  .hero__note   { margin-block-start: var(--s-3); font-size: var(--fs-xs); }
+  :root[lang="ur"] .hero__lead { line-height: 1.8; }
+}
+
+.hero__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--s-8);
+  align-items: center;
+}
+
+@media (min-width: 62.5rem) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--s-7);
+  }
+}
+
+@media (min-width: 62.5rem) and (max-height: 48rem) {
+  .hero__grid { gap: var(--s-6); }
+}
+
+.hero__copy {
+  min-width: 0;
+  max-width: 46rem;
+}
+
+.hero__status {
+  margin-block-end: var(--s-5);
+}
+
+/* H1: width AUR height dono se naapa jata hai (1366x640 par bhi 2 lines fit) */
+.hero__title {
+  color: var(--white);
+  font-size: min(var(--fs-display), max(2.25rem, 11vh));
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  text-shadow: 0 0 60px rgb(57 255 20 / 0.18);
+}
+
+/* Urdu: Nastaliq ko zyada line-height chahiye, isliye height-cap thora kam */
+:root[lang="ur"] .hero__title {
+  font-size: min(var(--fs-display), max(2rem, 8.2vh));
+}
+
+/* Highlighted lafz: hare marker-block ke upar gehra text (Creatix 'Our [Services]') */
+.hero__title .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.2em;
+  color: var(--green-ink);
+  white-space: nowrap;
+  text-shadow: none;
+}
+
+.hero__title .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.1em 0.04em;
+  z-index: -1;
+  border-radius: 0.16em;
+  background: var(--green);
+  box-shadow: 0 0 40px -6px var(--green-a55);
+  rotate: calc(-1.4deg * var(--flip));
+}
+
+:root[lang="ur"] .hero__title .hl::before {
+  inset-block: 0.28em 0.12em;
+}
+
+/* Title ke andar chhota pin (full stop ki jagah) — brand ka hara */
+.hero__title .pin {
+  --pin-size: 0.5em;
+  --pin-color: var(--green);
+  --pin-glow: var(--green-a55);
+  margin-inline-start: 0.12em;
+  vertical-align: baseline;
+}
+
+.hero__lead {
+  max-width: 34em;
+  margin-block-start: var(--s-5);
+  color: var(--gray-200);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+/* CTA: pill + gol circle ke andar teer (AirLume jaisa) */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-block-start: var(--s-6);
+}
+
+.hero__actions .btn--light {
+  padding-inline-end: 0.5rem;
+  border-radius: var(--r-pill);
+}
+
+.hero__actions .btn--light .icon {
+  box-sizing: content-box;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: var(--gray-950);
+  color: var(--green);
+}
+
+.hero__actions .btn--ghost-light {
+  border-radius: var(--r-pill);
+}
+
+.hero__note {
+  margin-block-start: var(--s-5);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* Chhote glass pill labels (sirf sach: yeh platform ke wade/design hain, abhi bun raha hai) */
+.hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block-start: var(--s-5);
+}
+
+.hero__tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.05);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+}
+
+.hero__tags li::before {
+  content: "";
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ---------- Masla 2: right side = grid lanes (overlap mumkin hi nahi) ---------- */
+.hero__visual {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "status"
+    "card"
+    "float";
+  row-gap: var(--s-4);
+  justify-items: stretch;
+  width: 100%;
+  max-width: 28rem;
+  justify-self: center;
+  padding: 0;
+}
+
+/* AirLume jaisi dashed orbit: card ke peeche do ring (sirf sajawat) */
+.hero__visual::before,
+.hero__visual::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  border: 1px dashed var(--green-a20);
+  border-radius: 50%;
+  pointer-events: none;
+  translate: calc(-50% * var(--flip)) -50%;
+}
+
+.hero__visual::before { inline-size: 118%; aspect-ratio: 1; }
+.hero__visual::after  { inline-size: 150%; aspect-ratio: 1; border-color: rgb(57 255 20 / 0.08); }
+
+/* Lane A: status pill, card ke UPAR alag row */
+.status-cycle {
+  grid-area: status;
+  position: static;
+  justify-self: start;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(13 13 13 / 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+}
+
+.status-cycle .chip {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Motion allowed ho to chips ek hi jagah par ghoom kar badalte hain */
+@media (prefers-reduced-motion: no-preference) {
+  .status-cycle {
+    display: inline-grid;
+    flex-wrap: nowrap;
+    justify-items: center;
+    max-width: none;
+  }
+
+  .status-cycle .chip {
+    grid-area: 1 / 1;
+    opacity: 0;
+    animation: status-step 9s ease-in-out infinite both;
+  }
+
+  .status-cycle .chip:nth-child(2) { animation-delay: 3s; }
+  .status-cycle .chip:nth-child(3) { animation-delay: 6s; }
+}
+
+@keyframes status-step {
+  0%        { opacity: 0; translate: 0 8px;  scale: 0.94; }
+  5%, 28%   { opacity: 1; translate: 0 0;    scale: 1; }
+  33%, 100% { opacity: 0; translate: 0 -8px; scale: 0.94; }
+}
+
+/* Lane B: card */
+.hero__visual .report-card {
+  grid-area: card;
+  width: 100%;
+  max-width: none;
+  rotate: calc(-1.6deg * var(--flip));
+}
+
+/* Ticket card ke right kinare par, upar ke KHALI aasman wale hisse par.
+   Card ke wahi grid-cell mein baithta hai (percent margin = card ki chaurai ka hissa). */
+.hero__ticket {
+  grid-area: card;
+  position: relative;
+  z-index: 4;
+  align-self: start;
+  justify-self: end;
+  margin-block-start: 12%;
+  margin-inline-end: -6%;
+  --notch: 0.45rem;
+  gap: 0.35rem;
+  padding: 0.7rem 1rem 0.6rem;
+  rotate: calc(5deg * var(--flip));
+  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.55));
+}
+
+.hero__ticket .ticket__label {
+  padding-block: 0.15rem 0.45rem;
+  font-size: var(--fs-xs);
+}
+
+.hero__ticket .ticket__code {
+  font-size: 1.05rem;
+}
+
+/* Pin report-card__media ke ANDAR rakha jata hai.
+   Position percentage mein hai, isliye har screen size par sahi rehti hai. */
+.hero__pin {
+  position: absolute;
+  inset-block-start: 69%;
+  inset-inline-start: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: end center;
+  width: 3rem;
+  height: 3.4rem;
+  translate: calc(-50% * var(--flip)) calc(-100% + 0.55rem);
+}
+
+.hero__pin .pin {
+  --pin-size: 2.4rem;
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.6)) drop-shadow(0 0 10px var(--open-glow));
+}
+
+.hero__pin::after {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.35rem;
+  width: 1.4rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.55);
+  z-index: -1;
+}
+
+/* Lane C: card ke NEECHE alag row, kuch nahi dhakta */
+.hero__float {
+  grid-area: float;
+  position: relative;
+  z-index: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  max-width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--green-a35);
+  border-radius: var(--r-pill);
+  background: rgb(13 13 13 / 0.7);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--ink);
+  box-shadow: var(--shadow-lg), 0 0 30px -10px var(--green-a55);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  rotate: calc(1.2deg * var(--flip));
+}
+
+/* Short laptop screen: right side bhi chhota taake card ka title/location cut na ho */
+@media (min-width: 62.5rem) and (max-height: 48rem) {
+  .hero__visual { max-width: 20rem; row-gap: var(--s-3); }
+  .hero__visual .report-card__media { aspect-ratio: 5 / 2.6; }
+  .hero__tags { display: none; }
+  .hero__visual .report-card__body { gap: var(--s-2); padding-block-start: var(--s-3); }
+  .hero__ticket { margin-block-start: 8%; }
+}
+
+@media (max-width: 40rem) {
+  .hero__ticket { margin-inline-end: -2%; }
+  .hero__float  { justify-self: stretch; border-radius: var(--r-md); }
+}
+
+@media (max-width: 22.5rem) {
+  .hero__ticket { display: none; }
+}
+
+/* ---- the one orchestrated moment ---- */
+@keyframes rise {
+  from { opacity: 0; translate: 0 22px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* `translate` alag property hai, isliye pin ki rotate(-45deg) khatam nahi hoti */
+@keyframes pin-drop {
+  0%   { opacity: 0; translate: 0 -5rem; }
+  55%  { opacity: 1; translate: 0 0; }
+  72%  { translate: 0 -0.7rem; }
+  100% { translate: 0 0; }
+}
+
+@keyframes ripple {
+  from { opacity: 0.7; transform: scale(0.3); }
+  to   { opacity: 0;   transform: scale(3.2); }
+}
+
+@keyframes card-in {
+  from { opacity: 0; translate: 0 30px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes float-in {
+  from { opacity: 0; translate: 0 16px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -7px; }
+}
+
+.hero__status,
+.hero__title,
+.hero__lead,
+.hero__actions,
+.hero__note {
+  animation: rise 0.8s var(--ease-out) both;
+}
+
+.hero__title   { animation-delay: 0.08s; }
+.hero__lead    { animation-delay: 0.2s; }
+.hero__actions { animation-delay: 0.3s; }
+.hero__note    { animation-delay: 0.4s; }
+
+.hero__visual .report-card { animation: card-in 0.9s var(--ease-out) 0.35s both; }
+.hero__pin .pin            { animation: pin-drop 0.9s cubic-bezier(0.5, 0, 0.75, 0.6) 0.9s both; }
+.hero__pin::after          { animation: rise 0.4s ease 1.2s both; }
+.hero__float               { animation: float-in 0.8s var(--ease-out) 1.6s both; }
+.hero__ticket              { animation: float-in 0.8s var(--ease-out) 1.2s both, bob 6s ease-in-out 2.2s infinite; }
+.status-cycle              { animation: float-in 0.8s var(--ease-out) 1.4s both; }
+
+/* Ripple: pin girne ke baad ek ring phelti hai */
+.hero__pin::before {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.7rem;
+  width: 2.4rem;
+  height: 0.9rem;
+  border: 2px solid var(--green);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 12px var(--green-a55);
+  animation: ripple 1.4s ease-out 1.5s 2 both;
+}
+
+/* Gutter wali SVG tasveer mein zinda cheezein (SVG ke class names HTML mein hain) */
+.street__lit {
+  animation: window-flicker 5s steps(1, end) infinite;
+}
+
+.street__lit--b { animation-duration: 7s; animation-delay: -2s; }
+.street__lit--c { animation-duration: 9s; animation-delay: -5s; }
+
+@keyframes window-flicker {
+  0%, 100% { opacity: 1; }
+  38%      { opacity: 0.25; }
+  42%      { opacity: 1; }
+  70%      { opacity: 0.55; }
+  74%      { opacity: 1; }
+}
+
+.street__lane {
+  animation: lane-run 2.2s linear infinite;
+}
+
+@keyframes lane-run {
+  to { stroke-dashoffset: -60; }
+}
+
+.street__halo,
+.street__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.street__halo {
+  animation: halo-pulse 2.6s ease-in-out infinite;
+}
+
+.street__ring {
+  animation: ring-ping 2.6s ease-out infinite;
+}
+
+@keyframes halo-pulse {
+  0%, 100% { opacity: 0.55; scale: 0.92; }
+  50%      { opacity: 1;    scale: 1.08; }
+}
+
+@keyframes ring-ping {
+  0%   { opacity: 1; scale: 1; }
+  100% { opacity: 0; scale: 1.7; }
+}

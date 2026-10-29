@@ -1,0 +1,16 @@
+/* TEAM */
+Developer & Designer: Aliyan Saleem
+Portfolio: https://portfolio-aliyan-saleem.vercel.app
+GitHub: https://github.com/BuildsByAliyan
+
+/* SITE */
+Name: Masla-e-Karachi (landing website)
+Live platform: https://maslaekarachi.pk
+Last update: 2026/10/28
+Language: Urdu (RTL) and English
+Standards: HTML5, CSS3, vanilla JavaScript
+Hosting: GitHub Pages (/docs folder)
+
+/* FONTS */
+Inter, Space Grotesk, DM Mono, Noto Naskh Arabic, Noto Nastaliq Urdu
+License: SIL Open Font License 1.1 (texts in assets/fonts/licenses/)

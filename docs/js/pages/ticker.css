@@ -1,0 +1,150 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages/ticker.css   (Masla 7: tilted tape)
+   --------------------------------------------------------------------------
+   Do patiyan, -1.5deg jhuki hui, ULTI directions mein chalti hain:
+     1) hari bari tape : Report + Track + Hold accountable
+     2) gehri patti    : departments ke naam
+   Har group andar se 2 baar repeat hai, aur track mein 2 barabar group:
+   track ko aadha (-50%) khiskana seamless loop banata hai.
+   Urdu (RTL) mein dono patiyan apni direction ulti kar leti hain.
+   Sajawati hai: markup aria-hidden.
+   ========================================================================== */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  direction: ltr;                        /* layout ltr; Urdu mein direction animation se ulti hoti hai */
+  padding-block: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+  background: var(--bg-deep);
+}
+
+/* Patti ke siray screen se bahar taake tilt par khali kone na dikhen */
+.ticker__row {
+  position: relative;
+  width: calc(100% + 12vw);
+  margin-inline: -6vw;
+  overflow: hidden;
+  rotate: -1.5deg;
+}
+
+.ticker__row--tape {
+  z-index: 2;
+  background: var(--green);
+  color: var(--green-ink);
+  box-shadow: 0 18px 40px -18px var(--green-a55);
+}
+
+.ticker__row--depts {
+  z-index: 1;
+  margin-block-start: 0.35rem;
+  border-block: 1px solid var(--green-a20);
+  background: var(--gray-850);
+  color: var(--gray-200);
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+}
+
+.ticker__group {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  padding-inline-end: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  white-space: nowrap;
+}
+
+/* Bari tape: bold, bara text */
+.ticker__row--tape .ticker__item {
+  padding-block: clamp(0.6rem, 0.3rem + 1.2vw, 1.1rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.2rem + 3.4vw, 4rem);
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+/* Alfaaz ke beech 4-kone wala sitara */
+.ticker__row--tape .ticker__item::after {
+  content: "";
+  inline-size: 0.5em;
+  block-size: 0.5em;
+  flex: none;
+  background: var(--green-ink);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
+/* Departments ki patti: chhota, spaced, uppercase */
+.ticker__row--depts .ticker__item {
+  padding-block: 0.8rem;
+  font-family: var(--font-en-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ticker__row--depts .ticker__item::after {
+  content: "";
+  inline-size: 0.45rem;
+  block-size: 0.45rem;
+  flex: none;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  rotate: 45deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ticker__track {
+    animation: ticker-run 40s linear infinite;
+  }
+
+  .ticker__row--tape .ticker__track  { animation-duration: 46s; }
+  .ticker__row--depts .ticker__track { animation-duration: 34s; animation-direction: reverse; }
+
+  /* Urdu (RTL): dono ulti */
+  :root[dir="rtl"] .ticker__row--tape .ticker__track  { animation-direction: reverse; }
+  :root[dir="rtl"] .ticker__row--depts .ticker__track { animation-direction: normal; }
+
+  .ticker:hover .ticker__track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes ticker-run {
+  to { translate: -50% 0; }
+}
+
+/* Motion band ho to patiyan ruk jayen: sirf ek group, wrap ho kar, seedhi */
+@media (prefers-reduced-motion: reduce) {
+  .ticker__row {
+    width: 100%;
+    margin-inline: 0;
+    rotate: none;
+  }
+
+  .ticker__track {
+    width: auto;
+    animation: none !important;
+  }
+
+  .ticker__group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ticker__group + .ticker__group {
+    display: none;
+  }
+
+  .ticker__row--tape .ticker__item {
+    font-size: clamp(1.5rem, 1.1rem + 2vw, 2.5rem);
+  }
+}

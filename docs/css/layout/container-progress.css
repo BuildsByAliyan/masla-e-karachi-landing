@@ -1,0 +1,46 @@
+/* ---------- 1. CONTAINER ---------- */
+.container {
+  width: min(100% - 2 * (var(--gutter) + var(--safe-x)), var(--container));
+  margin-inline: auto;
+}
+
+.container--narrow {
+  width: min(100% - 2 * (var(--gutter) + var(--safe-x)), var(--container-narrow));
+  margin-inline: auto;
+}
+
+/* ---------- 2. SCROLL PROGRESS (hara patla patta, sab se upar) ----------
+   Sirf CSS se: browser jahan scroll-driven animation janta hai wahin dikhta hai,
+   baqi jagah chhupa rehta hai. JS ki zaroorat nahi. */
+.scroll-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: var(--z-progress);
+      height: 3px;
+      pointer-events: none;
+    }
+
+    .scroll-progress__bar {
+      display: block;
+      height: 100%;
+      background: linear-gradient(var(--to-end), var(--green-deep), var(--green), var(--green-bright));
+      box-shadow: 0 0 12px var(--green), 0 0 2px var(--green-bright);
+      transform-origin: var(--origin-start) 50%;
+      transform: scaleX(0);
+      animation: progress-grow linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    @keyframes progress-grow {
+      to { transform: scaleX(1); }
+    }
+  }
+}

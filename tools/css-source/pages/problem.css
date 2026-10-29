@@ -1,0 +1,222 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages/problem.css   (Masla 8: Problem section)
+   --------------------------------------------------------------------------
+   Bento ki jagah: saaf rounded dark panel, heading mein ek lafz hare marker
+   (.hl) mein, neeche 6 numbered glass rows (01-06). Desktop par 2 column.
+   #problem id aur sab purani i18n keys wahi hain.
+   Is file mein section divider (#solution ke ooper rounded kone) bhi hai.
+   ========================================================================== */
+
+/* ---- .hl: heading ke ek lafz ke peeche hara marker-block (h2 ke liye) ---- */
+.problem h2 .hl,
+.solution__intro h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.problem h2 .hl::before,
+.solution__intro h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+:root[lang="ur"] .problem h2 .hl::before,
+:root[lang="ur"] .solution__intro h2 .hl::before {
+  inset-block: 0.22em 0.1em;
+}
+
+/* ---- Section: neeche solution ke rounded kone ke liye jagah ---- */
+.problem {
+  padding-block-end: calc(var(--section-y) + 2.5rem);
+}
+
+/* ---- Panel ---- */
+.problem__panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(1.25rem, 0.6rem + 3vw, 3.5rem);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(70% 60% at 100% 0%, var(--green-a12), transparent 70%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent 40%),
+    var(--bg-deep);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Radar ke gol ring: panel ke kone mein, sirf sajawat */
+.problem__panel::before,
+.problem__panel::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -7rem;
+  inset-inline-end: -7rem;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.problem__panel::before {
+  background:
+    radial-gradient(circle, var(--green) 0 3px, transparent 4px),
+    repeating-radial-gradient(circle, var(--green-a20) 0 1.5px, transparent 1.5px 32px);
+  opacity: 0.7;
+}
+
+.problem__panel::after {
+  background: conic-gradient(from 0deg, transparent 0 78%, rgb(57 255 20 / 0.26) 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .problem__panel::after {
+    animation: radar-sweep 6s linear infinite;
+  }
+}
+
+@keyframes radar-sweep {
+  to { rotate: 360deg; }
+}
+
+.problem__head {
+  max-width: 44rem;
+  margin-block-end: clamp(1.75rem, 1rem + 3vw, 3rem);
+}
+
+.problem__head > * + * {
+  margin-block-start: var(--s-4);
+}
+
+.problem__head h2::before {
+  content: "";
+  display: block;
+  width: 2.75rem;
+  height: 4px;
+  margin-block-end: var(--s-4);
+  border-radius: 4px;
+  background: var(--green);
+}
+
+/* ---- Rows ---- */
+.problem-list {
+  display: grid;
+  gap: var(--s-3);
+  grid-template-columns: minmax(0, 1fr);
+  counter-reset: none;
+}
+
+@media (min-width: 62.5rem) {
+  .problem-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+}
+
+.problem-row {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--s-3) var(--s-4);
+  padding: var(--s-4) var(--s-5) var(--s-4) var(--s-4);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background: rgb(255 255 255 / 0.035);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease,
+    background-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+:root[dir="rtl"] .problem-row {
+  padding: var(--s-4) var(--s-4) var(--s-4) var(--s-5);
+}
+
+.problem-row__num {
+  align-self: center;
+  min-width: 1.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--green);
+}
+
+.problem-row .icon-badge {
+  align-self: center;
+}
+
+.problem-row__body {
+  min-width: 0;
+  padding-block: 0.15rem;
+}
+
+.problem-row h3 {
+  font-size: var(--fs-md);
+}
+
+.problem-row p {
+  margin-block-start: var(--s-1);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  max-width: 32em;
+}
+
+/* Hassas category: dashed kinara + halka hatch */
+.problem-row--sensitive {
+  border-style: dashed;
+  border-color: var(--line-strong);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.04) 11px 12px),
+    rgb(255 255 255 / 0.02);
+}
+
+@media (hover: hover) {
+  .problem-row:hover {
+    transform: translateY(-3px);
+    border-color: var(--green-a55);
+    background-color: rgb(255 255 255 / 0.06);
+    box-shadow: var(--shadow-md), 0 0 36px -14px var(--green-a35);
+  }
+
+  .problem-row:hover .icon-badge {
+    transform: rotate(-6deg) scale(1.06);
+    box-shadow: inset 0 0 0 1px var(--green-a55), 0 0 18px -2px var(--green-a35);
+  }
+}
+
+/* Chhoti screen: number icon ke upar nahi, sirf icon + text */
+@media (max-width: 30rem) {
+  .problem-row,
+  :root[dir="rtl"] .problem-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: var(--s-4);
+    gap: var(--s-3);
+  }
+  .problem-row__num { display: none; }
+  .problem-row .icon-badge { align-self: start; }
+}
+
+/* ---- Divider: #solution ke upar rounded kone problem section mein ghulte hain ---- */
+#solution {
+  position: relative;
+  z-index: 1;
+  margin-block-start: -2.5rem;
+  border-start-start-radius: 2.5rem;
+  border-start-end-radius: 2.5rem;
+  box-shadow: 0 -24px 50px -30px rgb(0 0 0 / 0.8);
+}

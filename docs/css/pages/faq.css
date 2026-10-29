@@ -1,0 +1,198 @@
+/* ==========================================================================
+   E. FAQ PAGE  (Masla 14)
+   Left : topic filter chips + glass accordion groups
+   Right: sticky contact card (email logic main.js ke data-contact-link se)
+   ========================================================================== */
+.faq-layout {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62.5rem) {
+  .faq-layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: var(--s-8);
+    align-items: start;
+  }
+}
+
+.faq-main {
+  min-width: 0;
+}
+
+/* Topic chips: sirf JS chale to dikhte hain (bina JS ke sab sawal khule rehte hain) */
+.faq-filter {
+  display: none;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block-end: var(--s-7);
+}
+
+.js .faq-filter {
+  display: flex;
+}
+
+.faq-filter__chip {
+  min-height: var(--tap);
+  padding: 0.4rem 1.1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+@media (hover: hover) {
+  .faq-filter__chip:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+}
+
+.faq-filter__chip[aria-pressed="true"] {
+  border-color: var(--green);
+  background: var(--green);
+  color: var(--green-ink);
+}
+
+.faq-group[hidden] {
+  display: none;
+}
+
+.faq-group + .faq-group {
+  margin-block-start: var(--s-8);
+}
+
+.faq-group__title {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-end: var(--s-5);
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Heading se pehle chhota hara pin-nishan */
+.faq-group__title::before {
+  content: "";
+  flex: none;
+  inline-size: 0.7rem;
+  block-size: 0.7rem;
+  border-radius: 50% 50% 50% 0;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-a55);
+  rotate: -45deg;
+}
+
+/* ---------- Contact card ---------- */
+.contact-card {
+  display: grid;
+  gap: var(--s-4);
+  padding: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  border: 1px solid var(--green-a35);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(80% 60% at 100% 0%, var(--green-a12), transparent 70%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--gray-200);
+  box-shadow: var(--shadow-md), 0 0 50px -16px var(--green-a35);
+  scroll-margin-block-start: calc(var(--header-h) + var(--s-5));
+}
+
+@media (min-width: 62.5rem) {
+  .contact-card {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-5));
+  }
+}
+
+.contact-card h2 {
+  color: var(--white);
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.contact-card__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-4);
+  align-items: start;
+  padding-block-start: var(--s-4);
+  border-block-start: 1px dashed var(--line);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.contact-card__row > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.contact-card__row strong {
+  color: var(--white);
+}
+
+.contact-card__row span:not(.icon-badge) {
+  color: var(--muted);
+}
+
+.contact-card a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);               /* tap target 44px+ (Masla 17) */
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+
+.contact-card a:hover {
+  color: var(--green-bright);
+}
+
+/* Email abhi nahi lagi: link dhundla (main.js aria-disabled lagata hai) */
+.contact-card a[aria-disabled="true"] {
+  color: var(--muted);
+  cursor: default;
+  text-decoration: none;
+}
+
+/* Emergency patti: laal-halka, hamesha dikhti rahe */
+.contact-card__emergency {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--open-line);
+  border-inline-start: 5px solid var(--open);
+  border-radius: var(--r-md);
+  background: linear-gradient(var(--to-end), var(--open-soft), transparent 80%), var(--bg-deep);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.contact-card__emergency .icon {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-block-start: 0.15rem;
+  color: #ff8a93;
+}
+
+.contact-card__emergency > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.contact-card__emergency strong {
+  color: #ff8a93;
+}

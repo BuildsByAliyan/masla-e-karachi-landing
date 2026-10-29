@@ -1,0 +1,72 @@
+/* ==========================================================================
+   E. FAQ PAGE
+   ========================================================================== */
+.faq-layout {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62.5rem) {
+  .faq-layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: var(--s-8);
+    align-items: start;
+  }
+}
+
+.faq-group + .faq-group {
+  margin-block-start: var(--s-8);
+}
+
+.faq-group__title {
+  margin-block-end: var(--s-4);
+  font-size: var(--fs-xl);
+}
+
+.contact-card {
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-6);
+  border: 1px solid var(--green-a35);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(80% 60% at 100% 0%, var(--green-a12), transparent 70%),
+    var(--gray-950);
+  color: var(--gray-200);
+  box-shadow: var(--shadow-md), 0 0 50px -16px var(--green-a35);
+}
+
+@media (min-width: 62.5rem) {
+  .contact-card {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-5));
+  }
+}
+
+.contact-card h2 {
+  color: var(--white);
+  font-size: var(--fs-lg);
+}
+
+.contact-card__row {
+  display: grid;
+  gap: 0.2rem;
+  padding-block-start: var(--s-4);
+  border-block-start: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.contact-card__row strong {
+  color: var(--white);
+}
+
+.contact-card a {
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+
+.contact-card a:hover {
+  color: var(--green-bright);
+}

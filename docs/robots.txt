@@ -1,0 +1,12 @@
+# ==========================================================================
+# Masla-e-Karachi - robots.txt
+# Search engines (Google, Bing) ko batata hai ke kya crawl karna hai.
+# ==========================================================================
+
+User-agent: *
+Allow: /
+# 404 page search results mein nahi aani chahiye
+Disallow: /404.html
+
+
+Sitemap: https://buildsbyaliyan.github.io/masla-e-karachi-landing/sitemap.xml

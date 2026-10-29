@@ -1,0 +1,118 @@
+/* ---------- 7. ACCORDION (FAQ) ----------
+   <div class="accordion">
+     <div class="accordion__item">
+       <h3><button class="accordion__button" aria-expanded="false" aria-controls="a1" id="q1">Sawal</button></h3>
+       <div class="accordion__panel" id="a1" role="region" aria-labelledby="q1">
+         <div class="accordion__panel-inner"><div class="accordion__content">Jawab</div></div>
+       </div>
+     </div>
+   </div>
+   faq.js kholne par item par "is-open" lagata hai. Glass rows, + icon khulne par - ban jata hai. */
+.accordion {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.accordion__item {
+  position: relative;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01)),
+    var(--bg-deep);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .accordion__item:hover {
+    border-color: var(--line-strong);
+  }
+}
+
+.accordion__item.is-open {
+  border-color: var(--green-a35);
+  box-shadow: var(--shadow-md), 0 0 36px -16px var(--green-a35);
+}
+
+.accordion__item > h3,
+.accordion__item > h4 {
+  font-size: inherit;
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+.accordion__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--s-4) var(--s-5);
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+  text-align: start;
+}
+
+/* Plus icon: doosri patti khulne par ghat kar minus ban jati hai */
+.accordion__button::after {
+  content: "";
+  flex: none;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--green), var(--green)) center / 0.9rem 2px no-repeat,
+    linear-gradient(var(--green), var(--green)) center / 2px 0.9rem no-repeat;
+  transition:
+    background-size var(--dur) var(--ease-out),
+    background-color var(--dur) ease,
+    border-color var(--dur) ease,
+    transform var(--dur) var(--ease-out);
+}
+
+.accordion__item.is-open .accordion__button::after {
+  border-color: var(--green-a35);
+  background-color: var(--green-a12);
+  background-size: 0.9rem 2px, 2px 0;
+  transform: rotate(180deg);
+}
+
+.accordion__panel {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.accordion__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accordion__content {
+  padding: 0 var(--s-5) var(--s-5);
+  max-width: 62ch;
+  color: var(--text);
+}
+
+.accordion__content > * + * {
+  margin-block-start: var(--s-3);
+}
+
+/* JS chal raha ho to band items ko smoothly band karo */
+.js .accordion__panel {
+  transition: grid-template-rows var(--dur) var(--ease-out), visibility 0s;
+}
+
+.js .accordion__item:not(.is-open) .accordion__panel {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows var(--dur) var(--ease-out), visibility 0s var(--dur);
+}

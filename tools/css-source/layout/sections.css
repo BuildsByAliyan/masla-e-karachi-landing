@@ -1,0 +1,110 @@
+/* ---------- 5. SECTIONS ---------- */
+.section {
+  --section-bg: var(--bg);
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--section-bg);
+}
+
+.section--tight {
+  padding-block: calc(var(--section-y) * 0.6);
+}
+
+.section--tint {
+  --section-bg: var(--bg-tint);
+}
+
+.section--tint,
+.section--deep {
+  border-block: 1px solid var(--line-faint);
+}
+
+.section--deep {
+  --section-bg: var(--bg-deep);
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--gray-200);
+}
+
+/* Section ka title + chhota intro: hamesha start-aligned, line chhoti */
+.section__head {
+  max-width: 44rem;
+  margin-block-end: clamp(2rem, 1.2rem + 3vw, 3.75rem);
+}
+
+.section__head > * + * {
+  margin-block-start: var(--s-4);
+}
+
+.section__lead {
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  color: var(--muted);
+  max-width: 38em;
+}
+
+/* Heading ke upar chhoti hari patti (brand ka nishan) */
+.section__head h2::before,
+.solution__intro h2::before {
+  content: "";
+  display: block;
+  width: 2.75rem;
+  height: 4px;
+  margin-block-end: var(--s-4);
+  border-radius: 4px;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-a55);
+}
+
+/* Gehre section par grid-bg: lakeeron ka jaal jo kinaron par ghul jata hai */
+.grid-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 70% at 85% 10%, var(--green-a12), transparent 70%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size);
+  -webkit-mask: radial-gradient(ellipse 90% 90% at 50% 40%, #000 30%, transparent 100%);
+  mask: radial-gradient(ellipse 90% 90% at 50% 40%, #000 30%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ---------- 6. GRID + STACK HELPERS ---------- */
+.grid {
+  display: grid;
+  gap: var(--grid-gap, var(--s-5));
+}
+
+.grid--2,
+.grid--3,
+.grid--4 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--3,
+  .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 62.5rem) {
+  .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.stack > * + * {
+  margin-block-start: var(--stack-gap, var(--s-4));
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-gap, var(--s-3));
+}
+
+.text-center {
+  text-align: center;
+}

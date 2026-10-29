@@ -1,0 +1,151 @@
+/* ==========================================================================
+   H. BUILT BY CARD  (Masla 22)
+   Home par chhota "Built by" glass card: monogram + naam + role + links.
+   Khali link ([hidden]) khud chhup jata hai.
+   ========================================================================== */
+.builder-card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--s-5);
+  align-items: center;
+  padding: clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(135deg, var(--green-a08), transparent 55%),
+    rgb(255 255 255 / 0.03);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* Kone mein dhundli hari roshni */
+.builder-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -35%;
+  inset-inline-end: -8%;
+  inline-size: 18rem;
+  block-size: 18rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--green-a12), transparent 70%);
+  pointer-events: none;
+}
+
+.builder-card__mono {
+  display: grid;
+  place-items: center;
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  border: 1px solid var(--green-a35);
+  border-radius: 50%;
+  background: var(--green-a08);
+  color: var(--green);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 6px var(--green-a08);
+}
+
+.builder-card__eyebrow {
+  margin: 0 0 var(--s-1);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.builder-card__name {
+  margin: 0;
+  color: var(--gray-50, var(--gray-100));
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.builder-card__role {
+  margin: var(--s-1) 0 0;
+  color: var(--gray-300);
+  font-weight: 600;
+}
+
+.builder-card__line {
+  margin: var(--s-3) 0 0;
+  max-inline-size: 46ch;
+  color: var(--gray-400);
+}
+
+.builder-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.builder-card__actions [hidden] {
+  display: none;
+}
+
+.builder-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-block-size: 2.75rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.03);
+  color: var(--gray-200);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.builder-chip:hover,
+.builder-chip:focus-visible {
+  color: var(--green);
+  border-color: var(--green-a35);
+  background: var(--green-a12);
+}
+
+@media (min-width: 48rem) {
+  .builder-card {
+    grid-template-columns: auto 1fr;
+    column-gap: var(--s-6);
+  }
+
+  .builder-card__mono {
+    inline-size: 5.5rem;
+    block-size: 5.5rem;
+    font-size: 1.85rem;
+  }
+
+  .builder-card__actions {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .builder-card {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .builder-card__actions {
+    grid-column: auto;
+    justify-content: flex-end;
+  }
+}
+
+/* Urdu: mono font aur letter-spacing Nastaliq ko bigaarte hain */
+:root[lang="ur"] .builder-card__eyebrow {
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: var(--fs-sm);
+}

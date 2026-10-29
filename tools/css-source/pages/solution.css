@@ -1,0 +1,195 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages/solution.css   (Masla 8: Solution = hisaab ki bahi)
+   --------------------------------------------------------------------------
+   Left: sticky heading. Right: bari glass card (ledger) mein 4 rows.
+   Rows ke beech jurne wali line aur har icon par tick, scroll-reveal par
+   ek ek karke "likhte" hain (sirf motion allowed ho to).
+   ========================================================================== */
+.solution {
+  display: grid;
+  gap: var(--s-7);
+}
+
+@media (min-width: 62.5rem) {
+  .solution {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .solution__intro {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-6));
+  }
+}
+
+.solution__intro > * + * {
+  margin-block-start: var(--s-4);
+}
+
+/* Ledger = bari glass card */
+.ledger {
+  --ledger-pad: clamp(0.75rem, 0.4rem + 1.5vw, 1.5rem);
+  padding: var(--ledger-pad);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg), 0 0 60px -34px var(--green-a35);
+}
+
+.ledger__row {
+  --row-pad: var(--s-4);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-2) var(--s-4);
+  padding: var(--row-pad);
+  border-radius: var(--r-md);
+  transition: background-color var(--dur) ease;
+}
+
+.ledger__row + .ledger__row {
+  border-block-start: 1px dashed var(--line);
+}
+
+@media (hover: hover) {
+  .ledger__row:hover {
+    background: linear-gradient(var(--to-end), var(--green-a08), transparent 80%);
+  }
+
+  .ledger__row:hover .icon-badge {
+    transform: scale(1.08) rotate(-5deg);
+    box-shadow: inset 0 0 0 1px var(--green-a55), 0 0 18px -2px var(--green-a35);
+  }
+}
+
+.ledger__row > .icon-badge {
+  position: relative;
+  grid-row: span 2;
+  border-radius: 50%;
+}
+
+/* Tick: icon ke kone par chhota hara gola + sahi ka nishan */
+.ledger__row > .icon-badge::before {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.15rem;
+  inset-inline-end: -0.15rem;
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 2px var(--bg-deep), 0 0 12px var(--green-a55);
+}
+
+.ledger__row > .icon-badge::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 0.27rem;
+  inset-inline-end: 0.2rem;
+  inline-size: 0.5rem;
+  block-size: 0.28rem;
+  border-inline-start: 2px solid var(--green-ink);
+  border-block-end: 2px solid var(--green-ink);
+  rotate: calc(-45deg * var(--flip));
+  scale: var(--flip) 1;
+}
+
+/* Rows ko jodne wali khadi line: icon ke neeche se agle icon ke upar tak */
+.ledger__row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(var(--row-pad) + 1.5rem - 1px);
+  inset-block-start: calc(var(--row-pad) + 3rem + 0.3rem);
+  inset-block-end: calc(-1 * var(--row-pad) + 0.3rem);
+  inline-size: 2px;
+  background: linear-gradient(to bottom, var(--green-a55), var(--green-a12));
+  border-radius: 2px;
+  transform-origin: top;
+  z-index: 1;
+}
+
+/* Title ........ tag  (hisaab ki entry jaisa) */
+.ledger__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.ledger__head h3 {
+  font-size: var(--fs-md);
+}
+
+.ledger__leader {
+  flex: 1;
+  min-width: 1rem;
+  border-block-end: 2px dotted var(--line-strong);
+  transform: translateY(-0.3em);
+}
+
+/* Chhoti screen: dotted leader hata do aur tag ko neeche wrap hone do */
+@media (max-width: 30rem) {
+  .ledger__head { flex-wrap: wrap; row-gap: var(--s-2); }
+  .ledger__leader { display: none; }
+}
+
+.ledger__row p {
+  grid-column: 2;
+  color: var(--muted);
+  line-height: var(--lh-snug);
+  max-width: 34em;
+}
+
+/* Scroll-reveal par: tick pop hota hai, line upar se neeche likhi jati hai */
+@media (prefers-reduced-motion: no-preference) {
+  .js .ledger__row.is-visible > .icon-badge::before,
+  .js .ledger__row.is-visible > .icon-badge::after {
+    animation: tick-pop 0.5s var(--ease-spring) 0.35s backwards;
+  }
+
+  .js .ledger__row.is-visible:not(:last-child)::after {
+    animation: line-write 0.8s var(--ease-out) 0.5s backwards;
+  }
+
+  .js .ledger__row.is-visible .ledger__leader {
+    animation: leader-write 0.9s var(--ease-out) 0.3s backwards;
+    transform-origin: var(--origin-start) 50%;
+  }
+}
+
+@keyframes tick-pop {
+  from { opacity: 0; scale: 0; }
+}
+
+@keyframes line-write {
+  from { transform: scaleY(0); }
+}
+
+@keyframes leader-write {
+  from { clip-path: inset(0 100% 0 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[dir="rtl"] .js .ledger__row.is-visible .ledger__leader {
+    animation-name: leader-write-rtl;
+  }
+}
+
+@keyframes leader-write-rtl {
+  from { clip-path: inset(0 0 0 100%); }
+}
+
+/* Phase 2 abhi aana baaqi hai: tick ki jagah khali ring */
+.ledger__row:last-child > .icon-badge::before {
+  background: var(--bg-deep);
+  box-shadow: inset 0 0 0 2px var(--green-a55), 0 0 0 2px var(--bg-deep);
+}
+
+.ledger__row:last-child > .icon-badge::after {
+  display: none;
+}

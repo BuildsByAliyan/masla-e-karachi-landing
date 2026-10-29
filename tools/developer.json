@@ -1,0 +1,29 @@
+{
+  "name": "Aliyan Saleem",
+  "role": "Developer & Designer",
+  "portfolio": "https://portfolio-aliyan-saleem.vercel.app",
+  "email": "",
+  "show_email_on_site": false,
+  "socials": [
+    {
+      "platform": "LinkedIn",
+      "handle": "aliyan-saleem",
+      "url": "https://www.linkedin.com/in/aliyan-saleem-02a596378/"
+    },
+    {
+      "platform": "YouTube",
+      "handle": "@apexmotive.official",
+      "url": "https://www.youtube.com/@apexmotive.official"
+    },
+    {
+      "platform": "Instagram",
+      "handle": "creativestudi0.pk_",
+      "url": "https://www.instagram.com/creativestudi0.pk_/"
+    },
+    {
+      "platform": "GitHub",
+      "handle": "BuildsByAliyan",
+      "url": "https://github.com/BuildsByAliyan"
+    }
+  ]
+}

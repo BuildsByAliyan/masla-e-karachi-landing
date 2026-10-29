@@ -1,0 +1,231 @@
+/* ==========================================================================
+   Masla-e-Karachi — variables.css   (THEME: Neon Green + Charcoal)
+   --------------------------------------------------------------------------
+   YEH FILE LOOK KA "CONTROL ROOM" HAI. Colors, fonts, sizes, spacing, motion:
+   sab yahin se badalte hain. Baaki 4 CSS files sirf in variables ko use karti hain.
+
+   PALETTE (reference image se):
+     #39FF14  neon green   -> brand / buttons / focus / "resolved"
+     #1A1A1A  charcoal     -> page background
+     #333333  graphite     -> borders, raised surfaces
+     #4D4D4D  slate        -> strong borders, hover lines
+     #666666  steel        -> decorative lines only (text ke liye nahi: contrast kam)
+
+   STATUS RANG (sirf masla ki halat batane ke liye):
+     Red   = open        Amber = review        White = responded       Green = resolved
+
+   Is file mein koi selector/rule nahi jo HTML ko chhoo — sirf tokens, font
+   fallbacks aur 1 @property. Isliye CSP (style-src 'self') ke saath bilkul safe.
+   ========================================================================== */
+
+/* ---------- 0. FONT FALLBACKS (CLS = 0) ----------
+   Web font aane se pehle system font bilkul usi size/line-height mein dikhta hai,
+   isliye font swap par layout kooda nahi marta (Google Core Web Vitals / SEO).
+   Numbers asal font files (assets/fonts) ki metrics se nikaale gaye hain. */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Helvetica"), local("Liberation Sans");
+  size-adjust: 107.5%;
+  ascent-override: 90.1%;
+  descent-override: 22.4%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Helvetica"), local("Liberation Sans");
+  size-adjust: 111.3%;
+  ascent-override: 88.4%;
+  descent-override: 26.2%;
+  line-gap-override: 0%;
+}
+
+/* ---------- 0b. ANIMATABLE ANGLE (neon border sweep ke liye) ----------
+   Jo browser @property nahi samajhta wahan border bas ruka hua dikhta hai. */
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* ---------- 1. BRAND PALETTE ---------- */
+  --green:        #39ff14;                    /* neon green: brand */
+  --green-bright: #7dff63;                    /* hover / highlight */
+  --green-deep:   #22c70a;                    /* pressed */
+  --green-ink:    #0d0d0d;                    /* green ke upar text (contrast 14:1) */
+  --green-a08: rgb(57 255 20 / 0.08);
+  --green-a12: rgb(57 255 20 / 0.12);
+  --green-a20: rgb(57 255 20 / 0.2);
+  --green-a35: rgb(57 255 20 / 0.35);
+  --green-a55: rgb(57 255 20 / 0.55);
+
+  /* Grays (image ki 4 shades + 3 madadgar) */
+  --gray-950: #0d0d0d;   /* footer, deep sections, green ke upar text */
+  --gray-900: #1a1a1a;   /* PAGE BACKGROUND */
+  --gray-850: #202020;   /* tint section */
+  --gray-800: #262626;   /* cards */
+  --gray-750: #2e2e2e;   /* card hover */
+  --gray-700: #333333;   /* borders */
+  --gray-600: #4d4d4d;   /* strong borders */
+  --gray-500: #666666;   /* decorative only */
+  --gray-400: #8a8a8a;   /* subtle text (sirf bari/bold jagah) */
+  --gray-300: #a3a3a3;   /* MUTED TEXT (contrast >= 6:1) */
+  --gray-200: #d4d4d4;   /* BODY TEXT */
+  --gray-100: #ececec;
+  --white:    #ffffff;
+
+  /* ---------- 2. SEMANTIC TOKENS (CSS inhe use karti hai) ---------- */
+  --bg:          var(--gray-900);
+  --bg-tint:     var(--gray-850);
+  --bg-deep:     var(--gray-950);
+  --surface:     var(--gray-800);
+  --surface-2:   var(--gray-750);
+  --ink:         var(--white);        /* headings */
+  --text:        var(--gray-200);     /* body */
+  --ink-soft:    var(--gray-100);
+  --muted:       var(--gray-300);     /* secondary text */
+  --line:        var(--gray-700);
+  --line-strong: var(--gray-600);
+  --line-faint:  rgb(255 255 255 / 0.08);
+  --focus:       var(--green);
+  --accent:      var(--green);
+
+  /* ---------- 3. STATUS COLORS (masla ki halat) ---------- */
+  --open:          #ff4d5a;                  /* red pin: masla open hai */
+  --open-soft:     rgb(255 77 90 / 0.12);
+  --open-line:     rgb(255 77 90 / 0.4);
+  --open-glow:     rgb(255 77 90 / 0.55);
+  --pending:       #ffb224;                  /* amber: review / intezar */
+  --pending-fill:  #ffb224;
+  --pending-soft:  rgb(255 178 36 / 0.12);
+  --pending-line:  rgb(255 178 36 / 0.4);
+  --pending-glow:  rgb(255 178 36 / 0.5);
+  --responded:     #ececec;                  /* white: department ne jawab diya */
+  --responded-soft: rgb(255 255 255 / 0.1);
+  --responded-glow: rgb(255 255 255 / 0.45);
+  --resolved:      var(--green);             /* green: masla hal */
+  --resolved-soft: var(--green-a12);
+  --resolved-line: rgb(57 255 20 / 0.4);
+  --overdue:       #ff4d5a;
+
+  /* ---------- 4. FONTS ----------
+     Fonts apne server se (assets/fonts/fonts.css). Na milen to metric-matched fallback. */
+  --font-en-display: "Space Grotesk", "Space Grotesk Fallback", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-en-body:    "Inter", "Inter Fallback", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono:       "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Jo font active hai */
+  --font-display: var(--font-en-display);
+  --font-body:    var(--font-en-body);
+  --font-ui:      var(--font-en-body);
+
+  /* ---------- 5. TYPE SCALE (fluid: screen ke hisaab se barhta hai) ---------- */
+  --fs-xs:   0.8125rem;                                   /* 13px */
+  --fs-sm:   0.9375rem;                                   /* 15px */
+  --fs-base: 1.0625rem;                                   /* 17px */
+  --fs-md:   clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --fs-lg:   clamp(1.3rem, 1.15rem + 0.7vw, 1.65rem);
+  --fs-xl:   clamp(1.6rem, 1.3rem + 1.4vw, 2.3rem);
+  --fs-2xl:  clamp(1.95rem, 1.45rem + 2.4vw, 3.4rem);
+  --fs-3xl:  clamp(2.2rem, 1.5rem + 3.6vw, 4.6rem);
+  --fs-display: clamp(2.45rem, 1.3rem + 6.2vw, 6.4rem);   /* hero headline */
+
+  --lh-body:    1.65;
+  --lh-snug:    1.4;
+  --lh-heading: 1.12;
+  --lh-display: 0.98;
+  --lh-ui:      1.3;
+  --tracking-display: -0.035em;
+  --tracking-heading: -0.02em;
+
+  /* ---------- 6. SPACING (4px base) ---------- */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+  --section-y: clamp(3.75rem, 2.8rem + 5vw, 8rem);        /* section ke upar/neeche */
+  --gutter: clamp(1.1rem, 0.7rem + 2.2vw, 2.5rem);
+  /* Notch wale phone (landscape) mein content kinare se na chipke */
+  --safe-x: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+
+  /* ---------- 7. LAYOUT ---------- */
+  --container: 1200px;
+  --container-narrow: 780px;
+  --header-h: 4.5rem;
+  --tap: 2.75rem;                                          /* 44px: minimum touch target */
+
+  /* ---------- 8. SHAPES ---------- */
+  --r-xs: 6px;
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 28px;
+  --r-pill: 999px;
+
+  /* ---------- 9. SHADOWS + GLOWS (dark theme: gehre saaye, hara noor) ---------- */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px -8px rgb(0 0 0 / 0.6);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 36px -16px rgb(0 0 0 / 0.75);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.4), 0 40px 80px -28px rgb(0 0 0 / 0.9);
+  --glow-sm:   0 0 0 1px var(--green-a35), 0 0 18px -2px var(--green-a35);
+  --glow-md:   0 0 0 1px var(--green-a55), 0 0 36px -4px var(--green-a35);
+  --glow-lg:   0 0 0 1px var(--green-a55), 0 0 70px -6px var(--green-a35);
+
+  /* ---------- 10. MOTION ---------- */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.18s;
+  --dur: 0.32s;
+  --dur-slow: 0.8s;
+
+  /* ---------- 11. Z-INDEX SCALE ---------- */
+  --z-base: 1;
+  --z-header: 100;
+  --z-progress: 300;
+  --z-skip: 1000;
+
+  /* ---------- 12. DIRECTION HELPERS (site hamesha LTR hai) ----------
+     --flip  : transform mein left/right ke liye (+1 ya -1)
+     --to-end: gradient ki direction (line ke aakhir ki taraf)
+     --origin-start: scaleX animation ka shuru (line "start" se khuli) */
+  --flip: 1;
+  --to-end: to right;
+  --origin-start: left;
+
+  /* ---------- 13. PATTERNS (sirf CSS gradients; koi image/data-URI nahi) ----------
+     --grid-size: grid ke khane   --grid-line: lakeer ka rang */
+  --grid-size: 56px;
+  --grid-line: rgb(255 255 255 / 0.055);
+  --grid-line-green: rgb(57 255 20 / 0.09);
+}
+
+/* ---------- LARGE SCREENS (TV / 4K) ---------- */
+@media (min-width: 100rem) {
+  :root {
+    --container: 1360px;
+    --fs-base: 1.125rem;
+  }
+}
+
+/* ---------- PHONE LANDSCAPE: header chhota taake content ke liye jagah bache ---------- */
+@media (max-height: 30rem) and (orientation: landscape) {
+  :root {
+    --header-h: 3.5rem;
+    --section-y: 3rem;
+  }
+}
+
+/* ---------- TOUCH SCREENS ---------- */
+@media (pointer: coarse) {
+  :root {
+    --tap: 3rem;
+  }
+}

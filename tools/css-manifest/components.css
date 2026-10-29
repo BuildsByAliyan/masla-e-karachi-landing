@@ -1,0 +1,23 @@
+/* ==========================================================================
+   Masla-e-Karachi — components.css
+   --------------------------------------------------------------------------
+   Chhote, dobara use hone wale tukde (building blocks):
+     1. Icons              6. Callout
+     2. Buttons            7. Accordion (FAQ)
+     3. Language toggle    8. Ticket (tracking code)
+     4. Chips (status)     9. Report card (example complaint)
+     5. Pin               10. Misc: monogram, token, stat
+                          11. Reveal (scroll animation)
+   Page-specific layout pages.css mein hai.
+   ========================================================================== */
+
+/* MANIFEST: yeh file ab sirf @import ki list hai. Asli CSS css/components/ ke andar hai.
+   Tarteeb (order) mat badlo, cascade isi par chalta hai. */
+@import url("components/icons.css");
+@import url("components/buttons.css");
+@import url("components/lang-toggle.css");
+@import url("components/chips-pin.css");
+@import url("components/callout.css");
+@import url("components/accordion.css");
+@import url("components/ticket-card.css");
+@import url("components/misc-reveal.css");

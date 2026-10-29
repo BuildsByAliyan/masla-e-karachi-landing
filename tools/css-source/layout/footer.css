@@ -1,0 +1,184 @@
+/* ==========================================================================
+   7. FOOTER  (Masla 11: gehra rounded-top container, hari patli lines)
+   --------------------------------------------------------------------------
+   SIRF CSS - 6 HTML ka footer markup same. Hooks: .site-footer__grid,
+   .footer-nav, .site-footer__emergency, .site-footer__legal.
+   CTA band (hara) ke baad footer gehra charcoal, hara nahi.
+   ========================================================================== */
+.site-footer {
+  --section-bg: var(--bg-deep);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--bg-deep);
+  border: 1px solid var(--line-faint);
+  border-block-end: 0;
+  border-start-start-radius: clamp(1.75rem, 1rem + 3vw, 2.75rem);
+  border-start-end-radius: clamp(1.75rem, 1rem + 3vw, 2.75rem);
+  color: var(--gray-300);
+  padding-block: var(--s-9) calc(var(--s-6) + env(safe-area-inset-bottom, 0px));
+  font-size: var(--fs-sm);
+}
+
+/* Upar hari roshni ki patli lakeer + halka glow (kone gol hain isliye beech mein) */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline: 12%;
+  z-index: -1;
+  height: 2px;
+  background: linear-gradient(var(--to-end), transparent, var(--green), transparent);
+  box-shadow: 0 0 36px 2px var(--green-a35);
+  pointer-events: none;
+}
+
+.site-footer::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: -1;
+  height: 14rem;
+  background: radial-gradient(60% 100% at 50% 0, var(--green-a08), transparent 75%);
+  pointer-events: none;
+}
+
+.site-footer h2,
+.site-footer h3,
+.site-footer h4 {
+  color: var(--ink);
+}
+
+.site-footer a {
+  color: var(--gray-200);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--green);
+  text-decoration: underline;
+  text-decoration-color: var(--green-a55);
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--s-7) var(--s-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 62.5rem) {
+  .site-footer__grid { grid-template-columns: 1.6fr 1fr 1fr; gap: var(--s-8); }
+}
+
+/* Footer ka brand: tagline hamesha nazar aaye, logo thora bara */
+.site-footer .brand__tag {
+  display: inline;
+}
+
+.site-footer .brand__logo {
+  height: 2.75rem;
+}
+
+.site-footer__tagline {
+  margin-block-start: var(--s-4);
+  max-width: 24em;
+  font-size: var(--fs-base);
+  color: var(--gray-200);
+}
+
+/* Column heading: hari chhoti patti + saaf text (CAPS nahi) */
+.footer-nav h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-end: var(--s-4);
+  padding-block-end: var(--s-3);
+  border-block-end: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.footer-nav h3::before {
+  content: "";
+  width: 1.25rem;
+  height: 3px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green-a55);
+}
+
+.footer-nav li + li {
+  margin-block-start: 0;
+}
+
+/* Tap target 44px+ (Masla 17 audit) */
+.footer-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding-block: 0.3rem;
+  transition: translate var(--dur) var(--ease-out), color var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .footer-nav a:hover {
+    translate: calc(4px * var(--flip)) 0;
+  }
+}
+
+/* Emergency: chhota gehra card, laal dhadakta nuqta */
+.site-footer__emergency {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-start: var(--s-8);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--open-line);
+  border-radius: var(--r-md);
+  background: var(--open-soft);
+  color: var(--ink);
+  font-size: var(--fs-base);
+  line-height: var(--lh-snug);
+}
+
+.site-footer__emergency::before {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--open);
+  box-shadow: 0 0 12px var(--open-glow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-footer__emergency::before {
+    animation: footer-siren 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes footer-siren {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-5);
+  margin-block-start: var(--s-6);
+  padding-block-start: var(--s-5);
+  border-block-start: 1px solid transparent;
+  border-image: linear-gradient(var(--to-end), var(--green-a35), var(--line) 40%, transparent) 1;
+  font-size: var(--fs-xs);
+  color: var(--gray-400);
+}

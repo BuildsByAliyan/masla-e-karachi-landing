@@ -1,0 +1,91 @@
+/* ==========================================================================
+   G. 404 PAGE
+   ========================================================================== */
+.error-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 72vh;
+  min-height: 72svh;
+  padding-block: var(--s-9);
+  text-align: center;
+  background: var(--bg);
+}
+
+.error-page__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+}
+
+/* "4 [pin] 4" - beech ka 0 asal mein pin hai */
+.error-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.04em;
+  direction: ltr;
+  color: var(--green);
+  font-family: var(--font-en-display);
+  font-size: clamp(6rem, 3.5rem + 18vw, 15rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.06em !important;
+  text-shadow: 0 0 20px var(--green-a55), 0 0 70px var(--green-a35);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .error-code {
+    animation: neon-flicker 6s linear 1.5s infinite;
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 55% { opacity: 0.55; }
+}
+
+.error-code__pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 0.62em;
+  height: 0.8em;
+}
+
+.error-code__pin .pin {
+  --pin-size: 0.5em;
+  animation: pin-drop 0.9s cubic-bezier(0.5, 0, 0.75, 0.6) 0.2s both;
+}
+
+.error-code__pin::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 0.02em;
+  width: 0.34em;
+  height: 0.1em;
+  border-radius: 50%;
+  border: 3px solid var(--green);
+  opacity: 0;
+  animation: ripple 1.4s ease-out 0.9s 2 both;
+}
+
+.error-page h1 {
+  font-size: var(--fs-2xl);
+}
+
+.error-page p {
+  max-width: 28em;
+  color: var(--muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-3);
+}

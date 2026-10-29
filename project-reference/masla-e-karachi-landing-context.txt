@@ -1,0 +1,418 @@
+====================================================================================================
+                       Masla-e-Karachi LANDING WEBSITE - Master Context File                        
+====================================================================================================
+
+
+####################################################################################################
+# DOCUMENT INFO (READ THIS FIRST)
+####################################################################################################
+
+
+## TITLE
+  Masla-e-Karachi LANDING WEBSITE - Master Context File
+
+## PURPOSE
+  Read this file FIRST. It tells any LLM / developer everything about the project so the owner does
+  not have to explain it again. It covers (A) the real Masla-e-Karachi platform and (B) the landing
+  website (this repo) that introduces it.
+
+## OWNER LANGUAGE NOTE
+  The owner writes in Roman Urdu (Urdu in English letters) mixed with English. Reply to the owner in
+  Roman Urdu unless asked otherwise. Keep explanations simple; the owner is learning and building
+  via 'vibe coding' with AI tools.
+
+## LAST UPDATED
+  2026-10-28
+
+## CURRENT STATUS
+  Landing website is BUILT: 6 HTML pages, English-only, dark charcoal + neon green theme, plain
+  HTML/CSS/JS in docs/. Remaining cleanup and polish tasks are tracked in
+  masla-e-karachi-masle-tasks.json. The real Masla-e-Karachi platform is still under development
+  (not fully live yet).
+
+####################################################################################################
+# PART A - THE REAL PROJECT: MASLA-E-KARACHI
+####################################################################################################
+
+
+## NAME
+  Masla-e-Karachi
+
+## MEANING
+  'Karachi's problem/issue' in Urdu. Instantly understood by any Karachi resident as being about
+  civic issues.
+
+## TAGLINE
+  Masla batao, hisaab lo (Report the problem, hold them accountable)
+
+## REAL WEBSITE DOMAIN
+  maslaekarachi.pk (owner's final decision; earlier notes said .com or .pk). The real site will live
+  here when launched.
+
+## TARGET AUDIENCE
+  Residents of Karachi, Pakistan.
+
+## PREVIOUS NAME NOTE
+  The name 'Basilaay' was considered earlier but dropped because it was hard to say and write.
+
+## WHY IT IS BEING BUILT
+  - Ordinary people in Karachi see civic problems every day but do not complain.
+  - Reasons they do not complain: fear their name will be exposed; they do not know which department
+    to complain to; no reply after complaining; no way to see which departments actually work.
+  - Examples of problems: open/broken gutter covers (manholes), broken roads and potholes,
+    uncollected garbage, water and sewerage problems, electricity/gas/street-light issues, and
+    sensitive categories like illegal liquor dens, drug spots and 'bhatta' (extortion) spots.
+
+## WHAT IT DOES
+  - Any citizen anonymously uploads a photo/short video (max 30 sec) with location and details. No
+    name, phone, email or login needed.
+  - The problem becomes public after moderator review (map + list).
+  - Each problem shows the government department responsible (KMC, KWSC, K-Electric, SSGC, Sindh
+    Solid Waste Management Board, Traffic Police, etc.).
+  - The department's verified officer must respond from an Official Dashboard; everyone can see
+    whether they responded.
+  - Resolution needs proof (after-photo) and community confirmation: nearby residents vote whether
+    it is really fixed.
+  - If a department does nothing for 7 days, the problem gets an 'Overdue' flag, a senior officer is
+    emailed, and the department's ranking drops.
+  - Departments are ranked publicly on data (resolution %, average days, pending/overdue, reopened).
+    Likes are NOT used in ranking.
+
+## CORE GOALS
+  - Give citizens a voice without fear.
+  - Make government departments accountable.
+  - Create public pressure so public money is used properly.
+  - Give public recognition to departments and people who actually do the work.
+
+## REALISTIC LIMITS
+  - The website cannot force any department to act; its power is public transparency.
+  - It is NOT anti-government and NOT political; it is a non-political platform for everyone.
+  - Pakistan Citizen Portal (government app) already exists. Difference here: anonymous complaints,
+    public map, public ranking.
+  - It is NOT an emergency service. Every page must say: 'If life is in danger, call 15 first.'
+
+## STORY EXAMPLE
+  Ahmed (32, Gulshan-e-Iqbal Block 13-D) sees an open gutter cover. He opens the site via a WhatsApp
+  link, reports in a 4-step form (Category, Location pin, Photo/Video, Details) with no name, gets a
+  secret tracking code like MEK-8F3K-92, moderators approve, the problem appears on the map as a red
+  pin, neighbours click 'I am affected too', KWSC officer replies, fixes it, uploads an after-photo,
+  residents confirm, pin turns green, it appears in Success Stories and KWSC's ranking improves.
+
+## REPORT FORM 4 STEPS
+  - Category
+  - Location (GPS or manual map pin)
+  - Photo or up to 30-second video
+  - Details in Urdu or English
+
+## PRIVACY AND SAFETY DESIGN
+  - No name/phone/email requested; only a secret tracking code (only its hash is stored).
+  - Photo EXIF metadata (phone model, GPS, time) is stripped by the server.
+  - IP address is stored only as a hash (for spam control).
+  - Every complaint is moderated before going public; faces and number plates are blurred.
+  - Sensitive complaints (liquor/drugs/bhatta): exact location and photo are NOT public; only
+    moderators and the relevant department (police / anti-narcotics) see them.
+  - Cloudflare Turnstile (anti-bot) and rate limiting against spam.
+  - Legal risks (defamation, PECA cyber-crime law in Pakistan) require a lawyer before launch.
+    Political-party ranking is NOT in phase 1.
+  - Tracking-code tradeoff: if a user loses the code it cannot be recovered (optional login could
+    fix this later).
+
+## CITIZEN FIX FLOW
+  Not only departments fix problems. Any user can press 'This Problem Is Fixed' on a complaint page
+  and upload an after-photo. Status becomes 'Citizen claims it's fixed - verification pending'. GPS
+  of after-photo must match the original; a moderator checks; nearby/affected residents vote. If
+  confirmed, status is 'Confirmed Resolved (Community)' and pin turns green. A 'resolved_by' field
+  (department / community / unknown) ensures department rankings count ONLY work done by the
+  department, but the department's Overdue flag stays if it failed to act in 7 days.
+
+## RANKING PHASES
+  phase_1: Departments only
+  phase_2: Areas (towns/union councils)
+  phase_3: Political parties, only with enough data and legal advice, labeled 'Public data, not a
+  verdict'
+
+## REAL PROJECT TECH STACK
+  frontend: Next.js + React + TypeScript + Tailwind CSS, mobile-first, Urdu+English (Urdu RTL), PWA,
+  Leaflet + OpenStreetMap map
+  backend: Next.js API routes / Server Actions (TypeScript, Node.js)
+  database_storage: Supabase (PostgreSQL + Storage + RLS)
+  other_services: Vercel (hosting), Cloudflare Turnstile (anti-bot), Resend (email), GitHub (code)
+  note: This stack is for the REAL website only. The landing website does NOT use any of it.
+
+## REAL PROJECT PAGES
+  public_14:
+    - Home /
+    - Report /report
+    - Feed /feed
+    - Map /map
+    - Complaint Detail /complaint/[id]
+    - Track /track
+    - Authorities list + profile /authorities
+    - Rankings /rankings
+    - Area page /areas/[area]
+    - Success Stories /success-stories
+    - About /about
+    - Privacy /privacy
+    - Terms /terms
+    - Contact/Abuse Report/FAQ /contact
+  user_3_optional_login:
+    - My Complaints
+    - Notifications
+    - Settings
+  authority_2:
+    - Official Dashboard
+    - Proof Upload
+  admin_7:
+    - Moderation Queue
+    - Complaints Management
+    - Categories/Authorities/Areas
+    - Users and Officials
+    - Abuse Reports
+    - Analytics
+    - Audit Log and Legal Takedown
+  total: about 26 pages
+
+## REAL PROJECT PHASES
+  phase_1_mvp: 4-6 weeks, one town only: Home, Report, Feed, Map, Complaint Detail, Track, Admin
+  moderation.
+  phase_2: Authority dashboard, Rankings, Area pages, full Urdu, WhatsApp sharing.
+  phase_3: Notifications, Success Stories, PWA, all Karachi, political data if legally sound.
+
+## FULL SPEC FILE
+  project-reference/masla-e-karachi.json contains the complete original specification.
+
+####################################################################################################
+# PART B - THE LANDING WEBSITE (THIS REPO)
+####################################################################################################
+
+
+## WHAT IT IS
+  A static marketing/introduction website (landing site) for Masla-e-Karachi, like the landing page
+  any big project has. Its job is to explain what the project is, build trust, and send visitors to
+  the REAL website via a 'Visit Real Website' button.
+
+## WHY IT EXISTS
+  - The real site is still under development / not fully live; the landing page introduces the idea
+    now.
+  - Gives the project a public face on GitHub Pages for free.
+  - When the real site goes live at maslaekarachi.pk, the landing page already links to it; only one
+    config value needs to change.
+
+## WHO IT IS FOR
+  Karachi residents (mostly on phones, many via WhatsApp links), plus supporters, media, officials,
+  possible team members/partners, investors.
+
+## OWNER REQUIREMENTS
+  - Built ONLY with HTML, CSS and JavaScript (plain, no frameworks, no build step, no Node needed).
+  - Hosted on GitHub Pages from the /docs folder of the repo (Settings > Pages > Branch main >
+    Folder /docs).
+  - ALL website files (html, css, js, assets) must live inside docs/.
+  - Must be a proper landing website with a prominent link/button to the real website.
+  - Real website link must be easy to change later (single place: docs/js/config.js, LIVE_SITE_URL =
+    'https://maslaekarachi.pk').
+  - English-only site. The owner decided against a second language; all text lives in
+    docs/lang/en.json (HTML also keeps the English text as default).
+
+## REPO
+  github_repo_name: masla-e-karachi-landing
+  description: Landing website for Masla-e-Karachi: Masla batao, hisaab lo. Live site:
+  maslaekarachi.pk
+  separate_repo_for_real_app: masla-e-karachi (Next.js code, built later, separate from this repo)
+  final_url_pattern: https://<github-username>.github.io/masla-e-karachi-landing/
+
+## PAGES
+  -
+      file: docs/index.html
+      name: Home
+      role: Main landing page, one long scrolling page
+  -
+      file: docs/how-it-works.html
+      name: How It Works
+      role: The Ahmed story and the full process in simple words
+  -
+      file: docs/privacy.html
+      name: Privacy and Anonymity
+      role: No name taken, EXIF removed, tracking code explained, hashed IP
+  -
+      file: docs/faq.html
+      name: FAQ and Contact
+      role: Common questions, contact, abuse/takedown request info
+  -
+      file: docs/terms.html
+      name: Terms and Community Guidelines
+      role: What may and may not be posted, legal terms
+  -
+      file: docs/404.html
+      name: Not Found
+      role: Shown by GitHub Pages for wrong links
+
+## TOTAL PAGES
+  5 content pages + 1 error page (404)
+
+## HOME PAGE SECTIONS TOP TO BOTTOM
+  - 1. Emergency top bar: 'If life is in danger, call 15 first. This website is not an emergency
+    service.' (English, scrolling line)
+  - 2. Header/nav (logo, links, 'Visit Real Website' button)
+  - 3. Hero: 'Masla batao, hisaab lo' + two buttons (Visit Real Website, See how it works) +
+    example report card with tracking-code ticket
+  - 4. Stats row (animated counters)
+  - 5. Two ticker strips (Report / Track / Hold accountable, and the department names)
+  - 6. The problem: gutters, roads, garbage, water, electricity/gas, etc.
+  - 7. The solution: anonymous report, public map, department responsibility, ranking
+  - 8. 4 steps: Report, Moderation, Department replies, Community confirms
+  - 9. Features: anonymity, map, rankings, Success Stories, status colours
+  - 10. Departments: KMC, KWSC, K-Electric, SSGC, SSWMB, Traffic Police
+  - 11. Privacy promise: 'Your name is never taken'
+  - 12. Roadmap: Phase 1, 2, 3
+  - 13. Final call-to-action band
+  - 14. 'Built by' card (Aliyan Saleem, Developer & Designer, with social links)
+  - 15. Footer (developer credit + emergency note)
+
+## FOLDER STRUCTURE TREE
+    masla-e-karachi-landing/
+    |
+    |-- README.md
+    |-- LICENSE
+    |-- .gitignore
+    |
+    |-- tools/                          (helper scripts, NOT deployed)
+    |   |-- developer.json              (developer name and links; keep same as docs/js/config.js)
+    |   |-- apply_author_meta.py        (author meta + JSON-LD)
+    |   |-- find_unused.py              (reports unused files/classes/keys, deletes nothing)
+    |   |-- make_favicons.py
+    |   `-- favicon-source/favicon.png
+    |
+    |-- project-reference/              (NOT part of the website, for owner/LLM reference only)
+    |   |-- masla-e-karachi-landing-context.txt
+    |   `-- masla-e-karachi-landing-context.json
+    |
+    `-- docs/                           (GitHub Pages serves the website from here)
+        |-- index.html
+        |-- how-it-works.html
+        |-- privacy.html
+        |-- terms.html
+        |-- faq.html
+        |-- 404.html
+        |-- humans.txt
+        |-- .nojekyll
+        |-- robots.txt
+        |-- sitemap.xml
+        |-- CNAME                       (ONLY if a custom domain is used; one line, domain only. Never keep it empty)
+        |
+        |-- css/
+        |   |-- variables.css
+        |   |-- base.css
+        |   |-- layout.css
+        |   |-- components.css
+        |   `-- pages.css
+        |
+        |-- js/
+        |   |-- config.js
+        |   |-- main.js
+        |   |-- i18n.js
+        |   |-- counter.js
+        |   |-- faq.js
+        |   `-- base-404.js
+        |
+        |-- lang/
+        |   `-- en.json
+        |
+        `-- assets/
+            |-- images/                 (logo.svg, logo.png, favicon.ico, og-image.png, favicons/)
+            `-- fonts/                  (inter, space-grotesk, dm-mono, fonts.css, licenses/)
+
+## FILE PURPOSES
+  docs/css/variables.css: colors (neon green + charcoal tokens), fonts, spacing (change look from
+    one place)
+  docs/css/base.css: reset and typography
+  docs/css/layout.css: header, footer, grid, container
+  docs/css/components.css: buttons, cards, badges, accordion
+  docs/css/pages.css: page-specific styles
+  docs/js/config.js: LIVE_SITE_URL and other settings (single source of truth for the real-site
+    link)
+  docs/js/main.js: mobile menu, header scroll state, smooth scroll, scroll reveal animations, top
+    bar line, developer credit links
+  docs/js/i18n.js: loads text from docs/lang/en.json into the page (English-only, safe HTML
+    sanitizer)
+  docs/js/counter.js: animated counter numbers
+  docs/js/faq.js: FAQ accordion
+  docs/.nojekyll: empty file so GitHub Pages serves all folders
+  docs/robots.txt and sitemap.xml: SEO
+  docs/js/base-404.js: sets the <base href> for 404.html (no inline script, CSP-safe)
+  docs/lang/en.json: all site text (single language file)
+  docs/assets/: images (logo, favicon, og-image 1200x630 share preview, favicons) and fonts
+    (Inter, Space Grotesk, DM Mono, SIL OFL licenses)
+  docs/CNAME: only for a custom domain on the landing site; one line with the domain. If no custom
+    domain, the file must not exist (an empty CNAME can break Pages)
+
+## DESIGN DECISIONS
+  theme: Neon Green + Charcoal: dark theme, accent #39FF14 on #1A1A1A / #333333 greys, white text.
+    All colors come from tokens in docs/css/variables.css.
+  mobile_first: True
+  tone: Simple, human, non-political, trust-building. Avoid legal accusations or naming
+    individuals.
+  tagline_everywhere: Masla batao, hisaab lo
+  language: English only.
+  animation: Light and professional, only opacity/transform, reveal 500-800ms, stagger 60-90ms,
+    everything off under prefers-reduced-motion.
+
+## STRICT RULES FOR ANY LLM
+  - Use ONLY HTML, CSS, vanilla JavaScript. No React, Next.js, Tailwind, npm, bundlers or build
+    steps.
+  - All website files stay inside docs/. Do not put site files in the repo root.
+  - Content-Security-Policy is set in every HTML head: no inline style="" attributes, no <style>
+    blocks, no inline onclick, and no new inline <script>. All text for the page comes from
+    docs/lang/en.json.
+  - No CDN, Google Fonts, npm or build step. Fonts and images come only from docs/assets/.
+  - Use RELATIVE paths (css/base.css, js/main.js, assets/images/logo.svg). Never use leading-
+    slash absolute paths; GitHub Pages serves under /<repo-name>/.
+  - Every link to the real site must read its URL from docs/js/config.js (LIVE_SITE_URL), not be
+    hard-coded.
+  - Do NOT invent statistics. The '1,240 reported / 389 resolved' counters in the spec are only
+    examples. Use placeholders or clearly labeled 'coming soon' values until real data exists.
+  - Do NOT claim features are already live if they are not. Say the platform is launching /
+    under development.
+  - Keep the emergency notice: 'If life is in danger, call 15 first. This website is not an
+    emergency service.'
+  - Keep it non-political. Do not name political parties or individuals. Do not accuse anyone.
+  - Do not mention or imply any collection of names, phones or emails; anonymity is the core
+    promise.
+  - Site is English-only: do not add any second language, language toggle or right-to-left
+    rules. Make it fully responsive.
+  - Accessible and fast: semantic HTML, alt texts, good contrast, compressed images, system-font
+    fallback.
+  - Add proper meta tags: title, description, Open Graph (WhatsApp preview), favicon.
+  - Do not edit files inside project-reference/ unless asked.
+  - Reply to the owner in Roman Urdu, simply, and ask before big changes to structure.
+  - Developer credit: 'Aliyan Saleem', role 'Developer & Designer'. Developer links live in
+    tools/developer.json and docs/js/config.js and must stay identical.
+
+## DEPLOYMENT STEPS
+  - 1. Create GitHub repo named masla-e-karachi-landing.
+  - 2. Upload the whole folder (docs/ must be at the repo root).
+  - 3. Custom domain? Create docs/CNAME with just the domain on one line. No custom domain? Make
+    sure docs/CNAME does not exist (an empty file can break Pages).
+  - 4. GitHub: Settings > Pages > Source: Deploy from a branch > Branch: main > Folder: /docs >
+    Save.
+  - 5. Wait 1-2 minutes; site appears at https://<username>.github.io/masla-e-karachi-landing/.
+  - 6. When the real site is live, only update LIVE_SITE_URL in docs/js/config.js.
+
+## NEXT STEPS
+  - Finish the remaining cleanup tasks listed in masla-e-karachi-masle-tasks.json.
+  - Test on mobile and desktop (360, 390, 768, 1366 px) and check all relative paths on GitHub
+    Pages.
+  - Push to GitHub and enable Pages.
+
+####################################################################################################
+# QUICK SUMMARY
+####################################################################################################
+
+Masla-e-Karachi is an anonymous civic-complaint and accountability platform for Karachi residents:
+report a problem with a photo and location without giving your name, the responsible government
+department must respond, the community confirms the fix, and departments are publicly ranked on real
+data. The landing website (this repo, plain HTML/CSS/JS on GitHub Pages from /docs) introduces the
+project in English and sends visitors to the real site at maslaekarachi.pk.
+
+====================================================================================================
+END OF FILE
+====================================================================================================

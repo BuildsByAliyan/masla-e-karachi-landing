@@ -1,0 +1,175 @@
+/* ==========================================================================
+   F. TERMS PAGE
+   ========================================================================== */
+.doc-layout {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62.5rem) {
+  .doc-layout {
+    grid-template-columns: 16rem minmax(0, 1fr);
+    gap: var(--s-9);
+    align-items: start;
+  }
+}
+
+.toc {
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+}
+
+@media (min-width: 62.5rem) {
+  .toc {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-5));
+    max-height: calc(100vh - var(--header-h) - var(--s-7));
+    max-height: calc(100dvh - var(--header-h) - var(--s-7));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.toc__title {
+  margin-block-end: var(--s-3);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.toc ol {
+  display: grid;
+  gap: var(--s-1);
+  counter-reset: toc;
+}
+
+.toc li {
+  counter-increment: toc;
+}
+
+.toc a {
+  display: flex;
+  gap: var(--s-2);
+  min-height: 2.25rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--r-xs);
+  color: var(--gray-200);
+  text-decoration: none;
+  line-height: var(--lh-snug);
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.toc a::before {
+  content: counter(toc) ".";
+  min-width: 1.4em;
+  color: var(--gray-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.toc a:hover,
+.toc a.is-active {
+  background: var(--green-a12);
+  color: var(--green);
+}
+
+.toc a.is-active::before {
+  color: var(--green);
+}
+
+/* Lamba likha hua text */
+.prose {
+  max-width: 44rem;
+}
+
+.prose > * + * {
+  margin-block-start: var(--s-4);
+}
+
+.prose h2 {
+  margin-block-start: var(--s-8);
+  padding-block-start: var(--s-6);
+  border-block-start: 1px solid var(--line);
+  font-size: var(--fs-xl);
+}
+
+.prose h2:first-child {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border: 0;
+}
+
+.prose h3 {
+  margin-block-start: var(--s-6);
+  font-size: var(--fs-md);
+}
+
+.prose ul,
+.prose ol {
+  display: grid;
+  gap: var(--s-2);
+  padding-inline-start: 1.4rem;
+}
+
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+
+.prose li::marker {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.doc-meta {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* Kya likh sakte hain / kya nahi */
+.rules {
+  display: grid;
+  gap: var(--s-4);
+  margin-block: var(--s-5);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.rules__col {
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.rules__col h3 {
+  margin-block: 0 var(--s-3);
+  font-size: var(--fs-md);
+}
+
+.rules__col ul {
+  display: grid;
+  gap: var(--s-2);
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.rules__col li {
+  position: relative;
+  padding-inline-start: 1.5rem;
+}
+
+.rules__col li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  font-weight: 800;
+}
+
+.rules__col--yes { background: linear-gradient(var(--green-a08), transparent 8rem), var(--surface); border-color: var(--green-a35); }
+.rules__col--yes li::before { content: "\2713"; color: var(--green); }
+.rules__col--no  { background: linear-gradient(var(--open-soft), transparent 8rem), var(--surface); border-color: var(--open-line); }
+.rules__col--no  li::before { content: "\2715"; color: var(--open); }

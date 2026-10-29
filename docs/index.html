@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-VDVDNNRTREupwUTWnq6itaNdc1TFEVFbXV4xlAS7Gow='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title data-i18n="meta.index.title">Masla-e-Karachi — Masla batao, hisaab lo</title>
+<meta name="description" content="Report civic problems in Karachi anonymously, see which department is responsible, and hold them accountable with public data. Platform under development." data-i18n-content="meta.index.desc">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Aliyan Saleem">
+<meta name="creator" content="Aliyan Saleem">
+<link rel="author" href="humans.txt">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="application-name" content="Masla-e-Karachi">
+<meta name="apple-mobile-web-app-title" content="Masla-e-Karachi">
+<link rel="canonical" href="https://buildsbyaliyan.github.io/masla-e-karachi-landing/">
+
+<!-- Open Graph + Twitter (WhatsApp / Facebook / X preview). -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Masla-e-Karachi">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://buildsbyaliyan.github.io/masla-e-karachi-landing/">
+<meta property="og:title" content="Masla-e-Karachi — Masla batao, hisaab lo">
+<meta property="og:description" content="Report civic problems in Karachi anonymously, see which department is responsible, and hold them accountable with public data. Platform under development.">
+<meta property="og:image" content="https://buildsbyaliyan.github.io/masla-e-karachi-landing/assets/images/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Masla-e-Karachi: Masla batao, hisaab lo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Masla-e-Karachi — Masla batao, hisaab lo">
+<meta name="twitter:description" content="Report civic problems in Karachi anonymously, see which department is responsible, and hold them accountable with public data. Platform under development.">
+<meta name="twitter:image" content="https://buildsbyaliyan.github.io/masla-e-karachi-landing/assets/images/og-image.png">
+
+<!-- Favicons + app icons (tools/make_favicons.py ne banaya) -->
+<link rel="icon" href="assets/images/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="assets/images/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="assets/images/favicons/site.webmanifest">
+<meta name="msapplication-config" content="assets/images/favicons/browserconfig.xml">
+
+<!-- Fonts: apne server se (Google Fonts nahi) -->
+<link rel="preload" href="assets/fonts/space-grotesk/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages.css">
+
+<script>document.documentElement.className = 'js';</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://buildsbyaliyan.github.io/masla-e-karachi-landing/#org",
+      "name": "Masla-e-Karachi",
+      "slogan": "Masla batao, hisaab lo",
+      "url": "https://maslaekarachi.pk",
+      "logo": "https://buildsbyaliyan.github.io/masla-e-karachi-landing/assets/images/logo.png",
+      "description": "An anonymous way for the people of Karachi to report civic problems and see which departments respond. Platform under development.",
+      "areaServed": {
+        "@type": "City",
+        "name": "Karachi"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://buildsbyaliyan.github.io/masla-e-karachi-landing/#site",
+      "url": "https://buildsbyaliyan.github.io/masla-e-karachi-landing/",
+      "name": "Masla-e-Karachi",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://buildsbyaliyan.github.io/masla-e-karachi-landing/#org"
+      },
+      "author": {
+        "@id": "#developer"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "#developer",
+      "name": "Aliyan Saleem",
+      "jobTitle": "Developer & Designer",
+      "url": "https://portfolio-aliyan-saleem.vercel.app",
+      "sameAs": [
+        "https://portfolio-aliyan-saleem.vercel.app",
+        "https://www.linkedin.com/in/aliyan-saleem-02a596378/",
+        "https://www.youtube.com/@apexmotive.official",
+        "https://www.instagram.com/creativestudi0.pk_/",
+        "https://github.com/BuildsByAliyan"
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+<div class="scroll-progress" aria-hidden="true"><span class="scroll-progress__bar"></span></div>
+
+<div class="emergency-bar" role="note">
+  <div class="container emergency-bar__inner">
+    <p data-i18n-html="emergency.bar">If life is in danger, call <strong class="ltr">15</strong> first. This website is not an emergency service.</p>
+  </div>
+</div>
+
+<header class="site-header" id="top">
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html">
+      <img class="brand__logo" src="assets/images/logo.svg" alt="Masla-e-Karachi" width="83" height="40" decoding="async">
+      <span class="brand__tag" data-i18n="brand.tag">Masla batao, hisaab lo</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main menu" data-i18n-aria-label="nav.label">
+      <ul class="site-nav__list">
+        <li><a href="index.html" aria-current="page" data-i18n="nav.home">Home</a></li>
+        <li><a href="how-it-works.html" data-i18n="nav.how">How it works</a></li>
+        <li><a href="privacy.html" data-i18n="nav.privacy">Privacy</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ &amp; contact</a></li>
+        <li class="site-nav__cta"><a class="btn" href="#" target="_blank" rel="noopener" data-live-link><span data-i18n="cta.visit">Visit Real Website</span><svg class="icon icon-flip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></li>
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="btn btn--sm site-header__cta" href="#" target="_blank" rel="noopener" data-live-link><span data-i18n="cta.visit">Visit Real Website</span><svg class="icon icon-flip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu" data-i18n-aria-label="nav.toggle">
+        <span class="nav-toggle__bars"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"><span class="hero__grid-lines"></span><span class="hero__glow"></span></div>
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="hero__status"><span class="chip chip--on-dark chip--live" data-i18n="hero.status">Platform under development · launching soon</span></p>
+      <h1 class="hero__title"><span data-i18n="hero.title.a">Masla batao,</span> <span class="hl" data-i18n="hero.title.b">hisaab lo</span><span class="pin" aria-hidden="true"></span></h1>
+      <p class="hero__lead" data-i18n="hero.lead">An anonymous way for the people of Karachi to report civic problems, and to see which government departments actually respond.</p>
+      <div class="hero__actions">
+        <a class="btn btn--light btn--lg" href="#" target="_blank" rel="noopener" data-live-link><span data-i18n="cta.visit">Visit Real Website</span><svg class="icon icon-flip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn btn--ghost-light btn--lg" href="how-it-works.html" data-i18n="cta.how">See how it works</a>
+      </div>
+      <p class="hero__note" data-i18n="hero.note">No name, phone number or email needed. The full platform is still being built.</p>
+      <ul class="hero__tags" aria-label="Platform highlights" data-i18n-aria-label="hero.tags.label">
+        <li data-i18n="hero.tag.1">Anonymous</li>
+        <li data-i18n="hero.tag.2">Public map</li>
+        <li data-i18n="hero.tag.3">Ranked on real data</li>
+      </ul>
+    </div>
+
+    <div class="hero__visual">
+      <article class="report-card">
+        <div class="report-card__media">
+          <svg class="street" viewBox="0 0 500 360" role="img" aria-label="Illustration: an open gutter on a Karachi road" data-i18n-aria-label="hero.art" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="st-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A1A1A"/><stop offset="1" stop-color="#333333"/></linearGradient>
+              <radialGradient id="st-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#39FF14" stop-opacity=".55"/><stop offset="1" stop-color="#39FF14" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="500" height="360" fill="#1A1A1A"/>
+            <rect width="500" height="172" fill="url(#st-sky)"/>
+            <g fill="#262626" stroke="#333333" stroke-width="1">
+              <rect x="14" y="52" width="62" height="98"/><rect x="84" y="78" width="48" height="72"/>
+              <rect x="142" y="40" width="70" height="110"/><rect x="224" y="86" width="52" height="64"/>
+              <rect x="288" y="60" width="64" height="90"/><rect x="362" y="92" width="46" height="58"/>
+              <rect x="418" y="46" width="70" height="104"/>
+            </g>
+            <g fill="#4D4D4D">
+              <rect x="28" y="66" width="10" height="12"/><rect x="48" y="66" width="10" height="12"/><rect x="28" y="90" width="10" height="12"/><rect x="48" y="90" width="10" height="12"/>
+              <rect x="158" y="56" width="12" height="12"/><rect x="182" y="56" width="12" height="12"/><rect x="158" y="82" width="12" height="12"/><rect x="182" y="82" width="12" height="12"/>
+              <rect x="304" y="74" width="10" height="12"/><rect x="326" y="74" width="10" height="12"/>
+              <rect x="434" y="62" width="12" height="12"/><rect x="458" y="62" width="12" height="12"/><rect x="434" y="88" width="12" height="12"/><rect x="458" y="88" width="12" height="12"/>
+            </g>
+            <g fill="#39FF14">
+              <rect class="street__lit" x="182" y="82" width="12" height="12"/><rect class="street__lit street__lit--b" x="326" y="74" width="10" height="12"/><rect class="street__lit street__lit--c" x="48" y="90" width="10" height="12"/>
+            </g>
+            <rect y="146" width="500" height="26" fill="#4D4D4D"/>
+            <rect y="172" width="500" height="188" fill="#1F1F1F"/>
+            <rect y="172" width="500" height="2" fill="#666666"/>
+            <g stroke="#666666" stroke-width="5" stroke-dasharray="34 26" stroke-linecap="round">
+              <line class="street__lane" x1="-10" y1="326" x2="510" y2="326"/>
+            </g>
+            <ellipse class="street__halo" cx="250" cy="256" rx="120" ry="42" fill="url(#st-glow)"/>
+            <ellipse cx="250" cy="256" rx="56" ry="18" fill="#4D4D4D"/>
+            <ellipse cx="250" cy="254" rx="46" ry="14" fill="#0D0D0D"/>
+            <ellipse class="street__ring" cx="250" cy="256" rx="56" ry="18" fill="none" stroke="#39FF14" stroke-width="2"/>
+            <path d="M236 252h28" stroke="#39FF14" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span class="chip report-card__badge" data-i18n="card.example">Example</span>
+          <div class="hero__pin" aria-hidden="true"><span class="pin"></span></div>
+        </div>
+        <div class="report-card__body">
+          <p class="report-card__title" data-i18n="card.title">Open gutter cover near the main road</p>
+          <p class="report-card__meta">
+            <span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span data-i18n="card.where">Gulshan-e-Iqbal, Karachi</span></span>
+            <span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg><span data-i18n="card.anon">Reported anonymously</span></span>
+          </p>
+          <div class="report-card__foot">
+            <span class="chip chip--open" data-i18n="chip.open">Open</span>
+            <small data-i18n="card.dept">Responsible: KWSC</small>
+          </div>
+        </div>
+      </article>
+      <div class="status-cycle" aria-hidden="true">
+        <span class="chip chip--open" data-i18n="chip.open">Open</span>
+        <span class="chip chip--responded" data-i18n="chip.responded">Responded</span>
+        <span class="chip chip--resolved" data-i18n="chip.resolved">Resolved</span>
+      </div>
+      <div class="hero__ticket ticket" aria-hidden="true">
+        <span class="ticket__label" data-i18n="promise.ticket.label">Your secret tracking code</span>
+        <span class="ticket__code ltr">MEK-8F3K-92</span>
+      </div>
+      <div class="hero__float">
+        <span class="pin pin--resolved pin--sm" aria-hidden="true"></span>
+        <span data-i18n="hero.float">Your name is never taken</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" aria-label="Masla-e-Karachi at a glance" data-i18n-aria-label="stats.label">
+  <div class="container">
+    <ul class="stats__bar reveal">
+      <li class="stats__item">
+        <span class="stats__value"><span data-counter="6" data-counter-duration="1200" data-counter-delay="200">6</span></span>
+        <span class="stats__label" data-i18n="stats.depts">Government departments</span>
+      </li>
+      <li class="stats__item">
+        <span class="stats__value"><span data-counter="4" data-counter-duration="1200" data-counter-delay="280">4</span></span>
+        <span class="stats__label" data-i18n="stats.steps">Steps from report to result</span>
+      </li>
+      <li class="stats__item">
+        <span class="stats__value"><span data-counter="0" data-counter-duration="1200" data-counter-delay="360">0</span></span>
+        <span class="stats__label" data-i18n="stats.data">Names, phones or emails taken</span>
+      </li>
+      <li class="stats__item">
+        <span class="stats__value"><span data-counter="3" data-counter-duration="1200" data-counter-delay="440">3</span></span>
+        <span class="stats__label" data-i18n="stats.status">Status colours: Open, Responded, Resolved</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__row ticker__row--tape reveal">
+    <div class="ticker__track">
+      <div class="ticker__group"><span class="ticker__item" data-i18n="ticker.report">Report</span><span class="ticker__item" data-i18n="ticker.track">Track</span><span class="ticker__item" data-i18n="ticker.hold">Hold accountable</span><span class="ticker__item" data-i18n="ticker.report">Report</span><span class="ticker__item" data-i18n="ticker.track">Track</span><span class="ticker__item" data-i18n="ticker.hold">Hold accountable</span></div>
+      <div class="ticker__group"><span class="ticker__item" data-i18n="ticker.report">Report</span><span class="ticker__item" data-i18n="ticker.track">Track</span><span class="ticker__item" data-i18n="ticker.hold">Hold accountable</span><span class="ticker__item" data-i18n="ticker.report">Report</span><span class="ticker__item" data-i18n="ticker.track">Track</span><span class="ticker__item" data-i18n="ticker.hold">Hold accountable</span></div>
+    </div>
+  </div>
+  <div class="ticker__row ticker__row--depts reveal">
+    <div class="ticker__track">
+      <div class="ticker__group"><span class="ticker__item">KMC</span><span class="ticker__item">KWSC</span><span class="ticker__item">K-Electric</span><span class="ticker__item">SSGC</span><span class="ticker__item">SSWMB</span><span class="ticker__item">Traffic Police</span><span class="ticker__item">KMC</span><span class="ticker__item">KWSC</span><span class="ticker__item">K-Electric</span><span class="ticker__item">SSGC</span><span class="ticker__item">SSWMB</span><span class="ticker__item">Traffic Police</span></div>
+      <div class="ticker__group"><span class="ticker__item">KMC</span><span class="ticker__item">KWSC</span><span class="ticker__item">K-Electric</span><span class="ticker__item">SSGC</span><span class="ticker__item">SSWMB</span><span class="ticker__item">Traffic Police</span><span class="ticker__item">KMC</span><span class="ticker__item">KWSC</span><span class="ticker__item">K-Electric</span><span class="ticker__item">SSGC</span><span class="ticker__item">SSWMB</span><span class="ticker__item">Traffic Police</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="section problem" id="problem">
+  <div class="container">
+    <div class="problem__panel">
+      <div class="problem__head reveal">
+        <h2><span data-i18n="problem.h.a">Every day Karachi sees problems that</span> <span class="hl" data-i18n="problem.h.b">nobody reports</span></h2>
+        <p class="section__lead" data-i18n="problem.p">Most people see them, but very few complain. They fear their name will be exposed, they do not know which department to go to, and they rarely get a reply.</p>
+      </div>
+      <ol class="problem-list">
+        <li class="problem-row reveal" data-delay="1">
+          <span class="problem-row__num" aria-hidden="true">01</span>
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
+          <div class="problem-row__body">
+            <h3 data-i18n="problem.gutter.h">Open gutters and manholes</h3>
+            <p data-i18n="problem.gutter.p">A missing cover is a danger for every child, bike and car that passes by. Someone sees it, but no one reports it.</p>
+          </div>
+        </li>
+        <li class="problem-row reveal" data-delay="2">
+          <span class="problem-row__num" aria-hidden="true">02</span>
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 21 8 3"/><path d="m16 3 4 18"/><path d="M12 5v3"/><path d="M12 11v3"/><path d="M12 17v3"/></svg></span>
+          <div class="problem-row__body">
+            <h3 data-i18n="problem.road.h">Broken roads and potholes</h3>
+            <p data-i18n="problem.road.p">Damaged roads slow everyone down and cause accidents, yet there is no simple way to say where and how bad.</p>
+          </div>
+        </li>
+        <li class="problem-row reveal" data-delay="3">
+          <span class="problem-row__num" aria-hidden="true">03</span>
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span>
+          <div class="problem-row__body">
+            <h3 data-i18n="problem.garbage.h">Uncollected garbage</h3>
+            <p data-i18n="problem.garbage.p">Piles that stay for days. Which department should clear them? Many residents do not know.</p>
+          </div>
+        </li>
+        <li class="problem-row reveal" data-delay="1">
+          <span class="problem-row__num" aria-hidden="true">04</span>
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg></span>
+          <div class="problem-row__body">
+            <h3 data-i18n="problem.water.h">Water and sewerage</h3>
+            <p data-i18n="problem.water.p">Leaking pipes, overflowing sewers and water shortages.</p>
+          </div>
+        </li>
+        <li class="problem-row reveal" data-delay="2">
+          <span class="problem-row__num" aria-hidden="true">05</span>
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span>
+          <div class="problem-row__body">
+            <h3 data-i18n="problem.power.h">Electricity, gas and street lights</h3>
+            <p data-i18n="problem.power.p">Dark streets, faulty lines and gas problems that go unreported.</p>
+          </div>
+        </li>
+        <li class="problem-row problem-row--sensitive reveal" data-delay="3">
+          <span class="problem-row__num" aria-hidden="true">06</span>
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M21 12h1"/><path d="M2 12h1"/><path d="M12 2v1"/><path d="m4.929 4.929.707.707"/><path d="m18.364 5.636.707-.707"/><path d="M12 12v6"/></svg></span>
+          <div class="problem-row__body">
+            <h3 data-i18n="problem.sensitive.h">Sensitive problems</h3>
+            <p data-i18n="problem.sensitive.p">Illegal liquor dens, drug spots and bhatta (extortion). Handled with extra care: the exact location and photo are never made public.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="solution">
+  <div class="container solution">
+    <div class="solution__intro reveal">
+      <h2><span data-i18n="solution.h.a">One place to report, see and</span> <span class="hl" data-i18n="solution.h.b">follow up</span></h2>
+      <p class="section__lead" data-i18n="solution.p">Masla-e-Karachi turns a quiet complaint into a public record. The responsible department is named, its answer is visible, and the result is checked by the community.</p>
+      <a class="btn btn--ghost" href="how-it-works.html"><span data-i18n="cta.story">Read the full story</span><svg class="icon icon-flip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    </div>
+    <div class="ledger">
+      <div class="ledger__row reveal" data-delay="1">
+          <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg></span>
+          <div class="ledger__head">
+            <h3 data-i18n="solution.1.h">Anonymous report</h3>
+            <span class="ledger__leader" aria-hidden="true"></span>
+            <span class="chip chip--responded" data-i18n="chip.p1">Phase 1</span>
+          </div>
+          <p data-i18n="solution.1.p">A photo or a video of up to 30 seconds, the location and a few details. No name, phone, email or login.</p>
+        </div>
+      <div class="ledger__row reveal" data-delay="2">
+          <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span>
+          <div class="ledger__head">
+            <h3 data-i18n="solution.2.h">Public map and list</h3>
+            <span class="ledger__leader" aria-hidden="true"></span>
+            <span class="chip chip--responded" data-i18n="chip.p1">Phase 1</span>
+          </div>
+          <p data-i18n="solution.2.p">After a moderator checks it, the problem appears on a public map and list that anyone can open.</p>
+        </div>
+      <div class="ledger__row reveal" data-delay="3">
+          <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></span>
+          <div class="ledger__head">
+            <h3 data-i18n="solution.3.h">The responsible department</h3>
+            <span class="ledger__leader" aria-hidden="true"></span>
+            <span class="chip chip--responded" data-i18n="chip.p1">Phase 1</span>
+          </div>
+          <p data-i18n="solution.3.p">Every problem shows which department should fix it, such as KMC, KWSC, K-Electric or SSGC.</p>
+        </div>
+      <div class="ledger__row reveal" data-delay="4">
+          <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>
+          <div class="ledger__head">
+            <h3 data-i18n="solution.4.h">Public ranking on real data</h3>
+            <span class="ledger__leader" aria-hidden="true"></span>
+            <span class="chip chip--soon" data-i18n="chip.p2">Phase 2</span>
+          </div>
+          <p data-i18n="solution.4.p">Departments are ranked on how many problems they resolve and how fast. Likes are never used.</p>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="section steps-section" id="steps">
+  <div class="container">
+    <div class="section__head reveal">
+    <h2><span data-i18n="steps.h.a">From a photo to a</span> <span class="hl" data-i18n="steps.h.b">fixed problem</span> <span data-i18n="steps.h.c">in 4 steps</span></h2>
+  </div>
+    <ol class="steps">
+      <li class="step reveal" data-delay="1">
+        <span class="step__marker" aria-hidden="true"></span>
+        <span class="icon-badge icon-badge--round step__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg></span>
+        <div class="step__body">
+          <h3 data-i18n="steps.1.h">Report</h3>
+          <p data-i18n="steps.1.p">Anyone reports a problem in four quick steps: category, location, photo or video, and details. A secret tracking code is given instead of an account.</p>
+        </div>
+      </li>
+      <li class="step reveal" data-delay="2">
+        <span class="step__marker" aria-hidden="true"></span>
+        <span class="icon-badge icon-badge--round step__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div class="step__body">
+          <h3 data-i18n="steps.2.h">Moderation</h3>
+          <p data-i18n="steps.2.p">A moderator reviews every report before it goes public. Faces and number plates are blurred.</p>
+        </div>
+      </li>
+      <li class="step reveal" data-delay="3">
+        <span class="step__marker" aria-hidden="true"></span>
+        <span class="icon-badge icon-badge--round step__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></span>
+        <div class="step__body">
+          <h3 data-i18n="steps.3.h">Department replies</h3>
+          <p data-i18n="steps.3.p">The verified officer of the responsible department answers from an official dashboard. If nothing happens for 7 days, the problem is marked Overdue.</p>
+        </div>
+      </li>
+      <li class="step reveal" data-delay="4">
+        <span class="step__marker" aria-hidden="true"></span>
+        <span class="icon-badge icon-badge--round step__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg></span>
+        <div class="step__body">
+          <h3 data-i18n="steps.4.h">Community confirms</h3>
+          <p data-i18n="steps.4.p">The fix needs proof, an after-photo, and nearby residents confirm that it is really fixed.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section section--tint features" id="features">
+  <div class="container">
+    <div class="section__head reveal">
+    <h2><span data-i18n="features.h.a">Built for</span> <span class="hl" data-i18n="features.h.b">trust</span></h2>
+  </div>
+    <div class="feature-grid">
+      <article class="feature feature--solid reveal" data-delay="1">
+        <span class="contours-mini" aria-hidden="true"></span>
+        <div class="feature__top">
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg></span>
+          
+        </div>
+        <h3 data-i18n="feature.anon.h">Anonymous by design</h3>
+        <p data-i18n="feature.anon.p">We never ask for your name, phone number or email. Photo metadata is removed and your IP address is stored only as a hash.</p>
+      </article>
+      <article class="feature reveal" data-delay="2">
+        <div class="feature__top">
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span>
+          <span class="chip chip--responded feature__tag" data-i18n="chip.p1">Phase 1</span>
+        </div>
+        <h3 data-i18n="feature.map.h">Public map</h3>
+        <p data-i18n="feature.map.p">See what is wrong in your area and who is responsible, with Leaflet and OpenStreetMap.</p>
+      </article>
+      <article class="feature reveal" data-delay="3">
+        <div class="feature__top">
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>
+          <span class="chip chip--soon feature__tag" data-i18n="chip.p2">Phase 2</span>
+        </div>
+        <h3 data-i18n="feature.rank.h">Department rankings</h3>
+        <p data-i18n="feature.rank.p">Resolution rate, average days, pending, overdue and reopened. Public data, not opinions.</p>
+      </article>
+      <article class="feature reveal" data-delay="4">
+        <div class="feature__top">
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+          <span class="chip chip--soon feature__tag" data-i18n="chip.planned">Planned</span>
+        </div>
+        <h3 data-i18n="feature.stories.h">Success Stories</h3>
+        <p data-i18n="feature.stories.p">Problems that were really fixed, and the people and departments who did the work.</p>
+      </article>
+      <article class="feature reveal" data-delay="1">
+        <div class="feature__top">
+          <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+          
+        </div>
+        <h3 data-i18n="feature.status.h">Open, Responded, Resolved</h3>
+        <p data-i18n="feature.status.p">Every report will show one clear status, so anyone can see where it stands.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section departments" id="departments">
+  <div class="container">
+    <div class="section__head reveal">
+    <h2><span data-i18n="depts.h.a">Who is</span> <span class="hl" data-i18n="depts.h.b">responsible?</span></h2>
+    <p class="section__lead" data-i18n="depts.p">Each problem is linked to the department that should handle it. This list is for information. It does not say that any department is failing.</p>
+  </div>
+    <div class="dept-ledger">
+      <div class="dept-row reveal" data-delay="1">
+        <span class="monogram" aria-hidden="true">KMC</span>
+        <div class="dept-row__text">
+          <h3 data-i18n="dept.kmc.h">Karachi Metropolitan Corporation</h3>
+          <p data-i18n="dept.kmc.p">Municipal services of the city.</p>
+        </div>
+        <span class="chip chip--soon dept-row__rank" data-i18n="dept.rank">Ranking: coming soon</span>
+      </div>
+      <div class="dept-row reveal" data-delay="2">
+        <span class="monogram" aria-hidden="true">KWSC</span>
+        <div class="dept-row__text">
+          <h3 data-i18n="dept.kwsc.h">Karachi Water and Sewerage Corporation</h3>
+          <p data-i18n="dept.kwsc.p">Water supply and sewerage.</p>
+        </div>
+        <span class="chip chip--soon dept-row__rank" data-i18n="dept.rank">Ranking: coming soon</span>
+      </div>
+      <div class="dept-row reveal" data-delay="3">
+        <span class="monogram" aria-hidden="true">K-E</span>
+        <div class="dept-row__text">
+          <h3 data-i18n="dept.k-e.h">K-Electric</h3>
+          <p data-i18n="dept.k-e.p">Electricity supply.</p>
+        </div>
+        <span class="chip chip--soon dept-row__rank" data-i18n="dept.rank">Ranking: coming soon</span>
+      </div>
+      <div class="dept-row reveal" data-delay="4">
+        <span class="monogram" aria-hidden="true">SSGC</span>
+        <div class="dept-row__text">
+          <h3 data-i18n="dept.ssgc.h">Sui Southern Gas Company</h3>
+          <p data-i18n="dept.ssgc.p">Gas supply.</p>
+        </div>
+        <span class="chip chip--soon dept-row__rank" data-i18n="dept.rank">Ranking: coming soon</span>
+      </div>
+      <div class="dept-row reveal" data-delay="1">
+        <span class="monogram" aria-hidden="true">SSWMB</span>
+        <div class="dept-row__text">
+          <h3 data-i18n="dept.sswmb.h">Sindh Solid Waste Management Board</h3>
+          <p data-i18n="dept.sswmb.p">Garbage collection and disposal.</p>
+        </div>
+        <span class="chip chip--soon dept-row__rank" data-i18n="dept.rank">Ranking: coming soon</span>
+      </div>
+      <div class="dept-row reveal" data-delay="2">
+        <span class="monogram" aria-hidden="true">TP</span>
+        <div class="dept-row__text">
+          <h3 data-i18n="dept.tp.h">Traffic Police</h3>
+          <p data-i18n="dept.tp.p">Traffic and road safety.</p>
+        </div>
+        <span class="chip chip--soon dept-row__rank" data-i18n="dept.rank">Ranking: coming soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--deep grid-bg" id="privacy-promise">
+  <div class="container">
+    <div class="promise">
+      <div class="promise__copy reveal">
+        <h2 class="promise__statement" data-i18n="promise.h">Your name is never taken.</h2>
+        <p class="promise__text" data-i18n="promise.p">You can report a problem without telling anyone who you are. Instead of an account you get a secret tracking code, and only a scrambled version of it is stored.</p>
+        <ul class="never-list">
+          <li data-i18n="promise.n1">No name</li>
+          <li data-i18n="promise.n2">No phone number</li>
+          <li data-i18n="promise.n3">No email</li>
+          <li data-i18n="promise.n4">No login to report</li>
+        </ul>
+        <p class="promise__cta"><a class="btn btn--light" href="privacy.html"><span data-i18n="cta.privacy">How we protect you</span><svg class="icon icon-flip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></p>
+      </div>
+      <div class="promise__aside reveal" data-delay="2">
+        <div class="ticket">
+          <span class="ticket__label" data-i18n="promise.ticket.label">Your secret tracking code</span>
+          <span class="ticket__code ltr">MEK-8F3K-92</span>
+          <span class="ticket__stub">
+            <span class="ticket__stub-label" data-i18n="promise.hash.label">What we store: only a scrambled version</span>
+            <span class="ticket__hash ltr" aria-hidden="true">7c9e &middot; 41ab &middot; d03f</span>
+          </span>
+        </div>
+        <p data-i18n="promise.aside">Example code. Keep yours safe: if it is lost, it cannot be recovered.</p>
+      </div>
+    </div>
+    <ul class="promise-points reveal" data-delay="1" aria-label="How your privacy is protected" data-i18n-aria-label="promise.points.label">
+      <li class="promise-point">
+        <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg></span>
+        <div>
+          <h3 data-i18n="promise.p1.h">No account, only a code</h3>
+          <p data-i18n="promise.p1.p">Instead of a login, you get a secret tracking code to follow your report.</p>
+        </div>
+      </li>
+      <li class="promise-point">
+        <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="2" x2="22" y1="2" y2="22"/><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"/><line x1="13.5" x2="6" y1="13.5" y2="21"/><line x1="18" x2="21" y1="12" y2="15"/><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59"/><path d="M21 15V5a2 2 0 0 0-2-2H9"/></svg></span>
+        <div>
+          <h3 data-i18n="promise.p2.h">Photo metadata is removed</h3>
+          <p data-i18n="promise.p2.p">Hidden details such as location and device (EXIF) are designed to be stripped from photos before anything is shown.</p>
+        </div>
+      </li>
+      <li class="promise-point">
+        <span class="icon-badge icon-badge--round"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></svg></span>
+        <div>
+          <h3 data-i18n="promise.p3.h">IP address kept as a hash</h3>
+          <p data-i18n="promise.p3.p">Your IP address is designed to be stored only as a scrambled hash, never as plain text.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tint roadmap-section" id="roadmap">
+  <div class="container">
+    <div class="section__head reveal">
+    <h2><span data-i18n="road.h.a">What is being</span> <span class="hl" data-i18n="road.h.b">built</span></h2>
+    <p class="section__lead" data-i18n="road.p">The real platform is under development and will launch in phases. Nothing here is live yet.</p>
+  </div>
+    <div class="roadmap">
+      <article class="phase phase--now reveal" data-delay="1">
+        <span class="chip chip--responded" data-i18n="chip.building">Under development</span>
+        <h3 data-i18n="road.1.h">Phase 1</h3>
+        <p class="phase__when" data-i18n="road.1.when">About 4 to 6 weeks, one town first</p>
+        <ul class="phase__list">
+          <li data-i18n="road.1.i1">Home, Report, Feed and Map</li>
+          <li data-i18n="road.1.i2">Complaint details and Track</li>
+          <li data-i18n="road.1.i3">Moderation by our team</li>
+        </ul>
+      </article>
+      <article class="phase phase--next reveal" data-delay="2">
+        <span class="chip chip--soon" data-i18n="chip.planned">Planned</span>
+        <h3 data-i18n="road.2.h">Phase 2</h3>
+        <p class="phase__when" data-i18n="road.2.when">After phase 1</p>
+        <ul class="phase__list">
+          <li data-i18n="road.2.i1">Official dashboard for departments</li>
+          <li data-i18n="road.2.i2">Rankings and area pages</li>
+          <li data-i18n="road.2.i3">WhatsApp sharing</li>
+        </ul>
+      </article>
+      <article class="phase phase--later reveal" data-delay="3">
+        <span class="chip chip--soon" data-i18n="chip.planned">Planned</span>
+        <h3 data-i18n="road.3.h">Phase 3</h3>
+        <p class="phase__when" data-i18n="road.3.when">Later</p>
+        <ul class="phase__list">
+          <li data-i18n="road.3.i1">Notifications</li>
+          <li data-i18n="road.3.i2">Success Stories and app-like install (PWA)</li>
+          <li data-i18n="road.3.i3">All of Karachi</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="cta-band reveal">
+      <div>
+        <h2 data-i18n="cta.h">Karachi’s problems deserve to be seen.</h2>
+        <p data-i18n="cta.p">Visit the real website to follow the launch and be among the first to use it.</p>
+      </div>
+      <div class="cta-band__actions">
+        <a class="btn btn--light btn--lg" href="#" target="_blank" rel="noopener" data-live-link><span data-i18n="cta.visit">Visit Real Website</span><svg class="icon icon-flip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn btn--ghost-light" href="faq.html"><span data-i18n="cta.faq">Read the FAQ</span></a>
+      </div>
+      <p class="cta-band__note"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span data-i18n="cta.emergency">If life is in danger, call 15 first. This website is not an emergency service.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight builder" aria-labelledby="builder-name">
+  <div class="container">
+    <div class="builder-card reveal">
+      <span class="builder-card__mono ltr" aria-hidden="true">A</span>
+      <div class="builder-card__body">
+        <p class="builder-card__eyebrow" data-i18n="builder.eyebrow">Built by</p>
+        <h2 class="builder-card__name ltr" id="builder-name">Aliyan Saleem</h2>
+        <p class="builder-card__role" data-i18n="builder.role">Developer &amp; Designer</p>
+        <p class="builder-card__line" data-i18n="builder.line">Designed and developed this landing website.</p>
+      </div>
+      <div class="builder-card__actions">
+        <a class="builder-chip ltr" data-dev-link="portfolio"><span>Portfolio</span></a>
+        <a class="builder-chip ltr" data-dev-link="linkedin"><span>LinkedIn</span></a>
+        <a class="builder-chip ltr" data-dev-link="youtube"><span>YouTube</span></a>
+        <a class="builder-chip ltr" data-dev-link="instagram"><span>Instagram</span></a>
+        <a class="builder-chip ltr" data-dev-link="github"><span>GitHub</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand" href="index.html">
+          <img class="brand__logo" src="assets/images/logo.svg" alt="Masla-e-Karachi" width="83" height="40" loading="lazy" decoding="async">
+          <span class="brand__tag" data-i18n="brand.tag">Masla batao, hisaab lo</span>
+        </a>
+        <p class="site-footer__tagline" data-i18n="footer.tagline">An anonymous way to report civic problems in Karachi and hold departments accountable with public data.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Pages" data-i18n-aria-label="footer.pages.label">
+        <h3 data-i18n="footer.pages">Pages</h3>
+        <ul>
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="how-it-works.html" data-i18n="nav.how">How it works</a></li>
+          <li><a href="privacy.html" data-i18n="nav.privacy.full">Privacy &amp; anonymity</a></li>
+          <li><a href="faq.html" data-i18n="nav.faq">FAQ &amp; contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="footer-nav" aria-label="Project" data-i18n-aria-label="footer.project.label">
+        <h3 data-i18n="footer.project">Project</h3>
+        <ul>
+          <li><a href="#" target="_blank" rel="noopener" data-live-link><span data-i18n="cta.visit">Visit Real Website</span></a></li>
+          <li><a href="terms.html" data-i18n="nav.terms">Terms &amp; guidelines</a></li>
+          <li><a href="faq.html#contact" data-i18n="nav.contact">Contact &amp; abuse reports</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="site-footer__emergency" data-i18n="footer.emergency">If life is in danger, call 15 first. This website is not an emergency service.</p>
+
+    <div class="site-footer__legal">
+      <span data-i18n="footer.legal1">© 2026 Masla-e-Karachi · Masla batao, hisaab lo</span>
+      <span data-i18n="footer.legal2">A non-political platform for everyone in Karachi.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js" defer></script>
+<script src="js/i18n.js" defer></script>
+<script src="js/main.js" defer></script>
+<script src="js/counter.js" defer></script>
+</body>
+</html>

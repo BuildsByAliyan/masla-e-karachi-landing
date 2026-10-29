@@ -1,0 +1,160 @@
+/* ==========================================================================
+   G. 404 PAGE  (Masla 15)
+   "4 [khula gutter] 4": beech ka 0 asal mein gutter ka gol hai, uska dhakkan
+   thora hat kar tairta hai. Neeche dashed sadak ki lakeer. Sirf CSS/SVG.
+   ========================================================================== */
+.error-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 72vh;
+  min-height: 72svh;
+  padding-block: var(--s-8) var(--s-9);
+  text-align: center;
+  background: var(--bg);
+}
+
+.error-page__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+}
+
+/* "4 O 4" */
+.error-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.02em;
+  direction: ltr;
+  color: var(--green);
+  font-family: var(--font-en-display);
+  font-size: clamp(6rem, 3.5rem + 18vw, 15rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.06em !important;
+  text-shadow: 0 0 20px var(--green-a55), 0 0 70px var(--green-a35);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .error-code {
+    animation: neon-flicker 6s linear 1.5s infinite;
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 55% { opacity: 0.55; }
+}
+
+.error-code__hole {
+  display: block;
+  inline-size: 0.78em;
+  block-size: 0.78em;
+  margin-inline: 0.04em;
+  text-shadow: none;
+}
+
+.error-code__hole svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+.manhole__rim {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 7;
+  filter: drop-shadow(0 0 6px var(--green-a55));
+}
+
+.manhole__pit {
+  fill: var(--gray-950);
+  stroke: var(--green-a35);
+  stroke-width: 2;
+}
+
+.manhole__ring {
+  fill: none;
+  stroke: var(--green-a20);
+  stroke-width: 2;
+  stroke-dasharray: 3 7;
+}
+
+/* Dhakkan: gutter ke upar se hat kar thora upar-daayen (RTL mein bhi 4-0-4 LTR hai) */
+.manhole__lid {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  translate: 30px -34px;
+  rotate: 14deg;
+}
+
+.manhole__lid-disc {
+  fill: var(--gray-900);
+  stroke: var(--green);
+  stroke-width: 4;
+}
+
+.manhole__lid-ring {
+  fill: none;
+  stroke: var(--green-a35);
+  stroke-width: 2;
+}
+
+.manhole__lid-grid {
+  fill: none;
+  stroke: var(--green-a35);
+  stroke-width: 1.5;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .manhole__lid {
+    animation: lid-wobble 4.5s ease-in-out 1s infinite alternate;
+  }
+}
+
+@keyframes lid-wobble {
+  from { translate: 30px -34px; rotate: 14deg; }
+  to   { translate: 34px -38px; rotate: 20deg; }
+}
+
+/* Sadak ki beech wali dashed lakeer */
+.error-road {
+  inline-size: min(34rem, 86%);
+  block-size: 0.5rem;
+  border-radius: 0.25rem;
+  background: repeating-linear-gradient(90deg, var(--green-a55) 0 2.25rem, transparent 2.25rem 3.75rem);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+}
+
+.error-page h1 {
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+.error-page p {
+  max-width: 28em;
+  color: var(--muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+/* Mazaiya line */
+.error-page .error-page__joke {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-3);
+  margin-block-start: var(--s-3);
+}

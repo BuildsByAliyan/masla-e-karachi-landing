@@ -1,0 +1,7 @@
+/* ---------- 8. SAFAI: bari screen par lamba text kinare se na chipke ---------- */
+@media (max-width: 22.5rem) {
+  .section__head h2::before,
+  .solution__intro h2::before {
+    width: 2.25rem;
+  }
+}

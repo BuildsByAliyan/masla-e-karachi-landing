@@ -1,0 +1,462 @@
+/* ==========================================================================
+   Masla-e-Karachi — base.css
+   --------------------------------------------------------------------------
+   Reset + default typography + accessibility + helpers +
+   page transitions + link-safety + print.
+   Is file mein koi page-specific design nahi hai.
+
+   Contents:
+     1. Reset            5. Reduced motion / contrast / forced colors
+     2. Typography       6. Helpers
+     3. Links + safety   7. Page transitions (MPA view transitions)
+     4. Accessibility    8. Print
+   ========================================================================== */
+
+/* ---------- 1. RESET ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color-scheme: dark;
+  background: var(--bg);                 /* overscroll par bhi dark */
+  scrollbar-gutter: stable;              /* scrollbar aane par layout na hile (CLS) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-600) var(--bg);
+  /* Anchor link par click karne se heading sticky header ke neeche na chhupe */
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  overflow-x: clip;                      /* clip: sticky ko nahi todta */
+  overflow-wrap: break-word;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+  -webkit-user-drag: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- 2. TYPOGRAPHY ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-weight: 700;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-3xl); letter-spacing: var(--tracking-display); }
+h2 { font-size: var(--fs-2xl); letter-spacing: var(--tracking-display); }
+h3 { font-size: var(--fs-lg); }
+h4 { font-size: var(--fs-md); }
+
+p {
+  text-wrap: pretty;
+}
+
+strong,
+b {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+small {
+  font-size: var(--fs-sm);
+}
+
+::selection {
+  background: var(--green);
+  color: var(--green-ink);
+  text-shadow: none;
+}
+
+hr {
+  border: 0;
+  border-block-start: 1px solid var(--line);
+  margin-block: var(--s-6);
+}
+
+/* ---------- 3. LINKS + LINK SAFETY ---------- */
+a {
+  color: var(--green);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  transition: color var(--dur-fast) ease, text-decoration-color var(--dur-fast) ease;
+}
+
+a:hover {
+  color: var(--green-bright);
+}
+
+/* Asli website ka link jab tak config.js se URL na aaye (href="#") ya
+   JS ne aria-disabled lagaya ho: disabled nazar aaye, click na ho. */
+a[aria-disabled="true"],
+a[data-live-link][href="#"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Security lint (sirf developer ke liye): target="_blank" bina rel="noopener"
+   ho to laal dashed ring aa jati hai taake review mein pakda jaye (tabnabbing). */
+a[target="_blank"]:not([rel~="noopener"]):not([rel~="noreferrer"]) {
+  outline: 3px dashed var(--open);
+  outline-offset: 3px;
+}
+
+/* javascript: / data: links kabhi render na hon, aur http:// (mixed content)
+   images kabhi load na hon. CSP pehle se rokta hai; yeh doosri deewar hai. */
+a[href^="javascript:" i],
+a[href^="data:" i],
+a[href^="vbscript:" i],
+img[src^="http://" i],
+iframe,
+object,
+embed {
+  display: none !important;
+}
+
+/* ---------- 4. ACCESSIBILITY ---------- */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
+}
+
+/* Hare background ke upar hara ring nazar nahi aata, wahan gehra ring */
+.btn:focus-visible {
+  outline-color: var(--white);
+}
+
+.cta-band :focus-visible {
+  outline-color: var(--green-ink);
+}
+
+/* "Skip to content" link: keyboard se sirf Tab dabane par nazar aata hai */
+.skip-link {
+  position: absolute;
+  inset-inline-start: var(--s-4);
+  inset-block-start: -5rem;
+  z-index: var(--z-skip);
+  padding: var(--s-3) var(--s-5);
+  background: var(--green);
+  color: var(--green-ink);
+  border-radius: var(--r-pill);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: inset-block-start var(--dur-fast) ease;
+}
+
+.skip-link:focus,
+.skip-link:hover {
+  inset-block-start: var(--s-3);
+  color: var(--green-ink);
+}
+
+/* Screen reader ke liye text jo aankh ko nazar na aaye */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 5. REDUCED MOTION / CONTRAST / FORCED COLORS ---------- */
+
+/* Jin ko animation se takleef ho unke liye animation band */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Reveal wali cheezein bina animation ke seedha nazar aayen (JS ke intezar mein chhupi na rahen) */
+  .js .reveal:not(.is-visible) {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+
+  .btn:active,
+  .chip:active {
+    scale: none;
+  }
+}
+
+/* Kam-refresh screens (e-ink) par bhi animation ki zaroorat nahi */
+@media (update: slow) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* "Zyada contrast" maangne walon ke liye lakeerein aur text tez */
+@media (prefers-contrast: more) {
+  :root {
+    --text: #ffffff;
+    --muted: #e0e0e0;
+    --line: #8a8a8a;
+    --line-strong: #bdbdbd;
+  }
+
+  a {
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* Windows High Contrast: system ke rang, borders zaroori */
+@media (forced-colors: active) {
+  a {
+    color: LinkText;
+  }
+
+  .btn,
+  .chip,
+  .token,
+  .nav-toggle {
+    border: 2px solid ButtonText;
+  }
+
+  :focus-visible {
+    outline-color: Highlight;
+  }
+
+  /* System-rang mein animation se chhupa hua kuch na rahe */
+  .js .reveal:not(.is-visible) {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+/* ---------- 6. HELPERS ----------
+   Site hamesha LTR/English hai. Left/right ki jagah hamesha "logical properties"
+   (margin-inline-start, padding-inline-end, inset-inline-start ...) use karo. */
+
+/* Code / tracking codes (jaise MEK-8F3K-92) hamesha LTR mein rahein */
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* ---------- 7. PAGE TRANSITIONS ----------
+   Ek page se doosre page par jaate waqt halka fade (Chrome/Edge/Safari naye).
+   Purane browser ise ignore karte hain, kuch nahi bigarta. Header apni jagah
+   tika rehta hai, sirf neeche ka content badalta hai. */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-header {
+    view-transition-name: site-header;
+  }
+
+  ::view-transition-old(root) {
+    animation: 0.16s ease-out both vt-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 0.34s var(--ease-out) 0.04s both vt-in;
+  }
+
+  /* Header (aur scroll bar) transition ke dauran apni jagah tike rahen */
+  .scroll-progress {
+    view-transition-name: scroll-progress;
+  }
+
+  @keyframes vt-out {
+    to { opacity: 0; }
+  }
+
+  @keyframes vt-in {
+    from { opacity: 0; translate: 0 10px; }
+  }
+}
+
+/* ---------- 8. PRINT ----------
+   Page print / PDF karne par: safed kagaz, kala text, menu aur animation gayab,
+   aur har bahari link ka address text ke saath chhap jaye. */
+@media print {
+  :root {
+    --bg: #fff;
+    --bg-tint: #fff;
+    --bg-deep: #fff;
+    --surface: #fff;
+    --ink: #000;
+    --text: #111;
+    --muted: #333;
+    --line: #bbb;
+    --line-strong: #888;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+
+  .emergency-bar,
+  .site-header,
+  .scroll-progress,
+  .ticker,
+  .hero__bg,
+  .hero__visual,
+  .page-hero__bg,
+  .error-page__bg,
+  .nav-toggle,
+  .skip-link,
+  .site-footer__legal {
+    display: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-image: none !important;
+  }
+
+  .section,
+  .hero,
+  .page-hero,
+  .cta-band,
+  .site-footer {
+    background: #fff !important;
+    color: #000 !important;
+    padding-block: 1.2rem !important;
+  }
+
+  h1, h2, h3, h4, strong, a {
+    color: #000 !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+
+  .accordion__panel {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    translate: none !important;
+  }
+
+  .feature,
+  .phase,
+  .story__body,
+  .accordion__item {
+    break-inside: avoid;
+  }
+}

@@ -1,0 +1,1162 @@
+/* ==========================================================================
+   Masla-e-Karachi — layout.css
+   --------------------------------------------------------------------------
+   Page ka dhancha: container, scroll-progress bar, emergency bar, header,
+   mobile menu, sections, grids, footer.
+
+   HTML contract (header):
+     <div class="scroll-progress"><span class="scroll-progress__bar"></span></div>
+     <div class="emergency-bar">...</div>
+     <header class="site-header" id="top">
+       <div class="container site-header__inner">
+         <a class="brand"><img class="brand__logo"><span class="brand__tag"></span></a>
+         <nav class="site-nav" id="site-nav"><ul class="site-nav__list">...</ul></nav>
+         <div class="site-header__actions">
+           <a class="btn btn--sm site-header__cta">..</a>
+           <button class="nav-toggle" aria-expanded="false">..</button>
+         </div>
+       </div>
+     </header>
+   main.js mobile menu kholne par <header> par class "is-open" lagata hai.
+   ========================================================================== */
+
+/* BUNDLE: neeche ki saari chhoti CSS files ek file mein jod di gayi hain (tez loading). */
+
+/* >>> layout/container-progress.css */
+/* ---------- 1. CONTAINER ---------- */
+.container {
+  width: min(100% - 2 * (var(--gutter) + var(--safe-x)), var(--container));
+  margin-inline: auto;
+}
+
+.container--narrow {
+  width: min(100% - 2 * (var(--gutter) + var(--safe-x)), var(--container-narrow));
+  margin-inline: auto;
+}
+
+/* ---------- 2. SCROLL PROGRESS (hara patla patta, sab se upar) ----------
+   Sirf CSS se: browser jahan scroll-driven animation janta hai wahin dikhta hai,
+   baqi jagah chhupa rehta hai. JS ki zaroorat nahi. */
+.scroll-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: var(--z-progress);
+      height: 3px;
+      pointer-events: none;
+    }
+
+    .scroll-progress__bar {
+      display: block;
+      height: 100%;
+      background: linear-gradient(var(--to-end), var(--green-deep), var(--green), var(--green-bright));
+      box-shadow: 0 0 12px var(--green), 0 0 2px var(--green-bright);
+      transform-origin: var(--origin-start) 50%;
+      transform: scaleX(0);
+      animation: progress-grow linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    @keyframes progress-grow {
+      to { transform: scaleX(1); }
+    }
+  }
+}
+
+/* >>> layout/topbar.css */
+/* ---------- 3. EMERGENCY BAR (har page ke sab se upar) ---------- */
+.emergency-bar {
+  background: var(--bg-deep);
+  border-block-end: 1px solid var(--line-faint);
+  color: var(--gray-100);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  padding-block: 0.5rem;
+  text-align: center;
+}
+
+.emergency-bar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem 0.6rem;
+}
+
+.emergency-bar p {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem 0.5rem;
+}
+
+/* Siren jaisa dhadakta laal nuqta */
+.emergency-bar p::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--open);
+  box-shadow: 0 0 0 0 var(--open-glow);
+  animation: siren 2s ease-out infinite;
+}
+
+@keyframes siren {
+  0%   { box-shadow: 0 0 0 0 var(--open-glow); }
+  70%  { box-shadow: 0 0 0 0.55rem rgb(255 77 90 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(255 77 90 / 0); }
+}
+
+.emergency-bar strong {
+  display: inline-block;
+  padding: 0.05em 0.6em;
+  background: var(--open);
+  color: var(--gray-950);
+  border-radius: var(--r-pill);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Chalti hui patti (marquee) ----
+   main.js .emergency-bar__track banata hai aur bar par .emergency-bar--marquee lagata hai.
+   Sab kuch motion-allowed hone par hi; reduced-motion mein purani static centered line.
+   JS na chale to bhi static line dikhti hai. Bar ki height FIX = var(--bar-h) (hero ka calc isi par hai). */
+@media (prefers-reduced-motion: no-preference) {
+  .js .emergency-bar--marquee {
+    display: flex;
+    align-items: center;
+    block-size: var(--bar-h, 2.25rem);
+    padding-block: 0;
+    text-align: start;
+  }
+
+  .js .emergency-bar--marquee .emergency-bar__inner {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(var(--to-end), transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(var(--to-end), transparent, #000 5%, #000 95%, transparent);
+  }
+
+  /* Asli <p> sirf screen reader ke liye (ek hi baar sunai de) */
+  .js .emergency-bar--marquee .emergency-bar__inner > p {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .emergency-bar__track {
+    display: flex;
+    inline-size: max-content;
+    animation: emergency-marquee var(--marquee-duration, 40s) linear infinite;
+    will-change: translate;
+  }
+
+  .emergency-bar__group {
+    display: flex;
+    flex: none;
+  }
+
+  .emergency-bar__item {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 1.5rem;
+    white-space: nowrap;
+  }
+
+  /* Har copy ke aage siren nuqta, aakhir mein chhota separator */
+  .emergency-bar__item::before {
+    content: "";
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--open);
+    box-shadow: 0 0 0 0 var(--open-glow);
+    animation: siren 2s ease-out infinite;
+  }
+
+  .emergency-bar__item::after {
+    content: "";
+    inline-size: 0.25rem;
+    block-size: 0.25rem;
+    flex: none;
+    margin-inline-start: 1.5rem;
+    border-radius: 50%;
+    background: var(--gray-500);
+  }
+
+  /* Hover ya keyboard focus par ruk jaye */
+  .emergency-bar:focus-within .emergency-bar__track {
+    animation-play-state: paused;
+  }
+
+  @media (hover: hover) {
+    .emergency-bar:hover .emergency-bar__track {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes emergency-marquee {
+    from { translate: 0 0; }
+    to   { translate: -50% 0; }
+  }
+}
+
+/* Reduced-motion: marquee ki copies chhupa do, purani static line dikhe */
+@media (prefers-reduced-motion: reduce) {
+  .emergency-bar__track { display: none; }
+}
+
+/* >>> layout/header.css */
+/* ==========================================================================
+   Masla-e-Karachi — layout/header.css  (Masla 5: floating pill navbar)
+   --------------------------------------------------------------------------
+   HTML (6 pages par same, badla NAHI):
+     <header class="site-header">
+       <div class="container site-header__inner">
+         .brand | nav.site-nav > ul.site-nav__list | .site-header__actions
+       </div>
+     </header>
+   Dhancha:
+     - <header> ka bahar ka height = var(--header-h) (hero ka calc isi par hai).
+       Header khud transparent hai; andar ki "goli" (pill) upar se thora gap
+       chhor kar tairti hai.
+     - Pill ka background .site-header__inner::before par hai (blur wahin),
+       taake mobile ki full-screen sheet (position: fixed) viewport se naap le.
+     - JS .is-open / .is-scrolled / aria-expanded lagata hai, aur neeche scroll par
+       .is-hidden (header upar slide hokar chhup jata hai; main.js HIDE_ON_SCROLL_DOWN).
+   ========================================================================== */
+
+/* ---------- 1. HEADER (bahar ka khol) ---------- */
+.site-header {
+  --pill-gap: 0.5rem;        /* pill ke upar/neeche ka gap */
+  --pill-shrink: 0.15rem;    /* scroll par pill itni patli ho jati hai */
+
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-header);
+  box-sizing: border-box;
+  block-size: var(--header-h);
+  padding-block: var(--pill-gap);
+  background: transparent;
+  pointer-events: none;      /* gap ke neeche wala content click hota rahe */
+}
+
+.site-header > * {
+  pointer-events: auto;
+}
+
+/* Scroll par pill ke upar-neeche ke gap (jahan header transparent hai) mein peeche ka
+   text jhankta tha. Ek patli scrim: --bg se transparent tak. Sirf scroll ke baad. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: -3;
+  block-size: calc(var(--header-h) + 0.75rem);
+  background: linear-gradient(to bottom, var(--bg) calc(var(--header-h) - 0.25rem), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.site-header.is-scrolled::before {
+  opacity: 1;
+}
+
+/* Smart hide: neeche scroll par upar slide. transform SIRF yahan (rest par none), taake
+   mobile menu ki fixed sheet header ke andar sahi naap le. Reduced-motion mein JS isay lagata hi nahi. */
+.site-header.is-hidden {
+  transform: translateY(-110%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-header::before {
+    transition: opacity var(--dur) ease;
+  }
+
+  .site-header {
+    transition: transform 0.28s var(--ease-out);
+  }
+}
+
+/* ---------- 2. PILL (tairti hui goli) ---------- */
+.site-header__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  block-size: 100%;
+  min-height: 0;
+  padding-inline: 1rem 0.5rem;
+}
+
+/* Pill ka glass background: neeche rehta hai (z-index -1), blur sirf yahan */
+.site-header__inner::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0;
+  z-index: -1;
+  border-radius: var(--r-pill);
+  background: rgb(13 13 13 / 0.94);
+  border: 1px solid var(--line-faint);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 12px 32px -20px rgb(0 0 0 / 0.8);
+  -webkit-backdrop-filter: saturate(1.4) blur(20px);
+  backdrop-filter: saturate(1.4) blur(20px);
+  pointer-events: none;
+}
+
+/* Scroll karne par pill thori chhoti + aur gehri + halki hari kinari (sirf CSS) */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header__inner::before {
+      animation: pill-solid linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 140px;
+    }
+
+    @keyframes pill-solid {
+      from {
+        inset-block: 0;
+        background-color: rgb(13 13 13 / 0.94);
+        border-color: var(--line-faint);
+      }
+      to {
+        inset-block: var(--pill-shrink);
+        background-color: rgb(13 13 13 / 0.97);
+        border-color: var(--green-a20);
+      }
+    }
+  }
+}
+
+/* Agar kabhi JS "is-scrolled" lagaye to bhi wahi look */
+.site-header.is-scrolled .site-header__inner::before {
+  inset-block: var(--pill-shrink);
+  background-color: rgb(13 13 13 / 0.97);
+  border-color: var(--green-a20);
+}
+
+/* Brand aur actions sheet ke upar rahen */
+.brand,
+.site-header__actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 3. BRAND ---------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);               /* tap target 44px+ (Masla 17) */
+  gap: 0.85rem;
+  min-width: 0;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-en-display);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.brand:hover {
+  color: var(--ink);
+}
+
+.brand__logo {
+  width: auto;
+  height: 2.4rem;
+  aspect-ratio: 83 / 40;           /* HTML ke width/height jaisa: layout shift nahi */
+  flex: none;
+  object-fit: contain;
+  transition: opacity var(--dur-fast) ease;
+}
+
+/* Logo saada: koi glow/scale nahi. Hover par sirf bahut halka opacity badlav */
+.brand:hover .brand__logo {
+  opacity: 0.85;
+}
+
+.brand__tag {
+  padding-inline-start: 0.85rem;
+  border-inline-start: 1px solid var(--line-strong);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-ui);
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+/* Header mein jagah kam hoti hai: tagline sirf bari screen par. Footer mein hamesha. */
+.site-header .brand__tag {
+  display: none;
+}
+
+@media (min-width: 80rem) {
+  .site-header .brand__tag {
+    display: inline;
+  }
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+/* ---------- 4. DESKTOP NAV ---------- */
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.site-nav__list a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-pill);
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.site-nav__list a::after {
+  display: none;
+}
+
+.site-nav__list a:hover {
+  color: var(--ink);
+}
+
+/* Jis page par hain uska link: aria-current="page" -> halka hara pill, koi glow nahi */
+.site-nav__list a[aria-current="page"] {
+  background: var(--green-a12);
+  color: var(--green);
+}
+
+/* Desktop hover: patli underline (andar se khulti hai). Mobile sheet ka apna teer hai. */
+@media (min-width: 62.5625rem) {
+  .site-nav__list > li:not(.site-nav__cta) > a::after {
+    content: "";
+    display: block;
+    position: absolute;
+    inset-inline: 1rem;
+    inset-block-end: 0.4rem;
+    block-size: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: var(--origin-start) 50%;
+  }
+
+  .site-nav__list > li:not(.site-nav__cta) > a:hover::after,
+  .site-nav__list > li:not(.site-nav__cta) > a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .site-nav__list > li:not(.site-nav__cta) > a[aria-current="page"]::after {
+    display: none;
+  }
+}
+
+@media (min-width: 62.5625rem) and (prefers-reduced-motion: no-preference) {
+  .site-nav__list > li:not(.site-nav__cta) > a::after {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+}
+
+.site-nav__cta {
+  display: none; /* sirf mobile menu mein dikhta hai */
+}
+
+/* Nav link ke style button ke rang ko na dabayen */
+.site-nav__list .site-nav__cta a,
+.site-nav__list .site-nav__cta a:hover {
+  background: var(--btn-bg);
+  box-shadow: none;
+  color: var(--btn-fg);
+}
+
+.site-nav__list .site-nav__cta a::before,
+.site-nav__list .site-nav__cta a::after {
+  display: none;
+}
+
+/* Tang desktop (1000-1200px): links thore chhote taake pill mein sab samaye */
+@media (min-width: 62.5rem) and (max-width: 75rem) {
+  .site-nav__list a { padding-inline: 0.8rem; }
+  .site-header__inner { gap: var(--s-3); }
+}
+
+/* ---------- 5. HAMBURGER ---------- */
+.nav-toggle {
+  display: none;
+  position: relative;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 1px solid var(--line-faint);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.06);
+  transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease;
+}
+
+.nav-toggle:hover {
+  border-color: var(--green-a55);
+  background: var(--green-a08);
+}
+
+.site-header.is-open .nav-toggle {
+  border-color: var(--green);
+}
+
+.nav-toggle__bars,
+.nav-toggle__bars::before,
+.nav-toggle__bars::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 50%;
+  width: 1.1rem;
+  height: 2px;
+  margin-inline-start: -0.55rem;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform var(--dur) var(--ease-out), opacity var(--dur-fast) ease, background-color var(--dur-fast) ease;
+}
+
+.nav-toggle__bars {
+  inset-block-start: 50%;
+  margin-block-start: -1px;
+}
+
+.nav-toggle__bars::before { inset-inline-start: 0; margin: 0; inset-block-start: -6px; }
+.nav-toggle__bars::after  { inset-inline-start: 0; margin: 0; inset-block-start: 6px; }
+
+.site-header.is-open .nav-toggle__bars {
+  background: transparent;
+}
+
+.site-header.is-open .nav-toggle__bars::before {
+  background: var(--green);
+  transform: translateY(6px) rotate(45deg);
+}
+
+.site-header.is-open .nav-toggle__bars::after {
+  background: var(--green);
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.nav-toggle {
+  flex: none;
+}
+
+/* Keyboard focus */
+.site-nav__list a:focus-visible,
+.nav-toggle:focus-visible,
+.brand:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Chhoti screen (phone): header mein sab kuch samane ke liye thora compact */
+@media (max-width: 30rem) {
+  .site-header__inner { gap: var(--s-2); padding-inline: 0.6rem 0.3rem; }
+  .site-header__actions { gap: var(--s-2); }
+  .brand__logo { height: 2.1rem; }
+}
+
+@media (max-width: 22.5rem) {
+  .brand__logo { height: 1.85rem; }
+}
+
+/* Phone landscape: header chhota hai, pill ko jagah do */
+@media (max-height: 30rem) and (orientation: landscape) {
+  .site-header {
+    --pill-gap: 0.25rem;
+    --pill-shrink: 0;
+  }
+}
+
+/* ---------- 6. MOBILE: pill ke neeche khulne wali bari sheet ---------- */
+/* Desktop: header CTA dikhao. Mobile: menu ke andar wali CTA dikhao */
+@media (max-width: 62.5rem) {
+  .nav-toggle {
+    display: block;
+  }
+
+  /* ".site-header ." lagaya taake components.css ka .btn{display:inline-flex} isay daba na sake */
+  .site-header .site-header__cta {
+    display: none;
+  }
+
+  /* "js" class <head> ki chhoti script lagati hai. JS na chale to menu khula rahega.
+     Sheet pill ke neeche latakti hai (pill ki chaurai ke barabar). */
+  .js .site-nav {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(100% + var(--s-2));
+    z-index: 0;                       /* pill ke background (-1) ke upar, brand/actions (1) ke barabar ya neeche */
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--header-h) - 6rem);
+    max-height: calc(100dvh - var(--header-h) - 6rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--s-3) var(--s-5) var(--s-5);
+    border: 1px solid var(--green-a20);
+    border-radius: var(--r-lg);
+    background:
+      radial-gradient(28rem 14rem at calc(50% + 40% * var(--flip)) 0, var(--green-a12), transparent 70%),
+      rgb(13 13 13 / 0.985);
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.95);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-0.75rem) scale(0.98);
+    transform-origin: 50% 0;
+    transition:
+      opacity var(--dur) ease,
+      transform var(--dur) var(--ease-out),
+      visibility 0s var(--dur);
+  }
+
+  .js .site-header.is-open .site-nav {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  /* Peeche ka page halka dhundhla jab menu khula ho (click-through: pointer-events none) */
+  .js .site-header::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: rgb(0 0 0 / 0.55);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--dur) ease, visibility 0s var(--dur);
+  }
+
+  .js .site-header.is-open::after {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* Menu khulte hi links ek ek karke andar aate hain */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .site-header.is-open .site-nav__list > li {
+      animation: nav-item-in 0.55s var(--ease-out) both;
+    }
+
+    .js .site-header.is-open .site-nav__list > li:nth-child(1) { animation-delay: 0.08s; }
+    .js .site-header.is-open .site-nav__list > li:nth-child(2) { animation-delay: 0.14s; }
+    .js .site-header.is-open .site-nav__list > li:nth-child(3) { animation-delay: 0.20s; }
+    .js .site-header.is-open .site-nav__list > li:nth-child(4) { animation-delay: 0.26s; }
+    .js .site-header.is-open .site-nav__list > li:nth-child(5) { animation-delay: 0.32s; }
+
+    @keyframes nav-item-in {
+      from { opacity: 0; translate: calc(-18px * var(--flip)) 0; }
+      to   { opacity: 1; translate: 0 0; }
+    }
+  }
+
+  .site-nav__list {
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    counter-reset: navnum;
+  }
+
+  .site-nav__list > li:not(.site-nav__cta) {
+    counter-increment: navnum;
+  }
+
+  /* Bade numbered links: 01 Home  ->  */
+  .site-nav__list a {
+    gap: 1rem;
+    min-height: 3.75rem;
+    padding: 0.6rem 0.25rem;
+    border-radius: 0;
+    border-block-end: 1px solid var(--line-faint);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.1rem + 2.4vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: var(--tracking-heading, -0.01em);
+    color: var(--ink);
+  }
+
+  .site-nav__list > li:not(.site-nav__cta) > a::before {
+    content: counter(navnum, decimal-leading-zero);
+    flex: none;
+    inline-size: auto;
+    block-size: auto;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--green);
+  }
+
+  /* Right-taraf ka teer */
+  .site-nav__list > li:not(.site-nav__cta) > a::after {
+    content: "\2192";
+    display: block;
+    margin-inline-start: auto;
+    font-family: var(--font-en-display);
+    font-size: 1.25rem;
+    color: var(--gray-400);
+    transform: scaleX(var(--flip));
+    transition: color var(--dur-fast) ease, translate var(--dur) var(--ease-out);
+  }
+
+  .site-nav__list a:hover,
+  .site-nav__list a[aria-current="page"] {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .site-nav__list a[aria-current="page"] {
+    color: var(--green);
+  }
+
+  .site-nav__list > li:not(.site-nav__cta) > a:hover::after,
+  .site-nav__list a[aria-current="page"]::after {
+    color: var(--green);
+    translate: calc(4px * var(--flip)) 0;
+  }
+
+  /* CTA sheet ke bilkul neeche, poori chaurai */
+  .site-nav__cta {
+    display: block;
+    margin-block-start: var(--s-5);
+  }
+
+  .site-nav__list .site-nav__cta a {
+    min-height: var(--tap);
+    padding: 0.8em 1.35em;
+    border: 0;
+    justify-content: center;
+    font-family: var(--font-ui);
+    font-size: var(--fs-base);
+    color: var(--btn-fg);
+  }
+}
+
+/* Motion kam karne wale users: sheet bina animation ke */
+@media (prefers-reduced-motion: reduce) {
+  .js .site-nav,
+  .js .site-header::after {
+    transition: opacity 0.01s linear, visibility 0s;
+    transform: none;
+  }
+}
+
+/* ---------- 7. NO-JS FALLBACK: nav neeche ek line mein wrap ---------- */
+.no-js .site-header {
+  block-size: auto;
+}
+
+.no-js .site-header__inner {
+  flex-wrap: wrap;
+  block-size: auto;
+  padding-block: var(--s-2);
+}
+
+.no-js .site-header__inner::before {
+  border-radius: var(--r-lg);
+}
+
+@media (max-width: 62.5rem) {
+  .no-js .site-nav {
+    order: 3;
+    width: 100%;
+  }
+}
+
+/* >>> layout/sections.css */
+/* ---------- 5. SECTIONS ---------- */
+.section {
+  --section-bg: var(--bg);
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--section-bg);
+}
+
+.section--tight {
+  padding-block: calc(var(--section-y) * 0.6);
+}
+
+.section--tint {
+  --section-bg: var(--bg-tint);
+}
+
+.section--tint,
+.section--deep {
+  border-block: 1px solid var(--line-faint);
+}
+
+.section--deep {
+  --section-bg: var(--bg-deep);
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--gray-200);
+}
+
+/* Section ka title + chhota intro: hamesha start-aligned, line chhoti */
+.section__head {
+  max-width: 44rem;
+  margin-block-end: clamp(2rem, 1.2rem + 3vw, 3.75rem);
+}
+
+.section__head > * + * {
+  margin-block-start: var(--s-4);
+}
+
+.section__lead {
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  color: var(--muted);
+  max-width: 38em;
+}
+
+/* Heading ke upar chhoti hari patti (brand ka nishan) */
+.section__head h2::before,
+.solution__intro h2::before {
+  content: "";
+  display: block;
+  width: 2.75rem;
+  height: 4px;
+  margin-block-end: var(--s-4);
+  border-radius: 4px;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-a55);
+}
+
+/* Gehre section par grid-bg: lakeeron ka jaal jo kinaron par ghul jata hai */
+.grid-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 70% at 85% 10%, var(--green-a12), transparent 70%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size);
+  -webkit-mask: radial-gradient(ellipse 90% 90% at 50% 40%, #000 30%, transparent 100%);
+  mask: radial-gradient(ellipse 90% 90% at 50% 40%, #000 30%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ---------- 6. GRID + STACK HELPERS ---------- */
+.grid {
+  display: grid;
+  gap: var(--grid-gap, var(--s-5));
+}
+
+/* >>> layout/footer.css */
+/* ==========================================================================
+   7. FOOTER  (Masla 11: gehra rounded-top container, hari patli lines)
+   --------------------------------------------------------------------------
+   SIRF CSS - 6 HTML ka footer markup same. Hooks: .site-footer__grid,
+   .footer-nav, .site-footer__emergency, .site-footer__legal.
+   CTA band (hara) ke baad footer gehra charcoal, hara nahi.
+   ========================================================================== */
+.site-footer {
+  --section-bg: var(--bg-deep);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--bg-deep);
+  border: 1px solid var(--line-faint);
+  border-block-end: 0;
+  border-start-start-radius: clamp(1.75rem, 1rem + 3vw, 2.75rem);
+  border-start-end-radius: clamp(1.75rem, 1rem + 3vw, 2.75rem);
+  color: var(--gray-300);
+  padding-block: var(--s-9) calc(var(--s-6) + env(safe-area-inset-bottom, 0px));
+  font-size: var(--fs-sm);
+}
+
+/* Upar hari roshni ki patli lakeer + halka glow (kone gol hain isliye beech mein) */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline: 12%;
+  z-index: -1;
+  height: 2px;
+  background: linear-gradient(var(--to-end), transparent, var(--green), transparent);
+  box-shadow: 0 0 36px 2px var(--green-a35);
+  pointer-events: none;
+}
+
+.site-footer::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: -1;
+  height: 14rem;
+  background: radial-gradient(60% 100% at 50% 0, var(--green-a08), transparent 75%);
+  pointer-events: none;
+}
+
+.site-footer h2,
+.site-footer h3,
+.site-footer h4 {
+  color: var(--ink);
+}
+
+.site-footer a {
+  color: var(--gray-200);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--green);
+  text-decoration: underline;
+  text-decoration-color: var(--green-a55);
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--s-7) var(--s-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 62.5rem) {
+  .site-footer__grid { grid-template-columns: 1.6fr 1fr 1fr; gap: var(--s-8); }
+}
+
+/* Footer ka brand: tagline hamesha nazar aaye, logo thora bara */
+.site-footer .brand__tag {
+  display: inline;
+}
+
+.site-footer .brand__logo {
+  height: 2.75rem;
+}
+
+.site-footer__tagline {
+  margin-block-start: var(--s-4);
+  max-width: 24em;
+  font-size: var(--fs-base);
+  color: var(--gray-200);
+}
+
+/* Column heading: hari chhoti patti + saaf text (CAPS nahi) */
+.footer-nav h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-end: var(--s-4);
+  padding-block-end: var(--s-3);
+  border-block-end: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.footer-nav h3::before {
+  content: "";
+  width: 1.25rem;
+  height: 3px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green-a55);
+}
+
+.footer-nav li + li {
+  margin-block-start: 0;
+}
+
+/* Tap target 44px+ (Masla 17 audit) */
+.footer-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding-block: 0.3rem;
+  transition: translate var(--dur) var(--ease-out), color var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .footer-nav a:hover {
+    translate: calc(4px * var(--flip)) 0;
+  }
+}
+
+/* Emergency: chhota gehra card, laal dhadakta nuqta */
+.site-footer__emergency {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-start: var(--s-8);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--open-line);
+  border-radius: var(--r-md);
+  background: var(--open-soft);
+  color: var(--ink);
+  font-size: var(--fs-base);
+  line-height: var(--lh-snug);
+}
+
+.site-footer__emergency::before {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--open);
+  box-shadow: 0 0 12px var(--open-glow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-footer__emergency::before {
+    animation: footer-siren 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes footer-siren {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-5);
+  margin-block-start: var(--s-6);
+  padding-block-start: var(--s-5);
+  border-block-start: 1px solid transparent;
+  border-image: linear-gradient(var(--to-end), var(--green-a35), var(--line) 40%, transparent) 1;
+  font-size: var(--fs-xs);
+  color: var(--gray-400);
+}
+
+/* ---------- Developer credit (Masla 21) ---------- */
+.site-footer__credit {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  max-inline-size: 100%;
+}
+
+.site-footer__credit-label {
+  color: var(--gray-400);
+}
+
+.site-footer__credit-name {
+  color: var(--gray-100);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;   /* ALIYAN SALEEM (HTML/JS mein naam normal likha rehta hai) */
+  text-decoration: none;
+  border-block-end: 1px solid var(--green-a35);
+  transition: color var(--dur-fast, 0.18s) ease, border-color var(--dur-fast, 0.18s) ease;
+}
+
+a.site-footer__credit-name:hover,
+a.site-footer__credit-name:focus-visible {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.site-footer__credit-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.site-footer__dev-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-block-size: 2.75rem;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gray-300);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out),
+    background-color 0.2s var(--ease-out), translate 0.2s var(--ease-out);
+}
+
+.site-footer__dev-chip:hover,
+.site-footer__dev-chip:focus-visible {
+  color: var(--green);
+  border-color: var(--green-a35);
+  background: var(--green-a08);
+}
+
+/* Mouse wale desktop par halka sa 1px upar (Masla 7 ke button jaisa); reduced-motion mein nahi */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .site-footer__dev-chip:hover {
+    translate: 0 -1px;
+  }
+}
+
+.site-footer__dev-icon {
+  flex: none;
+}
+
+@media (max-width: 40rem) {
+  .site-footer__credit { gap: var(--s-2); }
+}
+
+/* >>> layout/cleanup.css */
+/* ---------- 8. SAFAI: bari screen par lamba text kinare se na chipke ---------- */
+@media (max-width: 22.5rem) {
+  .section__head h2::before,
+  .solution__intro h2::before {
+    width: 2.25rem;
+  }
+}
+

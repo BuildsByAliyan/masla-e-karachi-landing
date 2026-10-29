@@ -1,0 +1,173 @@
+/* ---------- 10. MISC ---------- */
+
+/* Department ka gol monogram (KMC, KWSC ...) */
+.monogram {
+  display: inline-grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  flex: none;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--gray-900);
+  color: var(--ink);
+  font-family: var(--font-en-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  transition: background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+/* Chhota pill: "Phone model", "GPS" jaise tukde */
+.token {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.85em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--gray-900);
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.token--struck {
+  border-style: dashed;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--open);
+  text-decoration-thickness: 2px;
+}
+
+/* Bara number + chhota label (stats). Sirf asli data aane ke baad real numbers dalen. */
+.stat {
+  display: grid;
+  gap: var(--s-1);
+}
+
+.stat__value {
+  color: var(--green);
+  font-family: var(--font-en-display);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 24px var(--green-a35);
+}
+
+.stat__label {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* ---------- 11. REVEAL (scroll par nazar aana) ----------
+   main.js jab .reveal ko screen mein dekhta hai to "is-visible" lagata hai.
+   HTML mein data-delay="1..6" ho to ek qatar ke items ek ek karke aate hain
+   (main.js jahan data-delay nahi likha wahan khud stagger laga deta hai).
+   Variants (class ke saath .reveal): .reveal--scale  .reveal--side  .reveal--fade
+   `translate`/`scale` alag properties hain, isliye cards ka hover `transform` kabhi nahi tootta.
+   JS na chale (.no-js) to sab kuch pehle se nazar aata rahega.
+   Sirf transform-family + opacity animate hote hain (layout nahi hilta). */
+.js .reveal:not(.is-visible) {
+  opacity: 0;
+  translate: 0 26px;
+}
+
+.js .reveal--scale:not(.is-visible) { translate: none; scale: 0.94; }
+.js .reveal--side:not(.is-visible)  { translate: calc(-36px * var(--flip)) 0; }
+.js .reveal--fade:not(.is-visible)  { translate: none; }
+
+.js .reveal.is-visible {
+  animation: reveal-up var(--dur-slow) var(--ease-out) backwards;
+}
+
+.js .reveal--scale.is-visible { animation-name: reveal-scale; }
+.js .reveal--side.is-visible  { animation-name: reveal-side; }
+.js .reveal--fade.is-visible  { animation-name: reveal-fade; }
+
+.js .reveal.is-visible[data-delay="1"] { animation-delay: 0.06s; }
+.js .reveal.is-visible[data-delay="2"] { animation-delay: 0.14s; }
+.js .reveal.is-visible[data-delay="3"] { animation-delay: 0.22s; }
+.js .reveal.is-visible[data-delay="4"] { animation-delay: 0.3s; }
+.js .reveal.is-visible[data-delay="5"] { animation-delay: 0.38s; }
+.js .reveal.is-visible[data-delay="6"] { animation-delay: 0.46s; }
+
+@keyframes reveal-up {
+  from { opacity: 0; translate: 0 26px; scale: 0.985; }
+  to   { opacity: 1; translate: 0 0;    scale: 1; }
+}
+
+@keyframes reveal-scale {
+  from { opacity: 0; scale: 0.94; }
+  to   { opacity: 1; scale: 1; }
+}
+
+@keyframes reveal-side {
+  from { opacity: 0; translate: calc(-36px * var(--flip)) 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes reveal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---------- 12. MICRO-INTERACTIONS ---------- */
+
+/* Dabane ka ehsaas (touch + mouse dono): button halka sa dab jata hai */
+.btn:active,
+.chip:active,
+.faq-filter__chip:active {
+  scale: 0.97;
+}
+
+/* Heading ka hara marker (.hl) page khulte hi qalam ki tarah phailta hai.
+   clip-path se (rotate ke saath mil kar nahi bigarta); RTL mein dusri taraf se. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__title .hl::before,
+  .page-hero h1 .hl::before {
+    animation: hl-wipe 0.75s var(--ease-out) 0.5s backwards;
+  }
+
+  :root[dir="rtl"] .hero__title .hl::before,
+  :root[dir="rtl"] .page-hero h1 .hl::before {
+    animation-name: hl-wipe-rtl;
+  }
+}
+
+@keyframes hl-wipe     { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes hl-wipe-rtl { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+
+/* Sirf mouse wale desktop par (hover + fine pointer) aur motion allowed ho to:
+   - .lift          : hover par card halka upar uthta hai
+   - [data-tilt]    : card pointer ki taraf zara jhukta hai (JS --tilt-x/--tilt-y deta hai)
+   - [data-magnetic]: button pointer ki taraf zara khichta hai (JS `translate` deta hai) */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .lift {
+    transition: translate var(--dur) var(--ease-out), box-shadow var(--dur) ease;
+  }
+
+  .lift:hover {
+    translate: 0 -4px;
+  }
+
+  [data-tilt] {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.25s var(--ease-out);
+    will-change: transform;
+  }
+
+  [data-tilt].is-tilting {
+    transition: transform 0.06s linear;
+  }
+}
+
+/* Reduced-motion / touch: yeh sab bilkul band (JS bhi in par kuch nahi lagata) */
+@media (prefers-reduced-motion: reduce) {
+  [data-tilt] { transform: none; }
+  [data-magnetic] { translate: none !important; }
+}

@@ -1,0 +1,225 @@
+/* ==========================================================================
+   A6. DEPARTMENTS  (Masla 10: "hisaab ki bahi" - khuli bahi ke do safhe)
+   --------------------------------------------------------------------------
+   Ek rounded glass container; andar 6 rows. Desktop par do column (khuli bahi
+   jaisa, beech mein lakeer). Tablet par 1 column, har row mein chip right par.
+   Mobile (< 40rem) par har row alag glass card.
+   "Ranking: coming soon" ka matlab same: ranking abhi live nahi.
+   ========================================================================== */
+.departments h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.departments h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+:root[lang="ur"] .departments h2 .hl::before {
+  inset-block: 0.22em 0.1em;
+}
+
+/* ---- Container: glass ---- */
+.dept-ledger {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-3);
+}
+
+/* Upar ki patli hari lakeer + halka glow (sirf bari screen par container ke saath) */
+.dept-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  padding: var(--s-5) var(--s-4);
+  overflow: hidden;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  transition: background-color var(--dur) ease, border-color var(--dur) ease;
+}
+
+/* Row ke start par hari patti: hover par khulti hai */
+.dept-row::before {
+  content: "";
+  position: absolute;
+  inset-block: 18%;
+  inset-inline-start: 0;
+  width: 3px;
+  border-start-end-radius: 3px;
+  border-end-end-radius: 3px;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-a55);
+  scale: 1 0;
+  transition: scale var(--dur) var(--ease-out);
+}
+
+.dept-row__text h3 {
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.dept-row__text p {
+  margin-block-start: 0.2rem;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.dept-row__rank {
+  grid-column: 2;
+  justify-self: start;
+}
+
+@media (hover: hover) {
+  .dept-row:hover {
+    border-color: var(--green-a35);
+    background:
+      linear-gradient(var(--to-end), var(--green-a08), transparent 85%),
+      var(--bg-deep);
+  }
+
+  .dept-row:hover::before {
+    scale: 1 1;
+  }
+
+  .dept-row:hover .monogram {
+    border-color: var(--green);
+    background: var(--green);
+    color: var(--green-ink);
+    box-shadow: 0 0 22px -2px var(--green-a55);
+  }
+}
+
+/* ---- Tablet: ek bara glass container, rows ke beech dashed line ---- */
+@media (min-width: 40rem) {
+  .dept-ledger {
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-faint);
+    border-radius: var(--r-lg);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+      var(--bg-deep);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .dept-ledger::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 2;
+    height: 2px;
+    background: linear-gradient(var(--to-end), var(--green), var(--green-a12) 65%, transparent);
+    pointer-events: none;
+  }
+
+  .dept-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--s-3) var(--s-5);
+    padding: var(--s-5) var(--s-5);
+    border: 0;
+    border-radius: 0;
+    border-block-end: 1px dashed var(--line);
+    background: transparent;
+  }
+
+  .dept-row:last-child {
+    border-block-end: 0;
+  }
+
+  .dept-row__rank {
+    grid-column: auto;
+    justify-self: end;
+  }
+
+  @media (hover: hover) {
+    .dept-row:hover {
+      border-color: transparent;
+      border-block-end-color: var(--line);
+      background: linear-gradient(var(--to-end), var(--green-a08), transparent 85%);
+    }
+
+    .dept-row:last-child:hover {
+      border-block-end-color: transparent;
+    }
+  }
+}
+
+/* ---- Desktop: khuli bahi - do safhe, beech mein lakeer ---- */
+@media (min-width: 62.5rem) {
+  .dept-ledger {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dept-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    padding: var(--s-6) var(--s-6);
+  }
+
+  .dept-row:nth-child(odd) {
+    border-inline-end: 1px dashed var(--line);
+  }
+
+  /* Aakhri row (dono column ki) neeche ki lakeer nahi */
+  .dept-row:nth-last-child(2) {
+    border-block-end: 0;
+  }
+
+  .dept-row:last-child {
+    border-block-end: 0;
+  }
+
+  .dept-row .monogram {
+    margin-block-start: 0.15rem;
+  }
+
+  .dept-row__rank {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  @media (hover: hover) {
+    .dept-row:nth-child(odd):hover {
+      border-inline-end-color: var(--line);
+    }
+
+    .dept-row:nth-last-child(2):hover {
+      border-block-end-color: transparent;
+    }
+  }
+}
+
+@media (max-width: 30rem) {
+  .monogram {
+    width: 3.1rem;
+    height: 3.1rem;
+    font-size: 0.68rem;
+  }
+
+  .dept-row {
+    padding: var(--s-4);
+  }
+}

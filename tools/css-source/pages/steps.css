@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages/steps.css   (Masla 9: Steps)
+   --------------------------------------------------------------------------
+   4 qadam sach mein ek sequence hain, isliye numbering rakhi hai.
+   Desktop: 4 rounded glass cards ek qatar mein, beech mein dashed jorne wali line.
+   Mobile : vertical timeline (cards ke beech dashed khadi line).
+   Number ka rang masla ka safar dikhata hai: red -> amber -> white -> green.
+   ========================================================================== */
+.steps-section h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.steps-section h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+:root[lang="ur"] .steps-section h2 .hl::before {
+  inset-block: 0.22em 0.1em;
+}
+
+.steps {
+  --step-gap: var(--s-6);
+  position: relative;
+  display: grid;
+  gap: var(--step-gap);
+  counter-reset: step;
+}
+
+@media (min-width: 62.5rem) {
+  .steps {
+    --step-gap: 2.75rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.step {
+  --marker: var(--open);
+  --marker-glow: var(--open-glow);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  align-items: center;
+  gap: var(--s-4) var(--s-3);
+  padding: var(--s-5);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  box-shadow: var(--shadow-md);
+  counter-increment: step;
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+.step:nth-child(2) { --marker: var(--pending);   --marker-glow: var(--pending-glow); }
+.step:nth-child(3) { --marker: var(--responded); --marker-glow: var(--responded-glow); }
+.step:nth-child(4) { --marker: var(--green);     --marker-glow: var(--green-a55); }
+
+@media (hover: hover) {
+  .step:hover {
+    transform: translateY(-4px);
+    border-color: var(--green-a35);
+    box-shadow: var(--shadow-lg), 0 0 36px -14px var(--marker-glow);
+  }
+
+  .step:hover .step__icon {
+    transform: rotate(-6deg) scale(1.06);
+  }
+}
+
+/* Bara mono number */
+.step__marker {
+  font-family: var(--font-mono);
+  font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--marker);
+  text-shadow: 0 0 24px var(--marker-glow);
+}
+
+.step__marker::before {
+  content: counter(step, decimal-leading-zero);
+}
+
+.step__icon {
+  --badge-bg: var(--bg);
+  --badge-fg: var(--marker);
+  --badge-ring: var(--line-strong);
+}
+
+.step__body {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.step__body h3 {
+  font-size: var(--fs-md);
+  margin-block-end: var(--s-2);
+}
+
+.step__body p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* ---- Dashed jorne wali line: agle card ki taraf ---- */
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Desktop: card ke kinare se agle card tak, number wali qatar ki seedh mein */
+@media (min-width: 62.5rem) {
+  .step:not(:last-child)::after {
+    inset-inline-start: 100%;
+    inset-block-start: calc(var(--s-5) + 1.6rem);
+    inline-size: var(--step-gap);
+    block-size: 0;
+    border-block-start: 2px dashed var(--green-a55);
+    translate: 0 -1px;
+  }
+
+  /* Line ke aakhir par chhota nuqta */
+  .step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: calc(100% + var(--step-gap) - 0.3rem);
+    inset-block-start: calc(var(--s-5) + 1.6rem - 0.3rem);
+    inline-size: 0.6rem;
+    block-size: 0.6rem;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Mobile/tablet: vertical dashed line cards ke beech */
+@media (max-width: 62.49rem) {
+  .step:not(:last-child)::after {
+    inset-inline-start: 2.25rem;
+    inset-block-start: 100%;
+    block-size: var(--step-gap);
+    inline-size: 0;
+    border-inline-start: 2px dashed var(--green-a55);
+  }
+}
+
+/* Scroll-reveal ke baad dashed line halka sa "bahti" hai */
+@media (prefers-reduced-motion: no-preference) {
+  .step.is-visible:not(:last-child)::after {
+    animation: step-link 0.8s var(--ease-out) 0.4s backwards;
+  }
+}
+
+@keyframes step-link {
+  from { opacity: 0; }
+}

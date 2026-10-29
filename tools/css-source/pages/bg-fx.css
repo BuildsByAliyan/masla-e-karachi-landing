@@ -1,0 +1,112 @@
+/* ==========================================================================
+   SHARED BACKGROUND FX  (hero, page-hero, 404)
+   HTML:  <div class="hero__bg"><span class="hero__grid-lines"></span><span class="hero__glow"></span></div>
+   ========================================================================== */
+.hero__bg,
+.page-hero__bg,
+.error-page__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Lakeeron ka jaal jo kinaron par ghul jata hai */
+.hero__grid-lines {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size);
+  -webkit-mask: radial-gradient(ellipse 85% 80% at 70% 30%, #000 20%, transparent 100%);
+  mask: radial-gradient(ellipse 85% 80% at 70% 30%, #000 20%, transparent 100%);
+}
+
+/* Khadi hari patiyan (AirLume 'beams'): patle stripes, upar se neeche ghul jate hain.
+   Sirf CSS gradient + mask, koi image nahi. */
+.hero__bg::before,
+.page-hero__bg::before,
+.error-page__bg::before {
+  content: "";
+  position: absolute;
+  inset: -2px 0 0;
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 4.25rem,
+      var(--green-a08) 4.25rem 4.35rem,
+      rgb(57 255 20 / 0.035) 4.35rem 6.25rem,
+      transparent 6.25rem 8.5rem);
+  -webkit-mask:
+    linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 90%),
+    radial-gradient(ellipse 90% 100% at 70% 0%, #000 30%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 90%),
+    radial-gradient(ellipse 90% 100% at 70% 0%, #000 30%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Kinaron par halka vignette: hero ka markaz roshan, kone gehre */
+.hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgb(13 13 13 / 0.55) 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__bg::before {
+    animation: beams-drift 18s linear infinite;
+  }
+}
+
+@keyframes beams-drift {
+  to { translate: 8.5rem 0; }
+}
+
+/* Hara noor jo aahista tairta hai */
+.hero__glow {
+  position: absolute;
+  inset-block-start: -18rem;
+  inset-inline-end: -14rem;
+  width: 46rem;
+  height: 46rem;
+  max-width: 130vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--green-a20) 0%, rgb(57 255 20 / 0.06) 40%, transparent 68%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__grid-lines {
+    animation: grid-drift 24s linear infinite;
+  }
+
+  .hero__glow {
+    animation: glow-drift 14s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes grid-drift {
+  to { background-position: 0 var(--grid-size), var(--grid-size) 0; }
+}
+
+@keyframes glow-drift {
+  from { translate: 0 0;                               scale: 1; }
+  to   { translate: calc(-6rem * var(--flip)) 5rem;    scale: 1.18; }
+}
+
+/* Scroll karne par glow thora upar sarakta hai (parallax) — sirf CSS */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__glow {
+      animation: glow-drift 14s ease-in-out infinite alternate, glow-parallax linear both;
+      animation-timeline: auto, scroll(root block);
+      animation-range: normal, 0 90vh;
+    }
+
+    @keyframes glow-parallax {
+      to { opacity: 0.25; }
+    }
+  }
+}

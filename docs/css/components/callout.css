@@ -1,0 +1,57 @@
+/* ---------- 6. CALLOUT ---------- */
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--green-a20);
+  border-inline-start: 6px solid var(--green);
+  border-radius: var(--r-md);
+  background: linear-gradient(var(--to-end), var(--green-a08), transparent 70%), var(--surface);
+  color: var(--text);
+}
+
+.callout > .icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-block-start: 0.2em;
+  color: var(--green);
+}
+
+.callout > div {
+  min-width: 0;
+}
+
+.callout__title {
+  display: block;
+  margin-block-end: var(--s-1);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.callout--emergency {
+  border-color: var(--open-line);
+  border-inline-start-color: var(--open);
+  background: linear-gradient(var(--to-end), var(--open-soft), transparent 75%), var(--surface);
+}
+
+.callout--emergency > .icon,
+.callout--emergency .callout__title {
+  color: #ff8a93;
+}
+
+.callout--note {
+  border-color: var(--pending-line);
+  border-inline-start-color: var(--pending);
+  background: linear-gradient(var(--to-end), var(--pending-soft), transparent 75%), var(--surface);
+}
+
+.callout--note > .icon,
+.callout--note .callout__title {
+  color: var(--pending);
+}
+
+/* Callout ke upar/neeche faasla (HTML mein inline style nahi, isliye class) */
+.callout--gap-start { margin-block-start: var(--s-6); }
+.callout--gap-end   { margin-block-end: var(--s-6); }
+.callout--gap-both  { margin-block: var(--s-6); }

@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Masla-e-Karachi — components/lang-toggle.css  (Masla 5)
+   --------------------------------------------------------------------------
+   اردو | EN  : segmented pill + sarakta hua hara thumb.
+   HTML (badla nahi):
+   <button class="lang-toggle" type="button" aria-label="Language">
+     <span class="lang-toggle__opt" data-lang-opt="ur" lang="ur">اردو</span>
+     <span class="lang-toggle__opt" data-lang-opt="en" lang="en">EN</span>
+   </button>
+   Active option <html lang> se khud pata chalta hai (i18n.js).
+   RTL mein thumb khud ulta chalta hai (--flip).
+   ========================================================================== */
+.lang-toggle {
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: center;
+  min-height: var(--tap);               /* tap target 44px+ (Masla 17) */
+  padding: 3px;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  color: var(--gray-300);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease;
+}
+
+.lang-toggle:hover {
+  border-color: var(--green-a55);
+  background: var(--green-a08);
+}
+
+.lang-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Sarakne wala hara thumb */
+.lang-toggle::before {
+  content: "";
+  position: absolute;
+  inset-block: 3px;
+  inset-inline-start: 3px;
+  width: calc(50% - 3px);
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, var(--green-bright), var(--green));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.45),
+    0 0 14px -2px var(--green-a55);
+  transition: translate var(--dur) var(--ease-spring), scale var(--dur-fast) ease;
+}
+
+:root[lang="en"] .lang-toggle::before {
+  translate: calc(100% * var(--flip)) 0;
+}
+
+/* Dabane par thumb halka sa dabta hai */
+.lang-toggle:active::before {
+  scale: 0.94 1;
+}
+
+.lang-toggle__opt {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem;
+  height: 2.1rem;
+  padding-inline: 0.7rem;
+  border-radius: var(--r-pill);
+  transition: color var(--dur) ease;
+}
+
+.lang-toggle__opt[data-lang-opt="ur"] {
+  font-family: var(--font-ur-ui);
+  font-size: 1rem;
+  padding-block-end: 0.15rem;
+}
+
+.lang-toggle__opt[data-lang-opt="en"] {
+  font-family: var(--font-en-body);
+  letter-spacing: 0.02em;
+}
+
+/* Active option: hare thumb par gehra text (AA contrast) */
+:root[lang="ur"] .lang-toggle__opt[data-lang-opt="ur"],
+:root[lang="en"] .lang-toggle__opt[data-lang-opt="en"] {
+  color: var(--green-ink);
+}
+
+@media (pointer: coarse) {
+  .lang-toggle__opt { height: 2.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-toggle::before { transition: none; }
+}

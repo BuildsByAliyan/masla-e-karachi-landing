@@ -1,0 +1,53 @@
+/* ---------- 3. EMERGENCY BAR (har page ke sab se upar) ---------- */
+.emergency-bar {
+  background: var(--bg-deep);
+  border-block-end: 1px solid var(--line-faint);
+  color: var(--gray-100);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  padding-block: 0.5rem;
+  text-align: center;
+}
+
+.emergency-bar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem 0.6rem;
+}
+
+.emergency-bar p {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem 0.5rem;
+}
+
+/* Siren jaisa dhadakta laal nuqta */
+.emergency-bar p::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--open);
+  box-shadow: 0 0 0 0 var(--open-glow);
+  animation: siren 2s ease-out infinite;
+}
+
+@keyframes siren {
+  0%   { box-shadow: 0 0 0 0 var(--open-glow); }
+  70%  { box-shadow: 0 0 0 0.55rem rgb(255 77 90 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(255 77 90 / 0); }
+}
+
+.emergency-bar strong {
+  display: inline-block;
+  padding: 0.05em 0.6em;
+  background: var(--open);
+  color: var(--gray-950);
+  border-radius: var(--r-pill);
+  font-variant-numeric: tabular-nums;
+}

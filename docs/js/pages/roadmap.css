@@ -1,0 +1,220 @@
+/* ==========================================================================
+   A8. ROADMAP  (Masla 11: horizontal timeline + progress line)
+   --------------------------------------------------------------------------
+   Desktop: 3 phase cards ek line mein; upar ek lakeer jis par har phase ka
+   node hai. Maujooda phase (Phase 1) ka node hara, uski lakeer hari aur agle
+   phase tak. Baaqi lakeer dashed. Mobile: wohi cheez vertical (start side).
+   Kuch bhi "live" nahi likha: Phase 1 = "Under development".
+   ========================================================================== */
+.roadmap-section h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.roadmap-section h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+:root[lang="ur"] .roadmap-section h2 .hl::before {
+  inset-block: 0.22em 0.1em;
+}
+
+.roadmap {
+  --node: 1.1rem;
+  --rail-pad: 2.5rem;       /* mobile: line aur card ke beech */
+  --node-top: 1.75rem;      /* mobile: node card ke upar se kitna neeche */
+  --node-inset: 1.5rem;     /* desktop: node card ke start se kitna andar */
+  position: relative;
+  display: grid;
+  gap: var(--s-5);
+  padding-inline-start: var(--rail-pad);
+}
+
+/* Dashed rail (mobile: vertical) */
+.roadmap::before {
+  content: "";
+  position: absolute;
+  inset-block: calc(var(--node-top) + var(--node) / 2) 0;
+  inset-inline-start: calc(var(--node) / 2 - 1px);
+  width: 2px;
+  background: repeating-linear-gradient(180deg, var(--line-strong) 0 8px, transparent 8px 16px);
+  pointer-events: none;
+}
+
+@media (min-width: 62.5rem) {
+  .roadmap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-inline-start: 0;
+    padding-block-start: 2.75rem;
+  }
+
+  .roadmap::before {
+    inset-block: calc(var(--node) / 2 - 1px) auto;
+    inset-inline: calc(var(--node-inset) + var(--node) / 2) 0;
+    width: auto;
+    height: 2px;
+    background: repeating-linear-gradient(var(--to-end), var(--line-strong) 0 8px, transparent 8px 16px);
+  }
+}
+
+/* ---- Card ---- */
+.phase {
+  position: relative;
+  padding: var(--s-6) var(--s-5) var(--s-5);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease,
+    box-shadow var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .phase:hover {
+    transform: translateY(-4px);
+    border-color: var(--line-strong);
+  }
+}
+
+/* ---- Node (har card ka point on the rail) ---- */
+.phase::before {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--node-top);
+  inset-inline-start: calc(-1 * var(--rail-pad));
+  width: var(--node);
+  height: var(--node);
+  box-sizing: border-box;
+  border: 2px solid var(--gray-300);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+@media (min-width: 62.5rem) {
+  .phase::before {
+    inset-block-start: -2.75rem;
+    inset-inline-start: var(--node-inset);
+  }
+}
+
+.phase--later::before {
+  border-style: dashed;
+  border-color: var(--gray-500);
+}
+
+/* ---- Maujooda phase: hara node, hari lakeer agle node tak ---- */
+.phase--now {
+  border-color: var(--green-a35);
+  background:
+    linear-gradient(180deg, var(--green-a12), transparent 55%),
+    var(--bg-deep);
+  box-shadow: var(--shadow-md), 0 0 44px -14px var(--green-a35);
+}
+
+.phase--now::before {
+  border-color: var(--green);
+  background: var(--green);
+  box-shadow: 0 0 0 5px var(--green-a20), 0 0 16px var(--green-a55);
+}
+
+/* Hari progress lakeer: is node se agle node tak (bilkul ek column ya ek card) */
+.phase--now::after {
+  content: "";
+  position: absolute;
+  inset-block: calc(var(--node-top) + var(--node) / 2) calc(-1 * (var(--s-5) + var(--node-top) + var(--node) / 2));
+  inset-inline-start: calc(-1 * var(--rail-pad) + var(--node) / 2 - 1px);
+  width: 2px;
+  background: linear-gradient(180deg, var(--green), var(--green-a35));
+  box-shadow: 0 0 10px var(--green-a35);
+  pointer-events: none;
+}
+
+@media (min-width: 62.5rem) {
+  .phase--now::after {
+    inset-block: -2.75rem auto;
+    inset-block-start: calc(-2.75rem + var(--node) / 2 - 1px);
+    inset-inline: calc(var(--node-inset) + var(--node) / 2) calc(-1 * (var(--s-5) + var(--node-inset) + var(--node) / 2));
+    width: auto;
+    height: 2px;
+    background: linear-gradient(var(--to-end), var(--green), var(--green-a35));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .phase--now::before {
+    animation: node-pulse 2.8s ease-out infinite;
+  }
+}
+
+@keyframes node-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--green-a55), 0 0 16px var(--green-a55); }
+  70%  { box-shadow: 0 0 0 10px transparent, 0 0 16px var(--green-a55); }
+  100% { box-shadow: 0 0 0 0 transparent, 0 0 16px var(--green-a55); }
+}
+
+.phase--later {
+  border-style: dashed;
+  border-color: var(--line);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ---- Content ---- */
+.phase h3 {
+  margin-block: var(--s-4) var(--s-2);
+  font-size: var(--fs-lg);
+}
+
+.phase__when {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.phase__list {
+  display: grid;
+  gap: var(--s-3);
+  margin-block-start: var(--s-5);
+  padding-block-start: var(--s-5);
+  border-block-start: 1px dashed var(--line);
+}
+
+.phase__list li {
+  position: relative;
+  padding-inline-start: 1.5rem;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.phase__list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-a55);
+}
+
+.phase--later .phase__list li::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--green);
+}

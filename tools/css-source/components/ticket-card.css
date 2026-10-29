@@ -1,0 +1,142 @@
+/* ---------- 8. TICKET (tracking code) ----------
+   Parchi jaisa: dono taraf gol kataav (notch), beech mein dashed line.
+   <div class="ticket">
+     <span class="ticket__label">Your secret tracking code</span>
+     <span class="ticket__code ltr">MEK-8F3K-92</span>
+   </div> */
+.ticket {
+  --notch: 0.7rem;
+  display: inline-grid;
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-6);
+  background: var(--gray-100);
+  color: var(--gray-950);
+  border-radius: var(--r-md);
+  box-shadow: inset 0 5px 0 var(--green);          /* upar hari patti */
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 56%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 56%, #0000 97%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 56%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 56%, #0000 97%, #000) right / 51% 100% no-repeat;
+}
+
+.ticket__label {
+  padding-block: 0.25rem var(--s-3);
+  border-block-end: 2px dashed var(--gray-500);
+  color: var(--gray-600);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.ticket__code {
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
+  font-weight: 500;
+  letter-spacing: 0.08em !important;
+  color: var(--gray-950);
+}
+
+/* ---------- 9. REPORT CARD (misaali complaint) ----------
+   Hero mein dikhane ke liye. HAMESHA "Misal / Example" chip ke saath. */
+.report-card {
+  position: relative;
+  max-width: 26rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-lg), 0 0 60px -20px var(--green-a35);
+}
+
+/* Neon kinara: ek roshni card ke gird ghoomti hai (@property wale browser mein) */
+.report-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--angle), transparent 0 70%, var(--green) 85%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .report-card::before {
+    animation: border-spin 6s linear infinite;
+  }
+}
+
+@keyframes border-spin {
+  to { --angle: 360deg; }
+}
+
+.report-card__media {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 5 / 3.6;
+  overflow: hidden;
+  border-radius: calc(var(--r-lg) - 0.65rem);
+  background: var(--gray-950);
+}
+
+.report-card__media > svg,
+.report-card__media > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.report-card__badge {
+  position: absolute;
+  inset-block-start: 0.7rem;
+  inset-inline-start: 0.7rem;
+}
+
+.report-card__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-3) var(--s-3);
+}
+
+.report-card__title {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+}
+
+.report-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.report-card__meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.report-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-block-start: var(--s-3);
+  border-block-start: 1px dashed var(--line-strong);
+}
+
+.report-card__foot small {
+  color: var(--muted);
+}

@@ -1,0 +1,4663 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages.css
+   --------------------------------------------------------------------------
+   Har page / section ka apna design.
+
+   A. HOME      hero, ticker, problem, solution, steps, features, departments,
+                privacy promise, roadmap, final CTA
+   B. SUB-PAGES page-hero (shared header band), page-cta
+   C. HOW IT WORKS   story timeline, status legend
+   D. PRIVACY        compare columns, explain cards
+   E. FAQ            layout, contact card
+   F. TERMS          toc + prose + rules
+   G. 404
+
+   Yaad rakhein: sirf logical properties (inline/block) use hui hain,
+   taake layout saaf rahe. Animation sirf transform/opacity/translate
+   par hai (GPU), isliye phone par bhi smooth.
+   ========================================================================== */
+
+/* BUNDLE: neeche ki saari chhoti CSS files ek file mein jod di gayi hain (tez loading). */
+
+/* >>> pages/bg-fx.css */
+/* ==========================================================================
+   SHARED BACKGROUND FX  (hero, page-hero, 404)
+   HTML:  <div class="hero__bg"><span class="hero__grid-lines"></span><span class="hero__glow"></span></div>
+   ========================================================================== */
+.hero__bg,
+.page-hero__bg,
+.error-page__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Lakeeron ka jaal jo kinaron par ghul jata hai */
+.hero__grid-lines {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size);
+  -webkit-mask: radial-gradient(ellipse 85% 80% at 70% 30%, #000 20%, transparent 100%);
+  mask: radial-gradient(ellipse 85% 80% at 70% 30%, #000 20%, transparent 100%);
+}
+
+/* Khadi hari patiyan (AirLume 'beams'): patle stripes, upar se neeche ghul jate hain.
+   Sirf CSS gradient + mask, koi image nahi. */
+.hero__bg::before,
+.page-hero__bg::before,
+.error-page__bg::before {
+  content: "";
+  position: absolute;
+  inset: -2px 0 0;
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 4.25rem,
+      var(--green-a08) 4.25rem 4.35rem,
+      rgb(57 255 20 / 0.035) 4.35rem 6.25rem,
+      transparent 6.25rem 8.5rem);
+  -webkit-mask:
+    linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 90%),
+    radial-gradient(ellipse 90% 100% at 70% 0%, #000 30%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 90%),
+    radial-gradient(ellipse 90% 100% at 70% 0%, #000 30%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Kinaron par halka vignette: hero ka markaz roshan, kone gehre */
+.hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgb(13 13 13 / 0.55) 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__bg::before {
+    animation: beams-drift 18s linear infinite;
+  }
+}
+
+@keyframes beams-drift {
+  to { translate: 8.5rem 0; }
+}
+
+/* Hara noor jo aahista tairta hai */
+.hero__glow {
+  position: absolute;
+  inset-block-start: -18rem;
+  inset-inline-end: -14rem;
+  width: 46rem;
+  height: 46rem;
+  max-width: 130vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--green-a20) 0%, rgb(57 255 20 / 0.06) 40%, transparent 68%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__grid-lines {
+    animation: grid-drift 24s linear infinite;
+  }
+
+  .hero__glow {
+    animation: glow-drift 14s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes grid-drift {
+  to { background-position: 0 var(--grid-size), var(--grid-size) 0; }
+}
+
+@keyframes glow-drift {
+  from { translate: 0 0;                               scale: 1; }
+  to   { translate: calc(-6rem * var(--flip)) 5rem;    scale: 1.18; }
+}
+
+/* Scroll karne par glow thora upar sarakta hai (parallax) — sirf CSS */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__glow {
+      animation: glow-drift 14s ease-in-out infinite alternate, glow-parallax linear both;
+      animation-timeline: auto, scroll(root block);
+      animation-range: normal, 0 90vh;
+    }
+
+    @keyframes glow-parallax {
+      to { opacity: 0.25; }
+    }
+  }
+}
+
+/* >>> pages/hero.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/hero.css   (Masla 6: hero ka naya art-direction)
+   --------------------------------------------------------------------------
+   Is file mein Masla 1 (hero screen mein fit) aur Masla 2 (right side ka
+   overlap-free layout) ke rules bhi shamil hain.
+
+   Left : status pill, bara H1 (ek lafz hare marker .hl mein), lead, 2 CTA, note, tags
+   Right: grid-lanes (overlap structurally mumkin nahi):
+          lane A  status-cycle pill
+          lane B  report-card (+ ticket card ke kinare par, khali aasman par)
+          lane C  hero__float (card ke NEECHE alag row)
+   Peeche: bg-fx.css ki beams + neeche soft fade ticker mein.
+   Yaadgar lamha: pin gir kar ripple banata hai, phir card ubharta hai.
+   ========================================================================== */
+.hero {
+  --section-bg: var(--bg);
+  --hero-bar-h: var(--bar-h, 2.25rem);     /* emergency bar ki height */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(2rem, 1.2rem + 4vw, 5.5rem) clamp(4.5rem, 3rem + 6vw, 8rem);
+  background: var(--bg);
+  color: var(--gray-200);
+}
+
+/* Neeche halka fade: hero ticker (--bg-deep) mein ghul jata hai */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 0;
+  height: clamp(3rem, 2rem + 5vw, 6rem);
+  background: linear-gradient(to bottom, transparent, var(--bg-deep));
+  pointer-events: none;
+}
+
+/* ---------- Masla 1: laptop par poori pehli screen mein fit ---------- */
+@media (min-width: 62.5rem) {
+  .hero {
+    min-height: calc(100vh - var(--hero-bar-h) - var(--header-h));
+    min-height: calc(100svh - var(--hero-bar-h) - var(--header-h));
+    display: grid;
+    align-content: center;
+  }
+}
+
+@media (min-width: 62.5rem) and (max-height: 48rem) {
+  .hero {
+    padding-block: 1.5rem 3.5rem;
+  }
+
+  .hero__status { margin-block-end: var(--s-3); }
+  .hero__lead   { margin-block-start: var(--s-3); font-size: var(--fs-base); line-height: 1.5; }
+  .hero__actions { margin-block-start: var(--s-4); }
+  .hero__note   { margin-block-start: var(--s-3); font-size: var(--fs-xs); }
+}
+
+.hero__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--s-8);
+  align-items: center;
+}
+
+@media (min-width: 62.5rem) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--s-7);
+  }
+}
+
+@media (min-width: 62.5rem) and (max-height: 48rem) {
+  .hero__grid { gap: var(--s-6); }
+}
+
+.hero__copy {
+  min-width: 0;
+  max-width: 46rem;
+}
+
+.hero__status {
+  margin-block-end: var(--s-5);
+}
+
+/* H1: width AUR height dono se naapa jata hai (1366x640 par bhi 2 lines fit) */
+.hero__title {
+  color: var(--white);
+  font-size: min(var(--fs-display), max(2.25rem, 11vh));
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  text-shadow: 0 0 60px rgb(57 255 20 / 0.18);
+}
+
+/* Highlighted lafz: hare marker-block ke upar gehra text (Creatix 'Our [Services]') */
+.hero__title .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.2em;
+  color: var(--green-ink);
+  white-space: nowrap;
+  text-shadow: none;
+}
+
+.hero__title .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.1em 0.04em;
+  z-index: -1;
+  border-radius: 0.16em;
+  background: var(--green);
+  box-shadow: 0 0 40px -6px var(--green-a55);
+  rotate: calc(-1.4deg * var(--flip));
+}
+
+/* Title ke andar chhota pin (full stop ki jagah) — brand ka hara */
+.hero__title .pin {
+  --pin-size: 0.5em;
+  --pin-color: var(--green);
+  --pin-glow: var(--green-a55);
+  margin-inline-start: 0.12em;
+  vertical-align: baseline;
+}
+
+.hero__lead {
+  max-width: 34em;
+  margin-block-start: var(--s-5);
+  color: var(--gray-200);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+/* CTA: pill + gol circle ke andar teer (AirLume jaisa) */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-block-start: var(--s-6);
+}
+
+.hero__actions .btn--light {
+  padding-inline-end: 0.5rem;
+  border-radius: var(--r-pill);
+}
+
+.hero__actions .btn--light .icon {
+  box-sizing: content-box;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: var(--gray-950);
+  color: var(--green);
+}
+
+.hero__actions .btn--ghost-light {
+  border-radius: var(--r-pill);
+}
+
+.hero__note {
+  margin-block-start: var(--s-5);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* Chhote glass pill labels (sirf sach: yeh platform ke wade/design hain, abhi bun raha hai) */
+.hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block-start: var(--s-5);
+}
+
+.hero__tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.05);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+}
+
+.hero__tags li::before {
+  content: "";
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ---------- Masla 2: right side = grid lanes (overlap mumkin hi nahi) ---------- */
+.hero__visual {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "status"
+    "card"
+    "float";
+  row-gap: var(--s-4);
+  justify-items: stretch;
+  width: 100%;
+  max-width: 28rem;
+  justify-self: center;
+  padding: 0;
+}
+
+/* AirLume jaisi dashed orbit: card ke peeche do ring (sirf sajawat) */
+.hero__visual::before,
+.hero__visual::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  border: 1px dashed var(--green-a20);
+  border-radius: 50%;
+  pointer-events: none;
+  translate: calc(-50% * var(--flip)) -50%;
+}
+
+.hero__visual::before { inline-size: 118%; aspect-ratio: 1; }
+.hero__visual::after  { inline-size: 150%; aspect-ratio: 1; border-color: rgb(57 255 20 / 0.08); }
+
+/* Lane A: status pill, card ke UPAR alag row */
+.status-cycle {
+  grid-area: status;
+  position: static;
+  justify-self: start;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(13 13 13 / 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+}
+
+.status-cycle .chip {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Motion allowed ho to chips ek hi jagah par ghoom kar badalte hain */
+@media (prefers-reduced-motion: no-preference) {
+  .status-cycle {
+    display: inline-grid;
+    flex-wrap: nowrap;
+    justify-items: center;
+    max-width: none;
+  }
+
+  .status-cycle .chip {
+    grid-area: 1 / 1;
+    opacity: 0;
+    animation: status-step 9s ease-in-out infinite both;
+  }
+
+  .status-cycle .chip:nth-child(2) { animation-delay: 3s; }
+  .status-cycle .chip:nth-child(3) { animation-delay: 6s; }
+}
+
+@keyframes status-step {
+  0%        { opacity: 0; translate: 0 8px;  scale: 0.94; }
+  5%, 28%   { opacity: 1; translate: 0 0;    scale: 1; }
+  33%, 100% { opacity: 0; translate: 0 -8px; scale: 0.94; }
+}
+
+/* Lane B: card */
+.hero__visual .report-card {
+  grid-area: card;
+  width: 100%;
+  max-width: none;
+  rotate: calc(-1.6deg * var(--flip));
+}
+
+/* Ticket card ke right kinare par, upar ke KHALI aasman wale hisse par.
+   Card ke wahi grid-cell mein baithta hai (percent margin = card ki chaurai ka hissa). */
+.hero__ticket {
+  grid-area: card;
+  position: relative;
+  z-index: 4;
+  align-self: start;
+  justify-self: end;
+  margin-block-start: 12%;
+  margin-inline-end: -6%;
+  --notch: 0.45rem;
+  gap: 0.35rem;
+  padding: 0.7rem 1rem 0.6rem;
+  rotate: calc(5deg * var(--flip));
+  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.55));
+}
+
+.hero__ticket .ticket__label {
+  padding-block: 0.15rem 0.45rem;
+  font-size: var(--fs-xs);
+}
+
+.hero__ticket .ticket__code {
+  font-size: 1.05rem;
+}
+
+/* Pin report-card__media ke ANDAR rakha jata hai.
+   Position percentage mein hai, isliye har screen size par sahi rehti hai. */
+.hero__pin {
+  position: absolute;
+  inset-block-start: 69%;
+  inset-inline-start: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: end center;
+  width: 3rem;
+  height: 3.4rem;
+  translate: calc(-50% * var(--flip)) calc(-100% + 0.55rem);
+}
+
+.hero__pin .pin {
+  --pin-size: 2.4rem;
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.6)) drop-shadow(0 0 10px var(--open-glow));
+}
+
+.hero__pin::after {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.35rem;
+  width: 1.4rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.55);
+  z-index: -1;
+}
+
+/* Lane C: card ke NEECHE alag row, kuch nahi dhakta */
+.hero__float {
+  grid-area: float;
+  position: relative;
+  z-index: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  max-width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--green-a35);
+  border-radius: var(--r-pill);
+  background: rgb(13 13 13 / 0.7);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--ink);
+  box-shadow: var(--shadow-lg), 0 0 30px -10px var(--green-a55);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  rotate: calc(1.2deg * var(--flip));
+}
+
+/* Short laptop screen: right side bhi chhota taake card ka title/location cut na ho */
+@media (min-width: 62.5rem) and (max-height: 48rem) {
+  .hero__visual { max-width: 20rem; row-gap: var(--s-3); }
+  .hero__visual .report-card__media { aspect-ratio: 5 / 2.6; }
+  .hero__tags { display: none; }
+  .hero__visual .report-card__body { gap: var(--s-2); padding-block-start: var(--s-3); }
+  .hero__ticket { margin-block-start: 8%; }
+}
+
+@media (max-width: 40rem) {
+  .hero__ticket { margin-inline-end: -2%; }
+  .hero__float  { justify-self: stretch; border-radius: var(--r-md); }
+}
+
+/* Masla 12: 360px aur 320px par ticket chhupana nahi, sirf chhota karna hai.
+   Wahi grid cell (card ka kinara) rehta hai, isliye lanes ka layout nahi tootta. */
+@media (max-width: 22.5rem) {
+  .hero__ticket {
+    --notch: 0.35rem;
+    margin-block-start: 6%;
+    margin-inline-end: 0;
+    gap: 0.25rem;
+    padding: 0.5rem 0.7rem 0.45rem;
+  }
+
+  .hero__ticket .ticket__label {
+    padding-block: 0.1rem 0.3rem;
+    font-size: 0.6875rem;
+  }
+
+  .hero__ticket .ticket__code {
+    font-size: 0.875rem;
+  }
+}
+
+/* ---- the one orchestrated moment ---- */
+@keyframes rise {
+  from { opacity: 0; translate: 0 22px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* `translate` alag property hai, isliye pin ki rotate(-45deg) khatam nahi hoti */
+@keyframes pin-drop {
+  0%   { opacity: 0; translate: 0 -5rem; }
+  55%  { opacity: 1; translate: 0 0; }
+  72%  { translate: 0 -0.7rem; }
+  100% { translate: 0 0; }
+}
+
+@keyframes ripple {
+  from { opacity: 0.7; transform: scale(0.3); }
+  to   { opacity: 0;   transform: scale(3.2); }
+}
+
+@keyframes card-in {
+  from { opacity: 0; translate: 0 30px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes float-in {
+  from { opacity: 0; translate: 0 16px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -7px; }
+}
+
+.hero__status,
+.hero__title,
+.hero__lead,
+.hero__actions,
+.hero__note {
+  animation: rise 0.8s var(--ease-out) both;
+}
+
+.hero__title   { animation-delay: 0.08s; }
+.hero__lead    { animation-delay: 0.2s; }
+.hero__actions { animation-delay: 0.3s; }
+.hero__note    { animation-delay: 0.4s; }
+
+.hero__visual .report-card { animation: card-in 0.9s var(--ease-out) 0.35s both; }
+.hero__pin .pin            { animation: pin-drop 0.9s cubic-bezier(0.5, 0, 0.75, 0.6) 0.9s both; }
+.hero__pin::after          { animation: rise 0.4s ease 1.2s both; }
+.hero__float               { animation: float-in 0.8s var(--ease-out) 1.6s both; }
+.hero__ticket              { animation: float-in 0.8s var(--ease-out) 1.2s both, bob 6s ease-in-out 2.2s infinite; }
+.status-cycle              { animation: float-in 0.8s var(--ease-out) 1.4s both; }
+
+/* Ripple: pin girne ke baad ek ring phelti hai */
+.hero__pin::before {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.7rem;
+  width: 2.4rem;
+  height: 0.9rem;
+  border: 2px solid var(--green);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 12px var(--green-a55);
+  animation: ripple 1.4s ease-out 1.5s 2 both;
+}
+
+/* Gutter wali SVG tasveer mein zinda cheezein (SVG ke class names HTML mein hain) */
+.street__lit {
+  animation: window-flicker 5s steps(1, end) infinite;
+}
+
+.street__lit--b { animation-duration: 7s; animation-delay: -2s; }
+.street__lit--c { animation-duration: 9s; animation-delay: -5s; }
+
+@keyframes window-flicker {
+  0%, 100% { opacity: 1; }
+  38%      { opacity: 0.25; }
+  42%      { opacity: 1; }
+  70%      { opacity: 0.55; }
+  74%      { opacity: 1; }
+}
+
+.street__lane {
+  animation: lane-run 2.2s linear infinite;
+}
+
+@keyframes lane-run {
+  to { stroke-dashoffset: -60; }
+}
+
+.street__halo,
+.street__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.street__halo {
+  animation: halo-pulse 2.6s ease-in-out infinite;
+}
+
+.street__ring {
+  animation: ring-ping 2.6s ease-out infinite;
+}
+
+@keyframes halo-pulse {
+  0%, 100% { opacity: 0.55; scale: 0.92; }
+  50%      { opacity: 1;    scale: 1.08; }
+}
+
+@keyframes ring-ping {
+  0%   { opacity: 1; scale: 1; }
+  100% { opacity: 0; scale: 1.7; }
+}
+
+/* >>> pages/ticker.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/ticker.css   (Masla 7: tilted tape)
+   --------------------------------------------------------------------------
+   Do patiyan, -1.5deg jhuki hui, ULTI directions mein chalti hain:
+     1) hari bari tape : Report + Track + Hold accountable
+     2) gehri patti    : departments ke naam
+   Har group andar se 2 baar repeat hai, aur track mein 2 barabar group:
+   track ko aadha (-50%) khiskana seamless loop banata hai.
+   Dono patiyan ulti directions mein chalti hain.
+   Sajawati hai: markup aria-hidden.
+   ========================================================================== */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  direction: ltr;                        /* layout hamesha ltr */
+  padding-block: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+  background: var(--bg-deep);
+}
+
+/* Patti ke siray screen se bahar taake tilt par khali kone na dikhen */
+.ticker__row {
+  position: relative;
+  width: calc(100% + 12vw);
+  margin-inline: -6vw;
+  overflow: hidden;
+  rotate: -1.5deg;
+}
+
+.ticker__row--tape {
+  z-index: 2;
+  background: var(--green);
+  color: var(--green-ink);
+  box-shadow: 0 18px 40px -18px var(--green-a55);
+}
+
+.ticker__row--depts {
+  z-index: 1;
+  margin-block-start: 0.35rem;
+  border-block: 1px solid var(--green-a20);
+  background: var(--gray-850);
+  color: var(--gray-200);
+  box-shadow: inset 0 12px 16px -12px rgb(0 0 0 / 0.55);   /* tape ke neeche halka depth */
+}
+
+/* Dono patiyon ke siray halke phike (edge fade). Row ke andar hi hai, isliye tape ka shadow nahi katta */
+.ticker__row::before,
+.ticker__row::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  z-index: 3;
+  width: 12%;
+  pointer-events: none;
+}
+
+.ticker__row::before {
+  inset-inline-start: 0;
+  background: linear-gradient(to right, var(--bg-deep), transparent);
+}
+
+.ticker__row::after {
+  inset-inline-end: 0;
+  background: linear-gradient(to left, var(--bg-deep), transparent);
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+}
+
+.ticker__group {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  padding-inline-end: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  white-space: nowrap;
+}
+
+/* Bari tape: bold, bara text */
+.ticker__row--tape .ticker__item {
+  padding-block: clamp(0.6rem, 0.3rem + 1.2vw, 1.1rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.2rem + 3.4vw, 4rem);
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+/* Alfaaz ke beech 4-kone wala sitara */
+.ticker__row--tape .ticker__item::after {
+  content: "";
+  inline-size: 0.5em;
+  block-size: 0.5em;
+  flex: none;
+  background: var(--green-ink);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
+/* Departments ki patti: chhota, spaced, uppercase */
+.ticker__row--depts .ticker__item {
+  padding-block: 0.8rem;
+  font-family: var(--font-en-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ticker__row--depts .ticker__item::after {
+  content: "";
+  inline-size: 0.45rem;
+  block-size: 0.45rem;
+  flex: none;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green-a55);
+  rotate: 45deg;
+}
+
+/* MOTION (sirf jab animation allowed ho)
+   - Raftaar: main.js har track ki chaurai naap kar --ticker-duration deta hai
+     (tape ~50px/s, departments ~40px/s). JS na chale to neeche ke fallback seconds.
+   - Tape bayen taraf, departments ULTI (daayen) taraf chalti hai.
+   - Mouse upar aaye to wo patti ruk jati hai.
+   - Pehli baar screen par aane par dono patiyan neeche se halki si uth kar aati hain. */
+@media (prefers-reduced-motion: no-preference) {
+  .ticker__track {
+    animation: ticker-run var(--ticker-duration, 40s) linear infinite;
+    will-change: translate;
+  }
+
+  .ticker__row--tape .ticker__track  { animation-duration: var(--ticker-duration, 52s); }
+  .ticker__row--depts .ticker__track { animation-duration: var(--ticker-duration, 58s); animation-direction: reverse; }
+
+  .ticker__row:hover .ticker__track {
+    animation-play-state: paused;
+  }
+
+  .js .ticker__row.reveal:not(.is-visible) {
+    translate: 0 12px;
+  }
+
+  .js .ticker__row.reveal.is-visible {
+    animation: ticker-in 0.6s var(--ease-out) var(--reveal-delay, 0ms) backwards;
+  }
+}
+
+@keyframes ticker-in {
+  from { opacity: 0; translate: 0 12px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes ticker-run {
+  to { translate: -50% 0; }
+}
+
+/* Motion band ho to patiyan ruk jayen: sirf ek group, wrap ho kar, seedhi */
+@media (prefers-reduced-motion: reduce) {
+  .ticker__row {
+    width: 100%;
+    margin-inline: 0;
+    rotate: none;
+  }
+
+  .ticker__track {
+    width: auto;
+    animation: none !important;
+  }
+
+  .ticker__group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ticker__group + .ticker__group {
+    display: none;
+  }
+
+  .ticker__row::before,
+  .ticker__row::after {
+    display: none;
+  }
+
+  .ticker__row--tape .ticker__item {
+    font-size: clamp(1.5rem, 1.1rem + 2vw, 2.5rem);
+  }
+}
+
+/* >>> pages/stats.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/stats.css   (Masla 7: stats bar, Creatix jaisa)
+   --------------------------------------------------------------------------
+   4 sachche, banaye hue nahi: 6 departments, 4 steps, 0 personal data, 3 status colours.
+   Counter: js/counter.js (data-counter). HTML mein final number pehle se likha hai,
+   isliye JS na chale to bhi sahi number dikhta hai.
+   Layout: 4 column -> 2 -> 1. Khanon ke beech patli lakeer (gap 1px + background).
+   ========================================================================== */
+.stats {
+  padding-block: clamp(2rem, 1.2rem + 3vw, 4rem) clamp(1rem, 0.5rem + 2vw, 2.5rem);
+  background: var(--bg-deep);
+}
+
+.stats__bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background: var(--line-faint);               /* gap ki lakeeren */
+  box-shadow: var(--shadow-md), 0 0 60px -30px var(--green-a35);
+}
+
+@media (min-width: 36rem) {
+  .stats__bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 62.5rem) {
+  .stats__bar { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.stats__item {
+  display: grid;
+  align-content: center;
+  gap: var(--s-2);
+  padding: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem) clamp(1.25rem, 0.8rem + 2vw, 2.25rem);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.015)), var(--bg-deep);
+  transition: background-color 0.2s ease;
+}
+
+.stats__value {
+  display: block;
+  font-family: var(--font-en-display);        /* ginti hamesha Latin digits */
+  font-size: clamp(2.5rem, 1.9rem + 2.6vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Number ke baad chhota hara nishan (Creatix ke "+" jaisa) */
+.stats__value::after {
+  content: "";
+  display: inline-block;
+  inline-size: 0.32em;
+  block-size: 0.32em;
+  margin-inline-start: 0.14em;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green);
+  vertical-align: 0.1em;
+}
+
+.stats__label {
+  max-width: 16em;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+@media (hover: hover) {
+  .stats__item:hover {
+    background-color: var(--bg-tint);
+  }
+}
+
+/* ---- Stats ki animation (Masla 8) ----
+   Pura bar halka fade hota hai, phir 4 khane ek ke baad ek (80ms ke fasle se)
+   opacity + 14px neeche se aate hain. Counter ginti 200ms + 80ms*n baad shuru hoti hai
+   (HTML ka data-counter-delay). Ginti ke khatam hone par hari dot halki "pop" se aati hai,
+   phir bilkul static. Sirf opacity/translate/scale animate hote hain. */
+.stats__item:nth-child(1) { --i: 0; }
+.stats__item:nth-child(2) { --i: 1; }
+.stats__item:nth-child(3) { --i: 2; }
+.stats__item:nth-child(4) { --i: 3; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* bar khud sirf fade (translate nahi) taake khano ka stagger saaf dikhe */
+  .js .stats__bar.reveal:not(.is-visible) {
+    translate: none;
+  }
+
+  .js .stats__bar.reveal.is-visible {
+    animation: reveal-fade 0.6s var(--ease-out) backwards;
+  }
+
+  .js .stats__bar.reveal:not(.is-visible) .stats__item {
+    opacity: 0;
+    translate: 0 14px;
+  }
+
+  .js .stats__bar.reveal.is-visible .stats__item {
+    animation: stats-in 0.7s var(--ease-out) calc(var(--i, 0) * 80ms) backwards;
+  }
+
+  .js .stats__bar.reveal.is-visible .stats__value::after {
+    animation: stats-dot 0.45s var(--ease-out) calc(1350ms + var(--i, 0) * 80ms) backwards;
+  }
+}
+
+@keyframes stats-in {
+  from { opacity: 0; translate: 0 14px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes stats-dot {
+  from { scale: 0; opacity: 0; }
+  to   { scale: 1; opacity: 1; }
+}
+
+/* >>> pages/problem.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/problem.css   (Masla 8: Problem section)
+   --------------------------------------------------------------------------
+   Bento ki jagah: saaf rounded dark panel, heading mein ek lafz hare marker
+   (.hl) mein, neeche 6 numbered glass rows (01-06). Desktop par 2 column.
+   #problem id aur sab purani i18n keys wahi hain.
+   Is file mein section divider (#solution ke ooper rounded kone) bhi hai.
+   ========================================================================== */
+
+/* ---- .hl: heading ke ek lafz ke peeche hara marker-block (h2 ke liye) ---- */
+.problem h2 .hl,
+.solution__intro h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.problem h2 .hl::before,
+.solution__intro h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+/* ---- Section: neeche solution ke rounded kone ke liye jagah ---- */
+.problem {
+  padding-block-end: calc(var(--section-y) + 2.5rem);
+}
+
+/* ---- Panel ---- */
+.problem__panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(1.25rem, 0.6rem + 3vw, 3.5rem);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(70% 60% at 100% 0%, var(--green-a12), transparent 70%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent 40%),
+    var(--bg-deep);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Radar ke gol ring: panel ke kone mein, sirf sajawat */
+.problem__panel::before,
+.problem__panel::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -7rem;
+  inset-inline-end: -7rem;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.problem__panel::before {
+  background:
+    radial-gradient(circle, var(--green) 0 3px, transparent 4px),
+    repeating-radial-gradient(circle, var(--green-a20) 0 1.5px, transparent 1.5px 32px);
+  opacity: 0.7;
+}
+
+.problem__panel::after {
+  background: conic-gradient(from 0deg, transparent 0 78%, rgb(57 255 20 / 0.26) 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .problem__panel::after {
+    animation: radar-sweep 6s linear infinite;
+  }
+}
+
+@keyframes radar-sweep {
+  to { rotate: 360deg; }
+}
+
+.problem__head {
+  max-width: 44rem;
+  margin-block-end: clamp(1.75rem, 1rem + 3vw, 3rem);
+}
+
+.problem__head > * + * {
+  margin-block-start: var(--s-4);
+}
+
+.problem__head h2::before {
+  content: "";
+  display: block;
+  width: 2.75rem;
+  height: 4px;
+  margin-block-end: var(--s-4);
+  border-radius: 4px;
+  background: var(--green);
+}
+
+/* ---- Rows ---- */
+.problem-list {
+  display: grid;
+  gap: var(--s-3);
+  grid-template-columns: minmax(0, 1fr);
+  counter-reset: none;
+}
+
+@media (min-width: 62.5rem) {
+  .problem-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+}
+
+.problem-row {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--s-3) var(--s-4);
+  padding: var(--s-4) var(--s-5) var(--s-4) var(--s-4);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background: rgb(255 255 255 / 0.035);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease,
+    background-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+.problem-row__num {
+  align-self: center;
+  min-width: 1.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--green);
+}
+
+.problem-row .icon-badge {
+  align-self: center;
+}
+
+.problem-row__body {
+  min-width: 0;
+  padding-block: 0.15rem;
+}
+
+.problem-row h3 {
+  font-size: var(--fs-md);
+}
+
+.problem-row p {
+  margin-block-start: var(--s-1);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  max-width: 32em;
+}
+
+/* Hassas category: dashed kinara + halka hatch */
+.problem-row--sensitive {
+  border-style: dashed;
+  border-color: var(--line-strong);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.04) 11px 12px),
+    rgb(255 255 255 / 0.02);
+}
+
+@media (hover: hover) {
+  .problem-row:hover {
+    transform: translateY(-3px);
+    border-color: var(--green-a55);
+    background-color: rgb(255 255 255 / 0.06);
+    box-shadow: var(--shadow-md), 0 0 36px -14px var(--green-a35);
+  }
+
+  .problem-row:hover .icon-badge {
+    transform: rotate(-6deg) scale(1.06);
+    box-shadow: inset 0 0 0 1px var(--green-a55), 0 0 18px -2px var(--green-a35);
+  }
+}
+
+/* Chhoti screen: number icon ke upar nahi, sirf icon + text */
+@media (max-width: 30rem) {
+  .problem-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: var(--s-4);
+    gap: var(--s-3);
+  }
+  .problem-row__num { display: none; }
+  .problem-row .icon-badge { align-self: start; }
+}
+
+/* ---- Divider: #solution ke upar rounded kone problem section mein ghulte hain ---- */
+#solution {
+  position: relative;
+  z-index: 1;
+  margin-block-start: -2.5rem;
+  border-start-start-radius: 2.5rem;
+  border-start-end-radius: 2.5rem;
+  box-shadow: 0 -24px 50px -30px rgb(0 0 0 / 0.8);
+}
+
+/* >>> pages/solution.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/solution.css   (Masla 8: Solution = hisaab ki bahi)
+   --------------------------------------------------------------------------
+   Left: sticky heading. Right: bari glass card (ledger) mein 4 rows.
+   Rows ke beech jurne wali line aur har icon par tick, scroll-reveal par
+   ek ek karke "likhte" hain (sirf motion allowed ho to).
+   ========================================================================== */
+.solution {
+  display: grid;
+  gap: var(--s-7);
+}
+
+@media (min-width: 62.5rem) {
+  .solution {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .solution__intro {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-6));
+  }
+}
+
+.solution__intro > * + * {
+  margin-block-start: var(--s-4);
+}
+
+/* Ledger = bari glass card */
+.ledger {
+  --ledger-pad: clamp(0.75rem, 0.4rem + 1.5vw, 1.5rem);
+  padding: var(--ledger-pad);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg), 0 0 60px -34px var(--green-a35);
+}
+
+.ledger__row {
+  --row-pad: var(--s-4);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-2) var(--s-4);
+  padding: var(--row-pad);
+  border-radius: var(--r-md);
+  transition: background-color var(--dur) ease;
+}
+
+.ledger__row + .ledger__row {
+  border-block-start: 1px dashed var(--line);
+}
+
+@media (hover: hover) {
+  .ledger__row:hover {
+    background: linear-gradient(var(--to-end), var(--green-a08), transparent 80%);
+  }
+
+  .ledger__row:hover .icon-badge {
+    transform: scale(1.08) rotate(-5deg);
+    box-shadow: inset 0 0 0 1px var(--green-a55), 0 0 18px -2px var(--green-a35);
+  }
+}
+
+.ledger__row > .icon-badge {
+  position: relative;
+  grid-row: span 2;
+  border-radius: 50%;
+}
+
+/* Tick: icon ke kone par chhota hara gola + sahi ka nishan */
+.ledger__row > .icon-badge::before {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.15rem;
+  inset-inline-end: -0.15rem;
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 2px var(--bg-deep), 0 0 12px var(--green-a55);
+}
+
+.ledger__row > .icon-badge::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 0.27rem;
+  inset-inline-end: 0.2rem;
+  inline-size: 0.5rem;
+  block-size: 0.28rem;
+  border-inline-start: 2px solid var(--green-ink);
+  border-block-end: 2px solid var(--green-ink);
+  rotate: calc(-45deg * var(--flip));
+  scale: var(--flip) 1;
+}
+
+/* Rows ko jodne wali khadi line: icon ke neeche se agle icon ke upar tak */
+.ledger__row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(var(--row-pad) + 1.5rem - 1px);
+  inset-block-start: calc(var(--row-pad) + 3rem + 0.3rem);
+  inset-block-end: calc(-1 * var(--row-pad) + 0.3rem);
+  inline-size: 2px;
+  background: linear-gradient(to bottom, var(--green-a55), var(--green-a12));
+  border-radius: 2px;
+  transform-origin: top;
+  z-index: 1;
+}
+
+/* Title ........ tag  (hisaab ki entry jaisa) */
+.ledger__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.ledger__head h3 {
+  font-size: var(--fs-md);
+}
+
+.ledger__leader {
+  flex: 1;
+  min-width: 1rem;
+  border-block-end: 2px dotted var(--line-strong);
+  transform: translateY(-0.3em);
+}
+
+/* Chhoti screen: dotted leader hata do aur tag ko neeche wrap hone do */
+@media (max-width: 30rem) {
+  .ledger__head { flex-wrap: wrap; row-gap: var(--s-2); }
+  .ledger__leader { display: none; }
+}
+
+.ledger__row p {
+  grid-column: 2;
+  color: var(--muted);
+  line-height: var(--lh-snug);
+  max-width: 34em;
+}
+
+/* Scroll-reveal par: tick pop hota hai, line upar se neeche likhi jati hai */
+@media (prefers-reduced-motion: no-preference) {
+  .js .ledger__row.is-visible > .icon-badge::before,
+  .js .ledger__row.is-visible > .icon-badge::after {
+    animation: tick-pop 0.45s var(--ease-out) calc(var(--reveal-delay, 0ms) + 350ms) backwards;
+  }
+
+  .js .ledger__row.is-visible:not(:last-child)::after {
+    animation: line-write 0.8s var(--ease-out) calc(var(--reveal-delay, 0ms) + 500ms) backwards;
+  }
+
+  .js .ledger__row.is-visible .ledger__leader {
+    animation: leader-write 0.9s var(--ease-out) calc(var(--reveal-delay, 0ms) + 300ms) backwards;
+    transform-origin: var(--origin-start) 50%;
+  }
+}
+
+@keyframes tick-pop {
+  from { opacity: 0; scale: 0; }
+}
+
+@keyframes line-write {
+  from { transform: scaleY(0); }
+}
+
+@keyframes leader-write {
+  from { clip-path: inset(0 100% 0 0); }
+}
+
+/* Phase 2 abhi aana baaqi hai: tick ki jagah khali ring */
+.ledger__row:last-child > .icon-badge::before {
+  background: var(--bg-deep);
+  box-shadow: inset 0 0 0 2px var(--green-a55), 0 0 0 2px var(--bg-deep);
+}
+
+.ledger__row:last-child > .icon-badge::after {
+  display: none;
+}
+
+/* >>> pages/steps.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/steps.css   (Masla 9: Steps)
+   --------------------------------------------------------------------------
+   4 qadam sach mein ek sequence hain, isliye numbering rakhi hai.
+   Desktop: 4 rounded glass cards ek qatar mein, beech mein dashed jorne wali line.
+   Mobile : vertical timeline (cards ke beech dashed khadi line).
+   Number ka rang masla ka safar dikhata hai: red -> amber -> white -> green.
+   ========================================================================== */
+.steps-section h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.steps-section h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+.steps {
+  --step-gap: var(--s-6);
+  position: relative;
+  display: grid;
+  gap: var(--step-gap);
+  counter-reset: step;
+}
+
+@media (min-width: 62.5rem) {
+  .steps {
+    --step-gap: 2.75rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.step {
+  --marker: var(--open);
+  --marker-glow: var(--open-glow);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  align-items: center;
+  gap: var(--s-4) var(--s-3);
+  padding: var(--s-5);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  box-shadow: var(--shadow-md);
+  counter-increment: step;
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+.step:nth-child(2) { --marker: var(--pending);   --marker-glow: var(--pending-glow); }
+.step:nth-child(3) { --marker: var(--responded); --marker-glow: var(--responded-glow); }
+.step:nth-child(4) { --marker: var(--green);     --marker-glow: var(--green-a55); }
+
+@media (hover: hover) {
+  .step:hover {
+    transform: translateY(-4px);
+    border-color: var(--green-a35);
+    box-shadow: var(--shadow-lg), 0 0 36px -14px var(--marker-glow);
+  }
+
+  .step:hover .step__icon {
+    transform: rotate(-6deg) scale(1.06);
+  }
+}
+
+/* Bara mono number */
+.step__marker {
+  font-family: var(--font-mono);
+  font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--marker);
+  text-shadow: 0 0 24px var(--marker-glow);
+}
+
+.step__marker::before {
+  content: counter(step, decimal-leading-zero);
+}
+
+.step__icon {
+  --badge-bg: var(--bg);
+  --badge-fg: var(--marker);
+  --badge-ring: var(--line-strong);
+}
+
+.step__body {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.step__body h3 {
+  font-size: var(--fs-md);
+  margin-block-end: var(--s-2);
+}
+
+.step__body p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* ---- Dashed jorne wali line: agle card ki taraf ---- */
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Desktop: card ke kinare se agle card tak, number wali qatar ki seedh mein */
+@media (min-width: 62.5rem) {
+  .step:not(:last-child)::after {
+    inset-inline-start: 100%;
+    inset-block-start: calc(var(--s-5) + 1.6rem);
+    inline-size: var(--step-gap);
+    block-size: 0;
+    border-block-start: 2px dashed var(--green-a55);
+    translate: 0 -1px;
+  }
+
+  /* Line ke aakhir par chhota nuqta */
+  .step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: calc(100% + var(--step-gap) - 0.3rem);
+    inset-block-start: calc(var(--s-5) + 1.6rem - 0.3rem);
+    inline-size: 0.6rem;
+    block-size: 0.6rem;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Mobile/tablet: vertical dashed line cards ke beech */
+@media (max-width: 62.49rem) {
+  .step:not(:last-child)::after {
+    inset-inline-start: 2.25rem;
+    inset-block-start: 100%;
+    block-size: var(--step-gap);
+    inline-size: 0;
+    border-inline-start: 2px dashed var(--green-a55);
+  }
+}
+
+/* Scroll-reveal ke baad dashed line aage ki taraf "likhi" jati hai (clip-path, layout nahi hilta),
+   phir uske sire ka nuqta halka sa ubharta hai. Desktop: seedhi line, mobile: neeche ki taraf. */
+@media (prefers-reduced-motion: no-preference) {
+  .step.is-visible:not(:last-child)::after {
+    animation: step-link-x 0.7s var(--ease-out) calc(var(--reveal-delay, 0ms) + 450ms) backwards;
+  }
+
+  .step.is-visible:not(:last-child)::before {
+    animation: tick-pop 0.4s var(--ease-out) calc(var(--reveal-delay, 0ms) + 1050ms) backwards;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (max-width: 62.49rem) {
+  .step.is-visible:not(:last-child)::after {
+    animation-name: step-link-y;
+  }
+}
+
+@keyframes step-link-x {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes step-link-y {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* >>> pages/features.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/features.css   (Masla 9: Features, AirLume feature grid)
+   --------------------------------------------------------------------------
+   Pehla card SOLID neon green (gehra text), baaqi glass dark cards.
+   Desktop: pehla card lamba (2 rows), baaqi 4 cards 2x2. Tablet: 2 column. Mobile: 1.
+   Jo features abhi aane hain unpar chip (Phase / Planned) hai: "live" ka daawa nahi.
+   ========================================================================== */
+.features h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.features h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+.feature-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .feature--solid { grid-column: 1 / -1; }
+}
+
+@media (min-width: 62.5rem) {
+  .feature-grid {
+    grid-template-columns: minmax(0, 1.05fr) repeat(2, minmax(0, 1fr));
+    gap: var(--s-5);
+  }
+
+  .feature--solid {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+}
+
+.feature {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-6) var(--s-5);
+  overflow: hidden;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease,
+    box-shadow var(--dur) ease;
+}
+
+.feature__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-block-end: var(--s-3);
+}
+
+.feature h3 {
+  font-size: var(--fs-lg);
+}
+
+.feature p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  max-width: 32em;
+}
+
+@media (hover: hover) {
+  .feature:hover {
+    transform: translateY(-5px);
+    border-color: var(--green-a55);
+    box-shadow: var(--shadow-lg), 0 0 36px -14px var(--green-a35);
+  }
+
+  .feature:hover .icon-badge {
+    transform: rotate(-6deg) scale(1.08);
+  }
+}
+
+/* ---- Pehla card: solid neon green ---- */
+.feature--solid {
+  justify-content: flex-end;
+  min-height: 18rem;
+  padding: var(--s-6);
+  border-color: transparent;
+  background: var(--green);
+  color: var(--green-ink);
+  box-shadow: 0 30px 70px -30px var(--green-a55);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.feature--solid .feature__top {
+  margin-block-end: auto;
+}
+
+.feature--solid h3 {
+  color: var(--green-ink);
+  font-size: var(--fs-xl);
+}
+
+.feature--solid p {
+  color: rgb(13 13 13 / 0.82);
+  font-size: var(--fs-base);
+  max-width: 24em;
+}
+
+.feature--solid .icon-badge {
+  --badge-bg: var(--gray-950);
+  --badge-fg: var(--green);
+  --badge-ring: transparent;
+  width: 3.5rem;
+  height: 3.5rem;
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .feature--solid:hover {
+    border-color: transparent;
+    box-shadow: 0 40px 80px -30px var(--green-a55), 0 0 0 4px var(--green-a20);
+  }
+}
+
+/* Peeche gehra jaal: solid card par texture */
+.feature--solid .contours-mini {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(rgb(13 13 13 / 0.08) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgb(13 13 13 / 0.08) 1px, transparent 1px) 0 0 / 40px 40px;
+  -webkit-mask: linear-gradient(to bottom, #000, transparent 85%);
+  mask: linear-gradient(to bottom, #000, transparent 85%);
+  pointer-events: none;
+}
+
+.feature--solid > *:not(.contours-mini) {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 30rem) {
+  .feature--solid { min-height: 14rem; padding: var(--s-5); }
+}
+
+/* >>> pages/departments.css */
+/* ==========================================================================
+   A6. DEPARTMENTS  (Masla 10: "hisaab ki bahi" - khuli bahi ke do safhe)
+   --------------------------------------------------------------------------
+   Ek rounded glass container; andar 6 rows. Desktop par do column (khuli bahi
+   jaisa, beech mein lakeer). Tablet par 1 column, har row mein chip right par.
+   Mobile (< 40rem) par har row alag glass card.
+   "Ranking: coming soon" ka matlab same: ranking abhi live nahi.
+   ========================================================================== */
+.departments h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.departments h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+/* ---- Container: glass ---- */
+.dept-ledger {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-3);
+}
+
+/* Upar ki patli hari lakeer + halka glow (sirf bari screen par container ke saath) */
+.dept-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  padding: var(--s-5) var(--s-4);
+  overflow: hidden;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  transition: background-color var(--dur) ease, border-color var(--dur) ease;
+}
+
+/* Row ke start par hari patti: hover par khulti hai */
+.dept-row::before {
+  content: "";
+  position: absolute;
+  inset-block: 18%;
+  inset-inline-start: 0;
+  width: 3px;
+  border-start-end-radius: 3px;
+  border-end-end-radius: 3px;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-a55);
+  scale: 1 0;
+  transition: scale var(--dur) var(--ease-out);
+}
+
+.dept-row__text h3 {
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.dept-row__text p {
+  margin-block-start: 0.2rem;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.dept-row__rank {
+  grid-column: 2;
+  justify-self: start;
+}
+
+@media (hover: hover) {
+  .dept-row:hover {
+    border-color: var(--green-a35);
+    background:
+      linear-gradient(var(--to-end), var(--green-a08), transparent 85%),
+      var(--bg-deep);
+  }
+
+  .dept-row:hover::before {
+    scale: 1 1;
+  }
+
+  .dept-row:hover .monogram {
+    border-color: var(--green);
+    background: var(--green);
+    color: var(--green-ink);
+    box-shadow: 0 0 22px -2px var(--green-a55);
+  }
+}
+
+/* ---- Tablet: ek bara glass container, rows ke beech dashed line ---- */
+@media (min-width: 40rem) {
+  .dept-ledger {
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-faint);
+    border-radius: var(--r-lg);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+      var(--bg-deep);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .dept-ledger::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 2;
+    height: 2px;
+    background: linear-gradient(var(--to-end), var(--green), var(--green-a12) 65%, transparent);
+    pointer-events: none;
+  }
+
+  .dept-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--s-3) var(--s-5);
+    padding: var(--s-5) var(--s-5);
+    border: 0;
+    border-radius: 0;
+    border-block-end: 1px dashed var(--line);
+    background: transparent;
+  }
+
+  .dept-row:last-child {
+    border-block-end: 0;
+  }
+
+  .dept-row__rank {
+    grid-column: auto;
+    justify-self: end;
+  }
+
+  @media (hover: hover) {
+    .dept-row:hover {
+      border-color: transparent;
+      border-block-end-color: var(--line);
+      background: linear-gradient(var(--to-end), var(--green-a08), transparent 85%);
+    }
+
+    .dept-row:last-child:hover {
+      border-block-end-color: transparent;
+    }
+  }
+}
+
+/* ---- Desktop: khuli bahi - do safhe, beech mein lakeer ---- */
+@media (min-width: 62.5rem) {
+  .dept-ledger {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dept-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    padding: var(--s-6) var(--s-6);
+  }
+
+  .dept-row:nth-child(odd) {
+    border-inline-end: 1px dashed var(--line);
+  }
+
+  /* Aakhri row (dono column ki) neeche ki lakeer nahi */
+  .dept-row:nth-last-child(2) {
+    border-block-end: 0;
+  }
+
+  .dept-row:last-child {
+    border-block-end: 0;
+  }
+
+  .dept-row .monogram {
+    margin-block-start: 0.15rem;
+  }
+
+  .dept-row__rank {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  @media (hover: hover) {
+    .dept-row:nth-child(odd):hover {
+      border-inline-end-color: var(--line);
+    }
+
+    .dept-row:nth-last-child(2):hover {
+      border-block-end-color: transparent;
+    }
+  }
+}
+
+@media (max-width: 30rem) {
+  .monogram {
+    width: 3.1rem;
+    height: 3.1rem;
+    font-size: 0.68rem;
+  }
+
+  .dept-row {
+    padding: var(--s-4);
+  }
+}
+
+/* >>> pages/promise.css */
+/* ==========================================================================
+   A7. PRIVACY PROMISE  (Masla 10: deep section + grid-bg)
+   --------------------------------------------------------------------------
+   Upar: left par bara statement + "never" pills + CTA; right par bara
+   tracking-ticket (notch wala, halki shine, "sirf scrambled version store").
+   Neeche: 3 promise points ek hi glass bar mein (alag alag cards nahi).
+   Zubaan: "designed to" - kisi cheez ko live nahi likha.
+   ========================================================================== */
+.promise {
+  display: grid;
+  gap: var(--s-7);
+  align-items: center;
+}
+
+@media (min-width: 62.5rem) {
+  .promise {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--s-9);
+  }
+}
+
+.promise__statement {
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+  text-shadow: 0 0 50px rgb(57 255 20 / 0.28);
+}
+
+.promise__text {
+  max-width: 36em;
+  margin-block-start: var(--s-5);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  color: var(--gray-200);
+}
+
+/* ---- "Kya nahi liya jata": laal X wali chhoti pills ---- */
+.never-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-block-start: var(--s-6);
+}
+
+.never-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: var(--tap);
+  padding-block: 0.3rem;
+  padding-inline: 0.45rem var(--s-4);
+  border: 1px solid var(--open-line);
+  border-radius: var(--r-pill);
+  background: var(--open-soft);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+  color: var(--white);
+}
+
+.never-list li::before {
+  content: "\2715";
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--open);
+  box-shadow: 0 0 14px -2px var(--open-glow);
+  color: var(--gray-950);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.promise__cta {
+  margin-block-start: var(--s-6);
+}
+
+/* ---- Right: ticket + dashed orbit ---- */
+.promise__aside {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+  padding-block: var(--s-6);
+  text-align: center;
+}
+
+/* AirLume jaisa dashed orbit (sajawat): ticket ke peeche, do ring */
+.promise__aside::before,
+.promise__aside::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.promise__aside::before {
+  width: min(100%, 31rem);
+  border: 1.5px dashed var(--green-a35);
+}
+
+.promise__aside::after {
+  width: min(78%, 23rem);
+  border: 1px solid var(--line-faint);
+  background: radial-gradient(circle at 50% 45%, var(--green-a12), transparent 70%);
+}
+
+.promise__aside .ticket {
+  position: relative;
+  width: min(100%, 22rem);
+  gap: var(--s-4);
+  padding: var(--s-6);
+  text-align: start;
+  rotate: calc(-3deg * var(--flip));
+  filter: drop-shadow(0 0 28px var(--green-a35)) drop-shadow(0 22px 24px rgb(0 0 0 / 0.55));
+}
+
+.promise__aside .ticket__code {
+  font-size: clamp(1.5rem, 1.2rem + 1.6vw, 2.25rem);
+}
+
+/* Ticket ka stub: "sirf scrambled version store hota hai" */
+.ticket__stub {
+  display: grid;
+  gap: 0.4rem;
+  padding-block-start: var(--s-4);
+  border-block-start: 2px dashed var(--gray-500);
+}
+
+.ticket__stub-label {
+  color: var(--gray-600);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+}
+
+.ticket__hash {
+  justify-self: start;
+  font-family: var(--font-mono);
+  font-size: var(--fs-base);
+  letter-spacing: 0.06em !important;
+  color: var(--gray-950);
+  opacity: 0.55;
+  filter: blur(0.6px);
+}
+
+/* Halki chamak ek baar har kuch second baad; reduced-motion mein band */
+.promise__aside .ticket::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgb(57 255 20 / 0.28) 50%, transparent 62%);
+  translate: -120% 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .promise__aside .ticket {
+    transition: rotate var(--dur-slow) var(--ease-out);
+  }
+
+  .promise__aside .ticket::after {
+    animation: ticket-shine 7s var(--ease-in-out) 1.2s infinite;
+  }
+}
+
+@media (hover: hover) {
+  .promise__aside .ticket:hover {
+    rotate: 0deg;
+  }
+}
+
+@keyframes ticket-shine {
+  0%, 55% { translate: -120% 0; }
+  100%    { translate: 120% 0; }
+}
+
+.promise__aside p {
+  max-width: 24em;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* ---- Chhoti screen: pills aur ticket thore kam jagah lein ---- */
+@media (max-width: 30rem) {
+  .never-list {
+    gap: var(--s-2);
+  }
+
+  .never-list li {
+    min-height: 2.5rem;
+    gap: var(--s-2);
+    padding-inline: 0.35rem var(--s-3);
+    font-size: 0.85rem;
+  }
+
+  .never-list li::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.68rem;
+  }
+
+  .promise__aside .ticket {
+    width: calc(100% - 1.5rem);
+    padding: var(--s-5);
+  }
+}
+
+/* ---- Neeche: 3 promise points, ek glass bar ---- */
+.promise-points {
+  display: grid;
+  margin-block-start: var(--s-8);
+  overflow: hidden;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-md);
+}
+
+.promise-point {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  align-content: start;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border-block-end: 1px dashed var(--line);
+  transition: background-color var(--dur) ease;
+}
+
+.promise-point:last-child {
+  border-block-end: 0;
+}
+
+.promise-point h3 {
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.promise-point p {
+  margin-block-start: 0.35rem;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+@media (min-width: 48rem) {
+  .promise-points {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .promise-point {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-5);
+    padding: var(--s-6) var(--s-5);
+    border-block-end: 0;
+    border-inline-end: 1px dashed var(--line);
+  }
+
+  .promise-point:last-child {
+    border-inline-end: 0;
+  }
+}
+
+@media (hover: hover) {
+  .promise-point:hover {
+    background: linear-gradient(180deg, var(--green-a08), transparent 80%);
+  }
+
+  .promise-point:hover .icon-badge {
+    transform: rotate(-6deg) scale(1.08);
+  }
+}
+
+/* >>> pages/roadmap.css */
+/* ==========================================================================
+   A8. ROADMAP  (Masla 11: horizontal timeline + progress line)
+   --------------------------------------------------------------------------
+   Desktop: 3 phase cards ek line mein; upar ek lakeer jis par har phase ka
+   node hai. Maujooda phase (Phase 1) ka node hara, uski lakeer hari aur agle
+   phase tak. Baaqi lakeer dashed. Mobile: wohi cheez vertical (start side).
+   Kuch bhi "live" nahi likha: Phase 1 = "Under development".
+   ========================================================================== */
+.roadmap-section h2 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.18em;
+  color: var(--green-ink);
+}
+
+.roadmap-section h2 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.08em 0.02em;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0.16em;
+  background: var(--green);
+  rotate: calc(-1deg * var(--flip));
+}
+
+.roadmap {
+  --node: 1.1rem;
+  --rail-pad: 2.5rem;       /* mobile: line aur card ke beech */
+  --node-top: 1.75rem;      /* mobile: node card ke upar se kitna neeche */
+  --node-inset: 1.5rem;     /* desktop: node card ke start se kitna andar */
+  position: relative;
+  display: grid;
+  gap: var(--s-5);
+  padding-inline-start: var(--rail-pad);
+}
+
+/* Dashed rail (mobile: vertical) */
+.roadmap::before {
+  content: "";
+  position: absolute;
+  inset-block: calc(var(--node-top) + var(--node) / 2) 0;
+  inset-inline-start: calc(var(--node) / 2 - 1px);
+  width: 2px;
+  background: repeating-linear-gradient(180deg, var(--line-strong) 0 8px, transparent 8px 16px);
+  pointer-events: none;
+}
+
+@media (min-width: 62.5rem) {
+  .roadmap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-inline-start: 0;
+    padding-block-start: 2.75rem;
+  }
+
+  .roadmap::before {
+    inset-block: calc(var(--node) / 2 - 1px) auto;
+    inset-inline: calc(var(--node-inset) + var(--node) / 2) 0;
+    width: auto;
+    height: 2px;
+    background: repeating-linear-gradient(var(--to-end), var(--line-strong) 0 8px, transparent 8px 16px);
+  }
+}
+
+/* ---- Card ---- */
+.phase {
+  position: relative;
+  padding: var(--s-6) var(--s-5) var(--s-5);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease,
+    box-shadow var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .phase:hover {
+    transform: translateY(-4px);
+    border-color: var(--line-strong);
+  }
+}
+
+/* ---- Node (har card ka point on the rail) ---- */
+.phase::before {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--node-top);
+  inset-inline-start: calc(-1 * var(--rail-pad));
+  width: var(--node);
+  height: var(--node);
+  box-sizing: border-box;
+  border: 2px solid var(--gray-300);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+@media (min-width: 62.5rem) {
+  .phase::before {
+    inset-block-start: -2.75rem;
+    inset-inline-start: var(--node-inset);
+  }
+}
+
+.phase--later::before {
+  border-style: dashed;
+  border-color: var(--gray-500);
+}
+
+/* ---- Maujooda phase: hara node, hari lakeer agle node tak ---- */
+.phase--now {
+  border-color: var(--green-a35);
+  background:
+    linear-gradient(180deg, var(--green-a12), transparent 55%),
+    var(--bg-deep);
+  box-shadow: var(--shadow-md), 0 0 44px -14px var(--green-a35);
+}
+
+.phase--now::before {
+  border-color: var(--green);
+  background: var(--green);
+  box-shadow: 0 0 0 5px var(--green-a20), 0 0 16px var(--green-a55);
+}
+
+/* Hari progress lakeer: is node se agle node tak (bilkul ek column ya ek card) */
+.phase--now::after {
+  content: "";
+  position: absolute;
+  inset-block: calc(var(--node-top) + var(--node) / 2) calc(-1 * (var(--s-5) + var(--node-top) + var(--node) / 2));
+  inset-inline-start: calc(-1 * var(--rail-pad) + var(--node) / 2 - 1px);
+  width: 2px;
+  background: linear-gradient(180deg, var(--green), var(--green-a35));
+  box-shadow: 0 0 10px var(--green-a35);
+  pointer-events: none;
+}
+
+@media (min-width: 62.5rem) {
+  .phase--now::after {
+    inset-block: -2.75rem auto;
+    inset-block-start: calc(-2.75rem + var(--node) / 2 - 1px);
+    inset-inline: calc(var(--node-inset) + var(--node) / 2) calc(-1 * (var(--s-5) + var(--node-inset) + var(--node) / 2));
+    width: auto;
+    height: 2px;
+    background: linear-gradient(var(--to-end), var(--green), var(--green-a35));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .phase--now::before {
+    animation: node-pulse 2.8s ease-out infinite;
+  }
+}
+
+@keyframes node-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--green-a55), 0 0 16px var(--green-a55); }
+  70%  { box-shadow: 0 0 0 10px transparent, 0 0 16px var(--green-a55); }
+  100% { box-shadow: 0 0 0 0 transparent, 0 0 16px var(--green-a55); }
+}
+
+.phase--later {
+  border-style: dashed;
+  border-color: var(--line);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ---- Content ---- */
+.phase h3 {
+  margin-block: var(--s-4) var(--s-2);
+  font-size: var(--fs-lg);
+}
+
+.phase__when {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.phase__list {
+  display: grid;
+  gap: var(--s-3);
+  margin-block-start: var(--s-5);
+  padding-block-start: var(--s-5);
+  border-block-start: 1px dashed var(--line);
+}
+
+.phase__list li {
+  position: relative;
+  padding-inline-start: 1.5rem;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.phase__list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-a55);
+}
+
+.phase--later .phase__list li::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--green);
+}
+
+/* >>> pages/cta-band.css */
+/* ==========================================================================
+   A9. FINAL CTA BAND  (Masla 11: neon hara — poore page ka sab se roshan lamha)
+   --------------------------------------------------------------------------
+   Bara rounded hara block, bara type, 2 buttons, neeche gehri pill mein
+   emergency note. Peeche kali "contour" ringen (Karachi ke naqshe jaisi).
+   Footer is ke baad gehra hai, hara nahi: do hare block ek ke baad ek nahi.
+   ========================================================================== */
+.cta-band {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--s-6);
+  overflow: hidden;
+  padding: clamp(1.75rem, 1rem + 5vw, 5rem);
+  border-radius: clamp(1.75rem, 1rem + 3vw, 2.75rem);
+  background: var(--green);
+  color: rgb(13 13 13 / 0.85);
+  box-shadow: 0 0 90px -20px var(--green-a55);
+}
+
+/* Hare par kali lakeeron ka jaal */
+.cta-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-radial-gradient(circle at calc(50% + 46% * var(--flip)) 10%, transparent 0 34px, rgb(13 13 13 / 0.13) 34px 36px),
+    linear-gradient(rgb(13 13 13 / 0.07) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, rgb(13 13 13 / 0.07) 1px, transparent 1px) 0 0 / 44px 44px;
+  -webkit-mask: linear-gradient(var(--to-end), transparent 5%, #000 95%);
+  mask: linear-gradient(var(--to-end), transparent 5%, #000 95%);
+}
+
+/* Roshni ki patti jo aahista guzarti hai */
+.cta-band::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: -40%;
+  z-index: -1;
+  width: 30%;
+  background: linear-gradient(var(--to-end), transparent, rgb(255 255 255 / 0.32), transparent);
+  transform: skewX(calc(-18deg * var(--flip)));
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta-band::after {
+    animation: cta-sweep 7s ease-in-out 1s infinite;
+  }
+}
+
+@keyframes cta-sweep {
+  0%        { inset-inline-start: -40%; }
+  45%, 100% { inset-inline-start: 140%; }
+}
+
+@media (min-width: 62.5rem) {
+  .cta-band {
+    grid-template-columns: minmax(0, 1.3fr) auto;
+    align-items: center;
+  }
+}
+
+.cta-band h2 {
+  max-width: 14em;
+  color: var(--green-ink);
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+}
+
+.cta-band h2::before {
+  display: none;
+}
+
+.cta-band p {
+  max-width: 30em;
+  margin-block-start: var(--s-4);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.cta-band__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  align-items: flex-start;
+}
+
+.cta-band .btn--light {
+  --btn-bg: var(--gray-950);
+  --btn-fg: var(--green);
+  --btn-glow: rgb(13 13 13 / 0.5);
+}
+
+.cta-band .btn--light:hover {
+  --btn-bg: var(--gray-800);
+  color: var(--green-bright);
+}
+
+.cta-band .btn--ghost-light {
+  --btn-bg: transparent;
+  --btn-fg: var(--green-ink);
+  --btn-bd: rgb(13 13 13 / 0.6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.cta-band .btn--ghost-light:hover {
+  --btn-bg: rgb(13 13 13 / 0.1);
+  --btn-bd: var(--green-ink);
+  color: var(--green-ink);
+}
+
+.cta-band .cta-band__note {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--s-3);
+  max-width: none;
+  margin-block-start: 0;
+  padding: var(--s-3) var(--s-5) var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--gray-950);
+  color: var(--white);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  grid-column: 1 / -1;
+}
+
+.cta-band__note .icon {
+  flex: none;
+  color: var(--open);
+}
+
+/* >>> pages/subpage-hero.css */
+/* ==========================================================================
+   B. SUB-PAGE HERO  (How it works / Privacy / FAQ / Terms)
+   ========================================================================== */
+.page-hero {
+  --section-bg: var(--bg-deep);
+  --hero-curve: clamp(1.75rem, 1rem + 3.5vw, 3.75rem);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(2.5rem, 1.5rem + 4vw, 5.5rem) clamp(3.5rem, 2.25rem + 5vw, 7rem);
+  background: radial-gradient(ellipse 55% 90% at 82% 0%, var(--green-a08), transparent 70%), var(--bg-deep);
+  color: var(--gray-200);
+  border-block-end: 1px solid var(--line-faint);
+  /* Neeche soft curve: gehra hero agle (halke) section mein ghulta hai */
+  border-end-start-radius: var(--hero-curve);
+  border-end-end-radius: var(--hero-curve);
+}
+
+/* Neeche hari roshni ki lakeer */
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--hero-curve);
+  inset-block-end: -1px;
+  z-index: 0;
+  height: 1px;
+  background: linear-gradient(var(--to-end), transparent, var(--green), transparent);
+  opacity: 0.6;
+}
+
+/* Page khulte hi poora hero ek unit ki tarah halka fade-in hota hai (450ms) - Masla 9 */
+@media (prefers-reduced-motion: no-preference) {
+  .page-hero > .container {
+    animation: page-hero-in 0.45s var(--ease-out) backwards;
+  }
+}
+
+@keyframes page-hero-in {
+  from { opacity: 0; translate: 0 12px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.page-hero h1 {
+  max-width: 16em;
+  color: var(--white);
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  text-shadow: 0 0 60px rgb(57 255 20 / 0.16);
+}
+
+/* Chhota glass pill label (heading ke upar) */
+.page-hero__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-block-end: var(--s-4);
+  padding: 0.4rem 0.95rem;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.05);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+}
+
+.page-hero__pill::before {
+  content: "";
+  inline-size: 0.45rem;
+  block-size: 0.45rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* Highlighted lafz: hare marker-block ke upar gehra text (home hero jaisa) */
+.page-hero h1 .hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding-inline: 0.2em;
+  color: var(--green-ink);
+  white-space: nowrap;
+  text-shadow: none;
+}
+
+.page-hero h1 .hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0.1em 0.04em;
+  z-index: -1;
+  border-radius: 0.16em;
+  background: var(--green);
+  box-shadow: 0 0 40px -6px var(--green-a55);
+  rotate: calc(-1.4deg * var(--flip));
+}
+
+.page-hero p {
+  max-width: 36em;
+  margin-block-start: var(--s-4);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block-end: var(--s-5);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.breadcrumb a {
+  color: var(--gray-200);
+}
+
+/* Tap target 44px+ bina layout badle: padding + barabar ka negative margin (Masla 17) */
+.breadcrumb a,
+.breadcrumb [aria-current="page"] {
+  display: inline-block;
+  padding-block: 0.8rem;
+  margin-block: -0.8rem;
+}
+
+.breadcrumb a:hover {
+  color: var(--green);
+}
+
+.breadcrumb [aria-current="page"] {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.breadcrumb li + li::before {
+  content: "/";
+  margin-inline-end: var(--s-2);
+  color: var(--gray-500);
+}
+
+/* Har sub-page ke aakhir ka "Visit Real Website" button */
+.page-cta {
+  margin-block-start: var(--s-7);
+}
+
+/* >>> pages/how-it-works.css */
+/* ==========================================================================
+   C. HOW IT WORKS  (Masla 12)
+   --------------------------------------------------------------------------
+   1. Hero route      4 pin ek "sadak" par (red -> amber -> white -> green)
+   2. #story          Ahmed ki kahani: vertical timeline, line scroll par hari hoti hai
+   3. #report         4 chhote UI-mock cards (asli form NAHI, sirf nazara)
+   4. #colors         pin ke 4 rang: map-tile wale legend cards
+   5. #accountability bento: 7 din / shehri hal / rankings
+   6. #limits         "kya NAHI karte" bara, "kya karte hain" chhota
+
+   Sirf logical properties.
+   Animation sirf transform / opacity / translate par.
+   ========================================================================== */
+
+/* Glass card ka shared look (is page ke har hisse mein ek jaisa) */
+.story__body,
+.mock-card,
+.status-legend__item,
+.acc-card,
+.limits__col {
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- 1. HERO ROUTE ---------- */
+.how-route {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 40rem;
+  margin-block-start: var(--s-7);
+  padding: 0;
+}
+
+.how-route__stop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.how-route__stop .pin {
+  --pin-size: 1.15rem;
+  margin-inline: 0.2rem;
+}
+
+/* Mobile: seedhi khadi dashed sadak, pin se agle pin tak */
+.how-route__stop:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(0.775rem - 1px);
+  inset-block-start: calc(50% + 0.75rem);
+  block-size: calc(100% + var(--s-4) - 1.5rem);
+  border-inline-start: 2px dashed var(--line-strong);
+}
+
+@media (min-width: 40rem) {
+  .how-route {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+
+  .how-route__stop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Tablet/desktop: afqi (horizontal) sadak */
+  .how-route__stop:not(:last-child)::after {
+    inset-inline-start: 1.85rem;
+    inset-block-start: calc(0.575rem - 1px);
+    inline-size: calc(100% + var(--s-3) - 2.15rem);
+    block-size: 0;
+    border-inline-start: 0;
+    border-block-start: 2px dashed var(--line-strong);
+  }
+}
+
+/* ---------- 2. STORY TIMELINE ---------- */
+.story {
+  --story-pad: 4.25rem;
+  --story-node: 2.75rem;
+  --story-gap: var(--s-7);
+  position: relative;
+  display: grid;
+  gap: var(--story-gap);
+  padding-inline-start: var(--story-pad);
+  counter-reset: story;
+}
+
+@media (max-width: 30rem) {
+  .story {
+    --story-pad: 3.25rem;
+    --story-node: 2.25rem;
+  }
+}
+
+.story__step {
+  --tone: var(--open);
+  --tone-next: var(--pending);
+  position: relative;
+  min-width: 0;
+  counter-increment: story;
+}
+
+.story__step--open      { --tone: var(--open);      --tone-next: var(--pending); }
+.story__step--review    { --tone: var(--pending);   --tone-next: var(--responded); }
+.story__step--responded { --tone: var(--responded); --tone-next: var(--green); }
+.story__step--resolved  { --tone: var(--green); }
+
+/* Numbered node (01, 02 ...): rang status ke hisaab se */
+.story__pin {
+  position: absolute;
+  inset-block-start: 0.25rem;
+  inset-inline-start: calc(var(--story-pad) * -1);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--story-node);
+  height: var(--story-node);
+  border-radius: 50%;
+  background: var(--bg-deep);
+  color: var(--tone);
+  box-shadow: 0 0 0 5px var(--bg), inset 0 0 0 2px var(--tone), 0 0 22px -4px var(--tone);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.story__pin::before {
+  content: counter(story, decimal-leading-zero);
+  direction: ltr;
+}
+
+/* Line: peeche dhundli patri (::after = track), uske upar rang-badalti line
+   (::before = fill). Fill tab bharti hai jab step nazar aata hai (main.js ka .is-visible). */
+.story__step:not(:last-child)::before,
+.story__step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(var(--story-pad) * -1 + var(--story-node) / 2 - 1.5px);
+  inset-block-start: calc(0.25rem + var(--story-node) + 0.5rem);
+  inset-block-end: calc((var(--story-gap) - 0.25rem) * -1);
+  width: 3px;
+  border-radius: 3px;
+}
+
+.story__step:not(:last-child)::after {
+  background: var(--line);
+}
+
+.story__step:not(:last-child)::before {
+  z-index: 1;
+  background: linear-gradient(to bottom, var(--tone), var(--tone-next));
+  box-shadow: 0 0 14px -2px var(--tone);
+  transform-origin: top;
+  transition: transform 1.1s var(--ease-out) 0.35s;
+}
+
+.js .story__step:not(.is-visible):not(:last-child)::before {
+  transform: scaleY(0);
+}
+
+.story__body {
+  padding: clamp(1.25rem, 0.9rem + 1.5vw, 2rem);
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .story__body:hover {
+    border-color: var(--green-a35);
+    box-shadow: var(--shadow-md), 0 0 36px -14px var(--green-a35);
+  }
+}
+
+.story__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-end: var(--s-3);
+}
+
+.story__meta .pin {
+  --pin-size: 0.85rem;
+  margin-inline: 0.15rem;
+}
+
+.story__when {
+  color: var(--green);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.story__body h3 {
+  margin-block-end: var(--s-3);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.story__body p {
+  max-width: 62ch;
+}
+
+.story__body p + p {
+  margin-block-start: var(--s-3);
+}
+
+.story__body .ticket {
+  margin-block-start: var(--s-4);
+}
+
+.story__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block-start: var(--s-4);
+}
+
+/* ---------- 3. REPORT: 4 UI-mock cards ---------- */
+.mock-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .mock-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Chaar column + ek-ek card thora neeche: seedhi qatar nahi, seedhiyan */
+@media (min-width: 75rem) {
+  .mock-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .mock-card:nth-child(even) {
+    margin-block-start: var(--s-7);
+  }
+}
+
+.mock-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .mock-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--green-a35);
+  }
+}
+
+.mock-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.mock-card h3 {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.mock-card > p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* Nakli screen ka dabba (sirf nazara, koi input nahi) */
+.mock-ui {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--s-2);
+  margin-block-start: auto;
+  min-height: 9.25rem;
+  padding: var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  pointer-events: none;
+  user-select: none;
+}
+
+.mock-cat {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25em 0.8em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+}
+
+.mock-cat--on {
+  border-color: var(--green);
+  background: var(--green);
+  color: var(--green-ink);
+}
+
+/* Map tile: grid + do sadaken + beech mein pin */
+.mock-ui--map {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: var(--s-3);
+}
+
+.mock-map {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 5.5rem;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background:
+    linear-gradient(var(--to-end), transparent 46%, var(--gray-700) 46% 54%, transparent 54%),
+    linear-gradient(180deg, transparent 58%, var(--gray-700) 58% 64%, transparent 64%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 22px 22px,
+    var(--bg-deep);
+}
+
+.mock-map .pin {
+  --pin-size: 1.3rem;
+  margin-block-end: 0.6rem;
+}
+
+.mock-gps {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.45rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.65rem;
+  border-radius: var(--r-pill);
+  background: var(--green-a12);
+  box-shadow: inset 0 0 0 1px var(--green-a35);
+  color: var(--green);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: var(--lh-ui);
+}
+
+.mock-gps .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Upload dabba */
+.mock-drop {
+  display: grid;
+  flex: 1;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-2);
+  min-height: 7.25rem;
+  padding: var(--s-4);
+  border: 2px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+  text-align: center;
+}
+
+.mock-drop .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--green);
+}
+
+/* Details: nakli text box + do lakeerein + button */
+.mock-field {
+  flex-basis: 100%;
+  color: var(--gray-400);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+}
+
+.mock-line {
+  flex-basis: 100%;
+  block-size: 0.5rem;
+  border-radius: var(--r-pill);
+  background: var(--gray-700);
+}
+
+.mock-line--short {
+  flex-basis: 62%;
+}
+
+.mock-submit {
+  margin-block-start: var(--s-2);
+  padding: 0.35rem 1rem;
+  border-radius: var(--r-pill);
+  background: var(--green);
+  color: var(--green-ink);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  line-height: var(--lh-ui);
+}
+
+.mock-note {
+  margin-block-start: var(--s-6);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* ---------- 4. COLORS: status legend (map-tile wale cards) ---------- */
+.status-legend {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 40rem) {
+  .status-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 62.5rem) {
+  .status-legend { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.status-legend__item {
+  --tone: var(--open);
+  --tone-soft: var(--open-soft);
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+  align-content: start;
+  padding: var(--s-4) var(--s-4) var(--s-5);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease;
+}
+
+.status-legend__item--open      { --tone: var(--open);      --tone-soft: var(--open-soft); }
+.status-legend__item--review    { --tone: var(--pending);   --tone-soft: var(--pending-soft); }
+.status-legend__item--responded { --tone: var(--responded); --tone-soft: var(--responded-soft); }
+.status-legend__item--resolved  { --tone: var(--green);     --tone-soft: var(--green-a12); }
+
+@media (hover: hover) {
+  .status-legend__item:hover {
+    transform: translateY(-4px);
+    border-color: var(--tone);
+  }
+}
+
+.status-legend__tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  min-height: 7rem;
+  margin-block-end: var(--s-2);
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background:
+    radial-gradient(circle at 50% 55%, var(--tone-soft), transparent 62%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--bg);
+  box-shadow: inset 0 0 0 1px var(--line-faint);
+}
+
+/* Pin ke neeche chhota saya (zameen par pin ka nishan) */
+.status-legend__tile::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 1.5rem;
+  inset-inline: 0;
+  margin-inline: auto;
+  inline-size: 2.2rem;
+  block-size: 0.7rem;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--tone), transparent 70%);
+  opacity: 0.45;
+}
+
+.status-legend__tile .pin {
+  position: relative;
+  z-index: 1;
+  margin-block-end: 0.6rem;
+}
+
+.status-legend__item p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* ---------- 5. ACCOUNTABILITY: bento ---------- */
+.acc-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62.5rem) {
+  .acc-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .acc-card--days     { grid-column: span 5; }
+  .acc-card--citizens { grid-column: span 7; }
+  .acc-card--rank     { grid-column: 1 / -1; }
+}
+
+.acc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-width: 0;
+  padding: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem);
+}
+
+.acc-card > h3,
+.acc-card__text > h3 {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.acc-card p {
+  max-width: 54ch;
+}
+
+.acc-card__visual {
+  margin-block-start: auto;
+  padding-block-start: var(--s-4);
+}
+
+.acc-card__text > p + p {
+  margin-block-start: var(--s-3);
+}
+
+/* 7 din ka meter: 6 saade dabbe, aakhri laal */
+.day-meter {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--s-2);
+  margin-block-end: var(--s-4);
+}
+
+.day-meter__cell {
+  display: grid;
+  place-items: center;
+  min-height: 2.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1;
+}
+
+.day-meter__cell--late {
+  border-color: var(--open);
+  background: var(--open);
+  color: var(--gray-950);
+  font-weight: 500;
+  box-shadow: 0 0 22px -4px var(--open-glow);
+}
+
+/* Status A -> status B (chips + chhoti wazahat) */
+.acc-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.acc-flow--stack {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+
+.acc-flow__arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+}
+
+.acc-flow__arrow::before {
+  content: "\2192";
+  display: inline-block;
+  color: var(--green);
+  font-size: 1.1em;
+  scale: var(--flip) 1;
+}
+
+.acc-flow--stack .acc-flow__arrow::before {
+  content: "\2193";
+  scale: 1;
+}
+
+/* Rankings wali wide card: text ek taraf, tokens doosri taraf */
+@media (min-width: 62.5rem) {
+  .acc-card--rank {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-8);
+  }
+
+  .acc-card--rank .acc-card__text   { flex: 1 1 50%; }
+  .acc-card--rank .acc-card__visual { flex: 1 1 45%; margin-block-start: 0; padding-block-start: 0; }
+}
+
+.acc-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* ---------- 6. LIMITS: asymmetric 7 + 5 ---------- */
+.limits {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62.5rem) {
+  .limits { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .limits__col--never { grid-column: span 7; }
+  .limits__col--do    { grid-column: span 5; }
+}
+
+.limits__col {
+  --tone: var(--green);
+  padding: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem);
+}
+
+/* "Kya nahi karte": bara, laal-halka callout jaisa (sab se zaroori sach) */
+.limits__col--never {
+  --tone: var(--open);
+  border-color: var(--open-line);
+  border-inline-start: 6px solid var(--open);
+  background:
+    linear-gradient(var(--to-end), var(--open-soft), transparent 75%),
+    var(--bg-deep);
+}
+
+.limits__col h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-end: var(--s-5);
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.limits__col h3 .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--tone);
+}
+
+.limits__col ul {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.limits__col li {
+  position: relative;
+  padding-inline-start: 1.9rem;
+  color: var(--ink-soft);
+  line-height: var(--lh-snug);
+}
+
+.limits__col li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.45em;
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: 50%;
+  background: var(--tone);
+  box-shadow: 0 0 12px -1px var(--tone);
+}
+
+.limits__col--never li {
+  font-size: var(--fs-md);
+}
+
+/* >>> pages/privacy.css */
+/* ==========================================================================
+   D. PRIVACY PAGE  (Masla 13)
+   --------------------------------------------------------------------------
+   Layout : sticky "On this page" (toc, main.js setupToc .is-active lagata hai)
+            + 3 hisse: #short-version, #how-we-protect, #honest-limits
+   Mobile : toc ek patli sticky patti (pills) ban jati hai, desktop par side column.
+   Sirf logical properties.
+   ========================================================================== */
+
+/* Glass card ka shared look */
+.trust-card,
+.pf-item,
+.limits-card {
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- Layout + TOC ---------- */
+.priv-layout {
+  padding-block: var(--s-7) var(--section-y);
+}
+
+@media (min-width: 62.5rem) {
+  .priv-layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--s-8);
+    align-items: start;
+    padding-block-start: var(--s-9);
+  }
+}
+
+.priv-doc {
+  display: grid;
+  gap: clamp(3.5rem, 2rem + 5vw, 6.5rem);
+  min-width: 0;
+}
+
+.priv-block {
+  scroll-margin-block-start: calc(var(--header-h) + var(--s-7));
+}
+
+/* Mobile: sticky patti, andar pills ki qatar */
+.toc.priv-toc {
+  position: sticky;
+  inset-block-start: calc(var(--header-h) + var(--s-1));
+  z-index: 5;
+  margin-block-end: var(--s-6);
+  padding: 0.35rem;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-pill);
+  background: rgb(13 13 13 / 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-md);
+}
+
+.toc.priv-toc .toc__title {
+  display: none;
+}
+
+.toc.priv-toc ol {
+  display: flex;
+  gap: var(--s-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  counter-reset: none;
+}
+
+.toc.priv-toc ol::-webkit-scrollbar {
+  display: none;
+}
+
+.toc.priv-toc li {
+  flex: none;
+  counter-increment: none;
+}
+
+.toc.priv-toc a {
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0.35rem 1rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.toc.priv-toc a::before {
+  display: none;
+}
+
+.toc.priv-toc a.is-active {
+  background: var(--green);
+  color: var(--green-ink);
+}
+
+/* Desktop: side column, numbered, vertical */
+@media (min-width: 62.5rem) {
+  .toc.priv-toc {
+    inset-block-start: calc(var(--header-h) + var(--s-5));
+    margin-block-end: 0;
+    padding: var(--s-4);
+    border-radius: var(--r-lg);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01)),
+      var(--bg-deep);
+  }
+
+  .toc.priv-toc .toc__title {
+    display: block;
+    margin-block-end: var(--s-3);
+    padding-inline: 0.5rem;
+    color: var(--muted);
+    font-family: var(--font-ui);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .toc.priv-toc ol {
+    display: grid;
+    gap: var(--s-1);
+    overflow: visible;
+    counter-reset: toc;
+  }
+
+  .toc.priv-toc li {
+    counter-increment: toc;
+  }
+
+  .toc.priv-toc a {
+    align-items: flex-start;
+    min-height: 2.5rem;
+    border-radius: var(--r-sm);
+    white-space: normal;
+  }
+
+  .toc.priv-toc a::before {
+    display: block;
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    padding-block-start: 0.2em;
+  }
+
+  .toc.priv-toc a.is-active {
+    background: var(--green-a12);
+    color: var(--green);
+    box-shadow: inset 0 0 0 1px var(--green-a35);
+  }
+}
+
+/* ---------- 1. SHORT VERSION: 3 trust cards ---------- */
+.trust-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .trust-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.trust-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .trust-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--green-a35);
+  }
+}
+
+.trust-card .icon-badge {
+  margin-block-end: var(--s-4);
+}
+
+.trust-card h3 {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.trust-card p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+/* Pehla card: solid hara (sab se bada wada) */
+.trust-card--solid {
+  border-color: transparent;
+  background: var(--green);
+  box-shadow: 0 0 60px -22px var(--green-a55), var(--shadow-md);
+}
+
+.trust-card--solid h3 {
+  color: var(--green-ink);
+}
+
+.trust-card--solid p {
+  color: rgb(13 13 13 / 0.82);
+}
+
+.trust-card--solid .icon-badge--dark {
+  --badge-bg: var(--gray-950);
+  --badge-fg: var(--green);
+  box-shadow: none;
+}
+
+/* "We never ask for" patti */
+.never-ask {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  margin-block-start: var(--s-6);
+  padding-block-start: var(--s-5);
+  border-block-start: 1px dashed var(--line);
+}
+
+.never-ask__label {
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.never-ask__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* ---------- 2. HOW WE PROTECT: 2-column numbered list ---------- */
+.pf-list {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: minmax(0, 1fr);
+  counter-reset: pf;
+}
+
+@media (min-width: 48rem) {
+  .pf-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pf-item--wide { grid-column: 1 / -1; }
+}
+
+.pf-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-4);
+  align-content: start;
+  padding: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  counter-increment: pf;
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .pf-item:hover {
+    border-color: var(--green-a35);
+    box-shadow: var(--shadow-md), 0 0 36px -14px var(--green-a35);
+  }
+}
+
+/* Bada halka number (01..05) kone mein */
+.pf-item::after {
+  content: counter(pf, decimal-leading-zero);
+  position: absolute;
+  inset-block-start: var(--s-4);
+  inset-inline-end: var(--s-5);
+  color: var(--gray-700);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  direction: ltr;
+}
+
+.pf-item__body {
+  min-width: 0;
+}
+
+.pf-item h3 {
+  margin-block-end: var(--s-2);
+  padding-inline-end: 2.5rem;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.pf-item__body > p {
+  color: var(--text);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.pf-item__body > p + p {
+  margin-block-start: var(--s-2);
+}
+
+.pf-item__body > .pf-item__cap {
+  margin-block-start: var(--s-2);
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+/* Chhota "misal" dabba: grid texture par tokens/chips */
+.pf-item__demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  margin-block-start: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--gray-950);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.pf-item__demo--ltr {
+  direction: ltr;
+}
+
+.pf-item__arrow {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.pf-item__demo .chip,
+.pf-item__demo .token {
+  max-width: 100%;
+}
+
+.token--code {
+  border-color: var(--green-a35);
+  background: var(--green-a08);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* ---------- 3. HONEST LIMITS: amber callout card ---------- */
+.limits-card {
+  --tone: var(--pending);
+  padding: clamp(1.25rem, 0.9rem + 2vw, 2.5rem);
+  border-color: var(--pending-line);
+  border-inline-start: 6px solid var(--pending);
+  background:
+    linear-gradient(var(--to-end), var(--pending-soft), transparent 70%),
+    var(--bg-deep);
+}
+
+.limits-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  margin-block-end: var(--s-5);
+}
+
+.limits-card__head .icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--pending);
+}
+
+.limits-card__head h2 {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Sab se ahem hadd: code kho jaye to wapas nahi */
+.limits-card__key {
+  margin-block-end: var(--s-5);
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-md);
+  background: var(--pending-soft);
+  box-shadow: inset 0 0 0 1px var(--pending-line);
+}
+
+.limits-card__key h3 {
+  margin-block-end: var(--s-1);
+  color: var(--pending);
+  font-size: var(--fs-md);
+}
+
+.limits-card__list {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 62ch;
+}
+
+.limits-card__list li {
+  position: relative;
+  padding-inline-start: 1.6rem;
+  line-height: var(--lh-snug);
+}
+
+.limits-card__list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.5em;
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  border-radius: 50%;
+  background: var(--pending);
+  box-shadow: 0 0 10px -1px var(--pending);
+}
+
+/* >>> pages/faq.css */
+/* ==========================================================================
+   E. FAQ PAGE  (Masla 14)
+   Left : topic filter chips + glass accordion groups
+   Right: sticky contact card (email logic main.js ke data-contact-link se)
+   ========================================================================== */
+.faq-layout {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62.5rem) {
+  .faq-layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: var(--s-8);
+    align-items: start;
+  }
+}
+
+.faq-main {
+  min-width: 0;
+}
+
+/* Topic chips: sirf JS chale to dikhte hain (bina JS ke sab sawal khule rehte hain) */
+.faq-filter {
+  display: none;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block-end: var(--s-7);
+}
+
+.js .faq-filter {
+  display: flex;
+}
+
+.faq-filter__chip {
+  min-height: var(--tap);
+  padding: 0.4rem 1.1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--gray-200);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-ui);
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+@media (hover: hover) {
+  .faq-filter__chip:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+}
+
+.faq-filter__chip[aria-pressed="true"] {
+  border-color: var(--green);
+  background: var(--green);
+  color: var(--green-ink);
+}
+
+.faq-group[hidden] {
+  display: none;
+}
+
+.faq-group + .faq-group {
+  margin-block-start: var(--s-8);
+}
+
+.faq-group__title {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-block-end: var(--s-5);
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Heading se pehle chhota hara pin-nishan */
+.faq-group__title::before {
+  content: "";
+  flex: none;
+  inline-size: 0.7rem;
+  block-size: 0.7rem;
+  border-radius: 50% 50% 50% 0;
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-a55);
+  rotate: -45deg;
+}
+
+/* ---------- Contact card ---------- */
+.contact-card {
+  display: grid;
+  gap: var(--s-4);
+  padding: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  border: 1px solid var(--green-a35);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(80% 60% at 100% 0%, var(--green-a12), transparent 70%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--gray-200);
+  box-shadow: var(--shadow-md), 0 0 50px -16px var(--green-a35);
+  scroll-margin-block-start: calc(var(--header-h) + var(--s-5));
+}
+
+@media (min-width: 62.5rem) {
+  .contact-card {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-5));
+  }
+}
+
+.contact-card h2 {
+  color: var(--white);
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.contact-card__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-4);
+  align-items: start;
+  padding-block-start: var(--s-4);
+  border-block-start: 1px dashed var(--line);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.contact-card__row > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.contact-card__row strong {
+  color: var(--white);
+}
+
+.contact-card__row span:not(.icon-badge) {
+  color: var(--muted);
+}
+
+.contact-card a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);               /* tap target 44px+ (Masla 17) */
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+
+.contact-card a:hover {
+  color: var(--green-bright);
+}
+
+/* Email abhi nahi lagi: link dhundla (main.js aria-disabled lagata hai) */
+.contact-card a[aria-disabled="true"] {
+  color: var(--muted);
+  cursor: default;
+  text-decoration: none;
+}
+
+/* Emergency patti: laal-halka, hamesha dikhti rahe */
+.contact-card__emergency {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--open-line);
+  border-inline-start: 5px solid var(--open);
+  border-radius: var(--r-md);
+  background: linear-gradient(var(--to-end), var(--open-soft), transparent 80%), var(--bg-deep);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.contact-card__emergency .icon {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-block-start: 0.15rem;
+  color: #ff8a93;
+}
+
+.contact-card__emergency > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.contact-card__emergency strong {
+  color: #ff8a93;
+}
+
+/* >>> pages/terms.css */
+/* ==========================================================================
+   F. TERMS PAGE  (Masla 15)
+   --------------------------------------------------------------------------
+   Layout + sticky TOC privacy page se shared hai (.priv-layout / .priv-toc,
+   privacy.css mein). Yahan: .toc ka base, numbered clauses, allowed/not-allowed
+   cards aur "not an emergency service" bara callout.
+   ========================================================================== */
+
+.toc {
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+}
+
+@media (min-width: 62.5rem) {
+  .toc {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + var(--s-5));
+    max-height: calc(100vh - var(--header-h) - var(--s-7));
+    max-height: calc(100dvh - var(--header-h) - var(--s-7));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.toc__title {
+  margin-block-end: var(--s-3);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.toc ol {
+  display: grid;
+  gap: var(--s-1);
+  counter-reset: toc;
+}
+
+.toc li {
+  counter-increment: toc;
+}
+
+.toc a {
+  display: flex;
+  gap: var(--s-2);
+  min-height: 2.25rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--r-xs);
+  color: var(--gray-200);
+  text-decoration: none;
+  line-height: var(--lh-snug);
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.toc a::before {
+  content: counter(toc) ".";
+  min-width: 1.4em;
+  color: var(--gray-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.toc a:hover,
+.toc a.is-active {
+  background: var(--green-a12);
+  color: var(--green);
+}
+
+.toc a.is-active::before {
+  color: var(--green);
+}
+
+/* Lamba likha hua text */
+
+/* ---------- Numbered clauses ---------- */
+.priv-doc--terms {
+  gap: var(--s-6);
+}
+
+.clauses {
+  display: grid;
+  counter-reset: clause;
+}
+
+.clause {
+  position: relative;
+  padding-block: var(--s-7);
+  border-block-start: 1px dashed var(--line);
+  counter-increment: clause;
+  scroll-margin-block-start: calc(var(--header-h) + var(--s-7));
+}
+
+.clause:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.clause h2 {
+  margin-block-end: var(--s-4);
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Heading ke upar 01, 02 ... (mono, hara) */
+.clause h2::before {
+  content: counter(clause, decimal-leading-zero);
+  display: block;
+  margin-block-end: var(--s-2);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  direction: ltr;
+  text-align: start;
+}
+
+.clause > p {
+  max-width: 62ch;
+}
+
+.clause > p + p {
+  margin-block-start: var(--s-3);
+}
+
+/* ---------- Kya likh sakte hain / kya nahi ---------- */
+.rules {
+  display: grid;
+  gap: var(--s-4);
+  margin-block: var(--s-5) 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.rules__col {
+  --tone: var(--green);
+  padding: clamp(1.25rem, 0.9rem + 1.2vw, 1.75rem);
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)),
+    var(--bg-deep);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+.rules__col h3 {
+  margin-block: 0 var(--s-4);
+  padding-block-end: var(--s-3);
+  border-block-end: 2px solid var(--tone);
+  color: var(--tone);
+  font-size: var(--fs-md);
+}
+
+.rules__col ul {
+  display: grid;
+  gap: var(--s-3);
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.rules__col li {
+  position: relative;
+  padding-inline-start: 2rem;
+}
+
+.rules__col li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.1em;
+  display: grid;
+  place-items: center;
+  inline-size: 1.3rem;
+  block-size: 1.3rem;
+  border-radius: 50%;
+  background: var(--tone);
+  color: var(--gray-950);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.rules__col--yes { --tone: var(--green); border-color: var(--green-a35); }
+.rules__col--yes li::before { content: "\2713"; }
+.rules__col--no  { --tone: var(--open); border-color: var(--open-line); }
+.rules__col--no  li::before { content: "\2715"; }
+
+/* ---------- Emergency: bara laal callout ---------- */
+.clause--emergency {
+  margin-block: var(--s-4);
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  border: 1px solid var(--open-line);
+  border-inline-start: 6px solid var(--open);
+  border-radius: var(--r-lg);
+  background: linear-gradient(var(--to-end), var(--open-soft), transparent 75%), var(--bg-deep);
+  box-shadow: var(--shadow-md), 0 0 60px -30px var(--open-glow);
+}
+
+.clause--emergency + .clause {
+  border-block-start: 0;
+}
+
+.clause--emergency h2 {
+  color: #ff8a93;
+}
+
+.clause--emergency h2::before {
+  color: #ff8a93;
+}
+
+.clause--emergency > p {
+  color: var(--ink);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.clause__icon {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 3rem;
+  block-size: 3rem;
+  margin-block-end: var(--s-3);
+  border-radius: 50%;
+  background: var(--open);
+  color: var(--gray-950);
+  box-shadow: 0 0 26px -2px var(--open-glow);
+}
+
+.clause__icon .icon {
+  inline-size: 1.4rem;
+  block-size: 1.4rem;
+}
+
+/* >>> pages/error-404.css */
+/* ==========================================================================
+   G. 404 PAGE  (Masla 15)
+   "4 [khula gutter] 4": beech ka 0 asal mein gutter ka gol hai, uska dhakkan
+   thora hat kar tairta hai. Neeche dashed sadak ki lakeer. Sirf CSS/SVG.
+   ========================================================================== */
+.error-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 72vh;
+  min-height: 72svh;
+  padding-block: var(--s-8) var(--s-9);
+  text-align: center;
+  background: var(--bg);
+}
+
+.error-page__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+}
+
+/* "4 O 4" */
+.error-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.02em;
+  direction: ltr;
+  color: var(--green);
+  font-family: var(--font-en-display);
+  font-size: clamp(6rem, 3.5rem + 18vw, 15rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.06em !important;
+  text-shadow: 0 0 20px var(--green-a55), 0 0 70px var(--green-a35);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .error-code {
+    animation: neon-flicker 6s linear 1.5s infinite;
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 55% { opacity: 0.55; }
+}
+
+.error-code__hole {
+  display: block;
+  inline-size: 0.78em;
+  block-size: 0.78em;
+  margin-inline: 0.04em;
+  text-shadow: none;
+}
+
+.error-code__hole svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+.manhole__rim {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 7;
+  filter: drop-shadow(0 0 6px var(--green-a55));
+}
+
+.manhole__pit {
+  fill: var(--gray-950);
+  stroke: var(--green-a35);
+  stroke-width: 2;
+}
+
+.manhole__ring {
+  fill: none;
+  stroke: var(--green-a20);
+  stroke-width: 2;
+  stroke-dasharray: 3 7;
+}
+
+/* Dhakkan: gutter ke upar se hat kar thora upar-daayen (4-0-4 hamesha LTR hai) */
+.manhole__lid {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  translate: 30px -34px;
+  rotate: 14deg;
+}
+
+.manhole__lid-disc {
+  fill: var(--gray-900);
+  stroke: var(--green);
+  stroke-width: 4;
+}
+
+.manhole__lid-ring {
+  fill: none;
+  stroke: var(--green-a35);
+  stroke-width: 2;
+}
+
+.manhole__lid-grid {
+  fill: none;
+  stroke: var(--green-a35);
+  stroke-width: 1.5;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .manhole__lid {
+    animation: lid-wobble 4.5s ease-in-out 1s infinite alternate;
+  }
+}
+
+@keyframes lid-wobble {
+  from { translate: 30px -34px; rotate: 14deg; }
+  to   { translate: 34px -38px; rotate: 20deg; }
+}
+
+/* Sadak ki beech wali dashed lakeer */
+.error-road {
+  inline-size: min(34rem, 86%);
+  block-size: 0.5rem;
+  border-radius: 0.25rem;
+  background: repeating-linear-gradient(90deg, var(--green-a55) 0 2.25rem, transparent 2.25rem 3.75rem);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+}
+
+.error-page h1 {
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+.error-page p {
+  max-width: 28em;
+  color: var(--muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+/* Mazaiya line */
+.error-page .error-page__joke {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-3);
+  margin-block-start: var(--s-3);
+}
+
+/* >>> pages/credits.css */
+/* ==========================================================================
+   Masla-e-Karachi — pages/credits.css   (Masla 11: "Built by" card)
+   --------------------------------------------------------------------------
+   Home ke aakhir mein chhota dark-glass card: monogram + naam + role + links.
+   Links HTML mein nahi: main.js ([data-dev-link]) config.js DEVELOPER se href bharta hai.
+   Khali URL wala link [hidden] ho jata hai. Chips ka look footer ke chips jaisa.
+   ========================================================================== */
+.builder-card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--s-5);
+  align-items: center;
+  padding: clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(135deg, var(--green-a08), transparent 55%),
+    rgb(255 255 255 / 0.03);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* Kone mein dhundli hari roshni */
+.builder-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -35%;
+  inset-inline-end: -8%;
+  inline-size: 18rem;
+  block-size: 18rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--green-a12), transparent 70%);
+  pointer-events: none;
+}
+
+.builder-card__mono {
+  display: grid;
+  place-items: center;
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  border: 1px solid var(--green-a35);
+  border-radius: 50%;
+  background: var(--green-a08);
+  color: var(--green);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.builder-card__eyebrow {
+  margin: 0 0 var(--s-1);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.builder-card__name {
+  margin: 0;
+  color: var(--gray-100);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+.builder-card__role {
+  margin: var(--s-1) 0 0;
+  color: var(--gray-300);
+  font-weight: 600;
+}
+
+.builder-card__line {
+  margin: var(--s-3) 0 0;
+  max-inline-size: 46ch;
+  color: var(--gray-400);
+}
+
+.builder-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+/* JS na chale (href nahi bhara) ya URL khali ho to chip nazar na aaye */
+.builder-card__actions [hidden],
+.builder-card__actions a:not([href]) {
+  display: none;
+}
+
+.builder-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-block-size: 2.75rem;
+  padding-inline: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--gray-300);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out),
+    background-color 0.2s var(--ease-out), translate 0.2s var(--ease-out);
+}
+
+.builder-chip:hover,
+.builder-chip:focus-visible {
+  color: var(--green);
+  border-color: var(--green-a35);
+  background: var(--green-a08);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .builder-chip:hover {
+    translate: 0 -1px;
+  }
+}
+
+@media (min-width: 48rem) {
+  .builder-card {
+    grid-template-columns: auto 1fr;
+    column-gap: var(--s-6);
+  }
+
+  .builder-card__mono {
+    inline-size: 5.5rem;
+    block-size: 5.5rem;
+    font-size: 1.85rem;
+  }
+
+  .builder-card__actions {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .builder-card {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .builder-card__actions {
+    grid-column: auto;
+    justify-content: flex-end;
+    max-inline-size: 26rem;
+  }
+}
+

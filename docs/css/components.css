@@ -1,0 +1,793 @@
+/* ==========================================================================
+   Masla-e-Karachi — components.css
+   --------------------------------------------------------------------------
+   Chhote, dobara use hone wale tukde (building blocks):
+     1. Icons              6. Callout
+     2. Buttons            7. Accordion (FAQ)
+     3. Language toggle    8. Ticket (tracking code)
+     4. Chips (status)     9. Report card (example complaint)
+     5. Pin               10. Misc: monogram, token, stat
+                          11. Reveal (scroll animation)
+   Page-specific layout pages.css mein hai.
+   ========================================================================== */
+
+/* BUNDLE: neeche ki saari chhoti CSS files ek file mein jod di gayi hain (tez loading). */
+
+/* >>> components/icons.css */
+/* ---------- 1. ICONS ----------
+   Inline SVG par class="icon" lagayen. Rang text ke rang se aata hai. */
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-badge {
+  --badge-bg: var(--green-a12);
+  --badge-fg: var(--green);
+  --badge-ring: var(--green-a20);
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  border-radius: var(--r-sm);
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  box-shadow: inset 0 0 0 1px var(--badge-ring);
+  transition: transform var(--dur) var(--ease-spring), box-shadow var(--dur) ease, background-color var(--dur) ease;
+}
+
+.icon-badge .icon {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.icon-badge--pending  { --badge-bg: var(--pending-soft);  --badge-fg: var(--pending); --badge-ring: var(--pending-line); }
+.icon-badge--dark     { --badge-bg: var(--green); --badge-fg: var(--green-ink); --badge-ring: transparent; box-shadow: 0 0 22px -2px var(--green-a55); }
+.icon-badge--round    { border-radius: 50%; }
+
+/* >>> components/buttons.css */
+/* ---------- 2. BUTTONS ----------
+   .btn  +  ek variant (--primary, --light, --ghost, --ghost-light)
+   Size: --sm, --lg   |   --block = poori chaurai
+   Default (.btn) aur --primary: neon green. --light: safed (hover par green). */
+.btn {
+  --btn-bg: var(--green);
+  --btn-fg: var(--green-ink);
+  --btn-bd: transparent;
+  --btn-shadow: 0 8px 18px -10px rgb(0 0 0 / 0.65);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: var(--tap);
+  padding: 0.65em 1.4em;
+  border: 1.5px solid var(--btn-bd);
+  border-radius: var(--r-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  /* Sirf rang badalte hain (halke, 200ms). Lift/press neeche motion-allowed block mein hai. */
+  transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out),
+    translate 0.2s var(--ease-out), scale 0.1s var(--ease-out);
+}
+
+.btn .icon {
+  transition: translate 0.2s var(--ease-out);
+}
+
+/* HOVER (sirf mouse wale desktop par): rang halka badlo + halka sa upar + saaf soft shadow.
+   Sab variants (primary, light, ghost, ghost-light) ek jaisa mizaaj rakhte hain. */
+@media (hover: hover) {
+  .btn:hover {
+    --btn-bg: var(--green-bright);
+    color: var(--btn-fg);
+    box-shadow: var(--btn-shadow);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .btn:hover {
+    translate: 0 -2px;
+  }
+
+  .btn--sm:hover {
+    translate: 0 -1px;
+  }
+
+  /* Arrow / icon 4px aage khisakta hai */
+  .btn:hover .icon {
+    translate: calc(4px * var(--flip)) 0;
+  }
+}
+
+/* PRESS: halka sa dabta hai (100ms). Reduced-motion mein base.css scale band kar deta hai. */
+.btn:active {
+  translate: 0 0;
+  scale: 0.98;
+  box-shadow: none;
+  transition-duration: 0.1s;
+}
+
+/* KEYBOARD FOCUS: saaf 2px ring, 3px door (rang base.css / cta-band se aata hai) */
+.btn:focus-visible {
+  outline-width: 2px;
+  outline-offset: 3px;
+}
+
+/* DISABLED: dhundla, na dabta hai na uthta hai */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  translate: none;
+  scale: none;
+}
+
+.btn--primary {
+  /* default hi primary hai; yeh class sirf saaf likhne ke liye hai */
+  --btn-bg: var(--green);
+}
+
+.btn--light {
+  --btn-bg: var(--white);
+  --btn-fg: var(--gray-950);
+}
+
+@media (hover: hover) {
+  .btn--light:hover {
+    --btn-bg: var(--green);
+  }
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-bd: var(--line-strong);
+}
+
+@media (hover: hover) {
+  .btn--ghost:hover {
+    --btn-bg: var(--green-a08);
+    --btn-bd: var(--green);
+    color: var(--green);
+  }
+}
+
+.btn--ghost-light {
+  --btn-bg: rgb(255 255 255 / 0.04);
+  --btn-fg: var(--white);
+  --btn-bd: rgb(255 255 255 / 0.38);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+@media (hover: hover) {
+  .btn--ghost-light:hover {
+    --btn-bg: var(--green-a08);
+    --btn-bd: var(--green);
+    color: var(--green);
+  }
+}
+
+.btn--lg {
+  min-height: 3.6rem;
+  padding-inline: 1.9em;
+  font-size: var(--fs-md);
+}
+
+.btn--sm {
+  min-height: 2.5rem;
+  padding: 0.45em 1.1em;
+  font-size: var(--fs-sm);
+}
+
+/* Chhoti screen: bade buttons poori chaurai lein taake angoothe se dabana aasan ho */
+@media (max-width: 30rem) {
+  .hero__actions .btn,
+  .cta-band__actions .btn,
+  .error-page__actions .btn {
+    width: 100%;
+  }
+
+  .btn--lg {
+    padding-inline: 1.3em;
+  }
+}
+
+/* >>> components/chips-pin.css */
+/* ---------- 4. CHIPS (status badges) ----------
+   <span class="chip chip--open">Open</span>   etc.
+   Bina variant ka .chip = gehra shisha (glass) + hara nuqta. */
+.chip {
+  --chip-bg: rgb(13 13 13 / 0.7);
+  --chip-fg: var(--ink);
+  --chip-dot: var(--green);
+  --chip-ring: var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.3em 0.85em 0.3em 0.7em;
+  border-radius: var(--r-pill);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  box-shadow: inset 0 0 0 1px var(--chip-ring);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.chip::before {
+  content: "";
+  width: 0.55em;
+  height: 0.55em;
+  flex: none;
+  border-radius: 50%;
+  background: var(--chip-dot);
+  box-shadow: 0 0 8px var(--chip-dot);
+}
+
+.chip--open      { --chip-bg: var(--open-soft);      --chip-fg: #ff8a93; --chip-dot: var(--open);    --chip-ring: var(--open-line); }
+.chip--review    { --chip-bg: var(--pending-soft);   --chip-fg: #ffc866; --chip-dot: var(--pending); --chip-ring: var(--pending-line); }
+.chip--responded { --chip-bg: var(--responded-soft); --chip-fg: var(--white); --chip-dot: var(--responded); --chip-ring: rgb(255 255 255 / 0.28); }
+.chip--resolved  { --chip-bg: var(--resolved-soft);  --chip-fg: var(--green); --chip-dot: var(--green); --chip-ring: var(--resolved-line); }
+.chip--overdue   { --chip-bg: var(--open);           --chip-fg: var(--gray-950); --chip-dot: var(--gray-950); --chip-ring: transparent; }
+
+.chip--overdue::before,
+.chip--soon::before {
+  box-shadow: none;
+}
+
+/* "Jald aa raha hai" / "Misal" jaise neutral chips */
+.chip--soon {
+  --chip-bg: transparent;
+  --chip-fg: var(--muted);
+  --chip-ring: var(--line-strong);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.chip--soon::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+
+/* Gehre background (hero) ke liye */
+.chip--on-dark {
+  --chip-bg: rgb(255 255 255 / 0.07);
+  --chip-fg: var(--white);
+  --chip-dot: var(--green);
+  --chip-ring: rgb(255 255 255 / 0.2);
+}
+
+/* "Live" chip: nuqta dhadakta hai (platform ban raha hai) */
+.chip--live::before {
+  animation: live-dot 1.8s ease-out infinite;
+}
+
+@keyframes live-dot {
+  0%   { box-shadow: 0 0 0 0 var(--green-a55), 0 0 8px var(--green); }
+  70%  { box-shadow: 0 0 0 0.5rem rgb(57 255 20 / 0), 0 0 8px var(--green); }
+  100% { box-shadow: 0 0 0 0 rgb(57 255 20 / 0), 0 0 8px var(--green); }
+}
+
+/* ---------- 5. PIN ----------
+   Map ka pin, brand ka asli nishan. CSS se bana hai (koi image nahi).
+   <span class="pin"></span>   <span class="pin pin--resolved pin--lg"></span> */
+.pin {
+  --pin-size: 1.25rem;
+  --pin-color: var(--open);
+  --pin-glow: var(--open-glow);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--pin-size);
+  height: var(--pin-size);
+  border-radius: 50% 50% 50% 0;
+  background: var(--pin-color);
+  transform: rotate(-45deg);
+  filter: drop-shadow(0 0 7px var(--pin-glow));
+}
+
+.pin::after {
+  content: "";
+  position: absolute;
+  inset: 29%;
+  border-radius: 50%;
+  background: var(--gray-950);
+}
+
+.pin--review    { --pin-color: var(--pending);   --pin-glow: var(--pending-glow); }
+.pin--responded { --pin-color: var(--responded); --pin-glow: var(--responded-glow); }
+.pin--resolved  { --pin-color: var(--green);     --pin-glow: var(--green-a55); }
+.pin--sm { --pin-size: 0.9rem; }
+.pin--lg { --pin-size: 2.5rem; }
+
+/* >>> components/callout.css */
+/* ---------- 6. CALLOUT ---------- */
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--green-a20);
+  border-inline-start: 6px solid var(--green);
+  border-radius: var(--r-md);
+  background: linear-gradient(var(--to-end), var(--green-a08), transparent 70%), var(--surface);
+  color: var(--text);
+}
+
+.callout > .icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-block-start: 0.2em;
+  color: var(--green);
+}
+
+.callout > div {
+  min-width: 0;
+}
+
+.callout__title {
+  display: block;
+  margin-block-end: var(--s-1);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.callout--note {
+  border-color: var(--pending-line);
+  border-inline-start-color: var(--pending);
+  background: linear-gradient(var(--to-end), var(--pending-soft), transparent 75%), var(--surface);
+}
+
+.callout--note > .icon,
+.callout--note .callout__title {
+  color: var(--pending);
+}
+
+/* Callout ke upar/neeche faasla (HTML mein inline style nahi, isliye class) */
+
+.callout--gap-end   { margin-block-end: var(--s-6); }
+
+/* >>> components/accordion.css */
+/* ---------- 7. ACCORDION (FAQ) ----------
+   <div class="accordion">
+     <div class="accordion__item">
+       <h3><button class="accordion__button" aria-expanded="false" aria-controls="a1" id="q1">Sawal</button></h3>
+       <div class="accordion__panel" id="a1" role="region" aria-labelledby="q1">
+         <div class="accordion__panel-inner"><div class="accordion__content">Jawab</div></div>
+       </div>
+     </div>
+   </div>
+   faq.js kholne par item par "is-open" lagata hai. Glass rows, + icon khulne par - ban jata hai. */
+.accordion {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.accordion__item {
+  position: relative;
+  border: 1px solid var(--line-faint);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01)),
+    var(--bg-deep);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .accordion__item:hover {
+    border-color: var(--line-strong);
+  }
+}
+
+.accordion__item.is-open {
+  border-color: var(--green-a35);
+  box-shadow: var(--shadow-md), 0 0 36px -16px var(--green-a35);
+}
+
+.accordion__item > h3,
+.accordion__item > h4 {
+  font-size: inherit;
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+.accordion__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--s-4) var(--s-5);
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+  text-align: start;
+}
+
+/* Plus icon: doosri patti khulne par ghat kar minus ban jati hai */
+.accordion__button::after {
+  content: "";
+  flex: none;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--green), var(--green)) center / 0.9rem 2px no-repeat,
+    linear-gradient(var(--green), var(--green)) center / 2px 0.9rem no-repeat;
+  transition:
+    background-size var(--dur) var(--ease-out),
+    background-color var(--dur) ease,
+    border-color var(--dur) ease,
+    transform var(--dur) var(--ease-out);
+}
+
+.accordion__item.is-open .accordion__button::after {
+  border-color: var(--green-a35);
+  background-color: var(--green-a12);
+  background-size: 0.9rem 2px, 2px 0;
+  transform: rotate(180deg);
+}
+
+.accordion__panel {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.accordion__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accordion__content {
+  padding: 0 var(--s-5) var(--s-5);
+  max-width: 62ch;
+  color: var(--text);
+}
+
+.accordion__content > * + * {
+  margin-block-start: var(--s-3);
+}
+
+/* JS chal raha ho to band items ko smoothly band karo */
+.js .accordion__panel {
+  transition: grid-template-rows var(--dur) var(--ease-out), visibility 0s;
+}
+
+.js .accordion__item:not(.is-open) .accordion__panel {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows var(--dur) var(--ease-out), visibility 0s var(--dur);
+}
+
+/* >>> components/ticket-card.css */
+/* ---------- 8. TICKET (tracking code) ----------
+   Parchi jaisa: dono taraf gol kataav (notch), beech mein dashed line.
+   <div class="ticket">
+     <span class="ticket__label">Your secret tracking code</span>
+     <span class="ticket__code ltr">MEK-8F3K-92</span>
+   </div> */
+.ticket {
+  --notch: 0.7rem;
+  display: inline-grid;
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-6);
+  background: var(--gray-100);
+  color: var(--gray-950);
+  border-radius: var(--r-md);
+  box-shadow: inset 0 5px 0 var(--green);          /* upar hari patti */
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 56%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 56%, #0000 97%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 56%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 56%, #0000 97%, #000) right / 51% 100% no-repeat;
+}
+
+.ticket__label {
+  padding-block: 0.25rem var(--s-3);
+  border-block-end: 2px dashed var(--gray-500);
+  color: var(--gray-600);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.ticket__code {
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
+  font-weight: 500;
+  letter-spacing: 0.08em !important;
+  color: var(--gray-950);
+}
+
+/* ---------- 9. REPORT CARD (misaali complaint) ----------
+   Hero mein dikhane ke liye. HAMESHA "Misal / Example" chip ke saath. */
+.report-card {
+  position: relative;
+  max-width: 26rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-lg), 0 0 60px -20px var(--green-a35);
+}
+
+/* Neon kinara: ek roshni card ke gird ghoomti hai (@property wale browser mein) */
+.report-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--angle), transparent 0 70%, var(--green) 85%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .report-card::before {
+    animation: border-spin 6s linear infinite;
+  }
+}
+
+@keyframes border-spin {
+  to { --angle: 360deg; }
+}
+
+.report-card__media {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 5 / 3.6;
+  overflow: hidden;
+  border-radius: calc(var(--r-lg) - 0.65rem);
+  background: var(--gray-950);
+}
+
+.report-card__media > svg,
+.report-card__media > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.report-card__badge {
+  position: absolute;
+  inset-block-start: 0.7rem;
+  inset-inline-start: 0.7rem;
+}
+
+.report-card__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-3) var(--s-3);
+}
+
+.report-card__title {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+}
+
+.report-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.report-card__meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.report-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-block-start: var(--s-3);
+  border-block-start: 1px dashed var(--line-strong);
+}
+
+.report-card__foot small {
+  color: var(--muted);
+}
+
+/* >>> components/misc-reveal.css */
+/* ---------- 10. MISC ---------- */
+
+/* Department ka gol monogram (KMC, KWSC ...) */
+.monogram {
+  display: inline-grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  flex: none;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--gray-900);
+  color: var(--ink);
+  font-family: var(--font-en-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  transition: background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+/* Chhota pill: "Phone model", "GPS" jaise tukde */
+.token {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.85em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--gray-900);
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.token--struck {
+  border-style: dashed;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--open);
+  text-decoration-thickness: 2px;
+}
+
+/* Bara number + chhota label (stats). Sirf asli data aane ke baad real numbers dalen. */
+.stat {
+  display: grid;
+  gap: var(--s-1);
+}
+
+.stat__value {
+  color: var(--green);
+  font-family: var(--font-en-display);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 24px var(--green-a35);
+}
+
+/* ---------- 11. REVEAL (scroll par nazar aana) - Masla 9 final touch ----------
+   main.js jab .reveal ko screen mein dekhta hai to "is-visible" lagata hai.
+   Ek hi rukh (neeche se upar): opacity + 20px translate, 700ms, ease-out.
+   Stagger: main.js ek hi waqt mein aane wali cheezon ko DOM order mein --reveal-delay
+   (70ms x number, max 6 tak) deta hai. data-delay attribute ab sirf purana hook hai.
+   Heading ka hara marker (.hl) heading ke saath ek baar "wipe" hota hai.
+   `translate`/`scale` alag properties hain, isliye cards ka hover `transform` kabhi nahi tootta.
+   .no-js ya reduced-motion mein sab kuch pehle se nazar aata hai (JS ki class .js chahiye).
+   Sirf opacity + translate animate hote hain (layout nahi hilta, CLS 0). */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal:not(.is-visible) {
+    opacity: 0;
+    translate: 0 20px;
+  }
+
+  .js .reveal.is-visible {
+    animation: reveal-up 0.7s var(--ease-out) var(--reveal-delay, 0ms) backwards;
+  }
+
+  .js .reveal.is-visible h2 .hl::before {
+    animation: hl-wipe 0.75s var(--ease-out) calc(var(--reveal-delay, 0ms) + 300ms) backwards;
+  }
+
+  /* Sirf chuni hui jagahon par animation: lambay text (terms ke clauses, FAQ groups),
+     chhoti list items aur legend ke tukde seedha nazar aate hain, alag se nahi aate. */
+  .js :is(.clause, .faq-group, .pf-item, .mock-note, .status-legend__item).reveal:not(.is-visible) {
+    opacity: 1;
+    translate: none;
+  }
+
+  .js :is(.clause, .faq-group, .pf-item, .mock-note, .status-legend__item).reveal.is-visible {
+    animation: none;
+  }
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; translate: 0 20px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes reveal-scale {
+  from { opacity: 0; scale: 0.94; }
+  to   { opacity: 1; scale: 1; }
+}
+
+@keyframes reveal-side {
+  from { opacity: 0; translate: calc(-36px * var(--flip)) 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes reveal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---------- 12. MICRO-INTERACTIONS ---------- */
+
+/* Dabane ka ehsaas (touch + mouse dono): chip halka sa dab jata hai. (Button ka press upar buttons section mein hai.) */
+.chip:active,
+.faq-filter__chip:active {
+  scale: 0.97;
+}
+
+/* Heading ka hara marker (.hl) page khulte hi qalam ki tarah phailta hai.
+   clip-path se (rotate ke saath mil kar nahi bigarta). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__title .hl::before,
+  .page-hero h1 .hl::before {
+    animation: hl-wipe 0.75s var(--ease-out) 0.5s backwards;
+  }
+}
+
+@keyframes hl-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* Sirf mouse wale desktop par (hover + fine pointer) aur motion allowed ho to:
+   - .lift          : hover par card halka upar uthta hai
+   - [data-tilt]    : card pointer ki taraf zara jhukta hai (JS --tilt-x/--tilt-y deta hai) */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  [data-tilt] {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.25s var(--ease-out);
+    will-change: transform;
+  }
+
+  [data-tilt].is-tilting {
+    transition: transform 0.06s linear;
+  }
+}
+
+/* Reduced-motion / touch: yeh sab bilkul band (JS bhi in par kuch nahi lagata) */
+@media (prefers-reduced-motion: reduce) {
+  [data-tilt] { transform: none; }
+}
+

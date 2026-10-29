@@ -1,0 +1,140 @@
+/* ==========================================================================
+   A9. FINAL CTA BAND  (Masla 11: neon hara — poore page ka sab se roshan lamha)
+   --------------------------------------------------------------------------
+   Bara rounded hara block, bara type, 2 buttons, neeche gehri pill mein
+   emergency note. Peeche kali "contour" ringen (Karachi ke naqshe jaisi).
+   Footer is ke baad gehra hai, hara nahi: do hare block ek ke baad ek nahi.
+   ========================================================================== */
+.cta-band {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--s-6);
+  overflow: hidden;
+  padding: clamp(1.75rem, 1rem + 5vw, 5rem);
+  border-radius: clamp(1.75rem, 1rem + 3vw, 2.75rem);
+  background: var(--green);
+  color: rgb(13 13 13 / 0.85);
+  box-shadow: 0 0 90px -20px var(--green-a55);
+}
+
+/* Hare par kali lakeeron ka jaal */
+.cta-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-radial-gradient(circle at calc(50% + 46% * var(--flip)) 10%, transparent 0 34px, rgb(13 13 13 / 0.13) 34px 36px),
+    linear-gradient(rgb(13 13 13 / 0.07) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, rgb(13 13 13 / 0.07) 1px, transparent 1px) 0 0 / 44px 44px;
+  -webkit-mask: linear-gradient(var(--to-end), transparent 5%, #000 95%);
+  mask: linear-gradient(var(--to-end), transparent 5%, #000 95%);
+}
+
+/* Roshni ki patti jo aahista guzarti hai */
+.cta-band::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: -40%;
+  z-index: -1;
+  width: 30%;
+  background: linear-gradient(var(--to-end), transparent, rgb(255 255 255 / 0.32), transparent);
+  transform: skewX(calc(-18deg * var(--flip)));
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta-band::after {
+    animation: cta-sweep 7s ease-in-out 1s infinite;
+  }
+}
+
+@keyframes cta-sweep {
+  0%        { inset-inline-start: -40%; }
+  45%, 100% { inset-inline-start: 140%; }
+}
+
+@media (min-width: 62.5rem) {
+  .cta-band {
+    grid-template-columns: minmax(0, 1.3fr) auto;
+    align-items: center;
+  }
+}
+
+.cta-band h2 {
+  max-width: 14em;
+  color: var(--green-ink);
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+}
+
+:root[lang="ur"] .cta-band h2 { line-height: 1.55; }
+
+.cta-band h2::before {
+  display: none;
+}
+
+.cta-band p {
+  max-width: 30em;
+  margin-block-start: var(--s-4);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+}
+
+.cta-band__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  align-items: flex-start;
+}
+
+.cta-band .btn--light {
+  --btn-bg: var(--gray-950);
+  --btn-fg: var(--green);
+  --btn-glow: rgb(13 13 13 / 0.5);
+}
+
+.cta-band .btn--light:hover {
+  --btn-bg: var(--gray-800);
+  color: var(--green-bright);
+}
+
+.cta-band .btn--ghost-light {
+  --btn-bg: transparent;
+  --btn-fg: var(--green-ink);
+  --btn-bd: rgb(13 13 13 / 0.6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.cta-band .btn--ghost-light:hover {
+  --btn-bg: rgb(13 13 13 / 0.1);
+  --btn-bd: var(--green-ink);
+  color: var(--green-ink);
+}
+
+.cta-band .cta-band__note {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--s-3);
+  max-width: none;
+  margin-block-start: 0;
+  padding: var(--s-3) var(--s-5) var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--gray-950);
+  color: var(--white);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  grid-column: 1 / -1;
+}
+
+.cta-band__note .icon {
+  flex: none;
+  color: var(--open);
+}

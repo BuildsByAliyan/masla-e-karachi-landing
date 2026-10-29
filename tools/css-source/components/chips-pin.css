@@ -1,0 +1,117 @@
+/* ---------- 4. CHIPS (status badges) ----------
+   <span class="chip chip--open">Open</span>   etc.
+   Bina variant ka .chip = gehra shisha (glass) + hara nuqta. */
+.chip {
+  --chip-bg: rgb(13 13 13 / 0.7);
+  --chip-fg: var(--ink);
+  --chip-dot: var(--green);
+  --chip-ring: var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.3em 0.85em 0.3em 0.7em;
+  border-radius: var(--r-pill);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  box-shadow: inset 0 0 0 1px var(--chip-ring);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.chip::before {
+  content: "";
+  width: 0.55em;
+  height: 0.55em;
+  flex: none;
+  border-radius: 50%;
+  background: var(--chip-dot);
+  box-shadow: 0 0 8px var(--chip-dot);
+}
+
+:root[lang="ur"] .chip {
+  font-size: var(--fs-sm);
+  line-height: 1.9;
+  padding-block: 0 0.2em;
+}
+
+.chip--open      { --chip-bg: var(--open-soft);      --chip-fg: #ff8a93; --chip-dot: var(--open);    --chip-ring: var(--open-line); }
+.chip--review    { --chip-bg: var(--pending-soft);   --chip-fg: #ffc866; --chip-dot: var(--pending); --chip-ring: var(--pending-line); }
+.chip--responded { --chip-bg: var(--responded-soft); --chip-fg: var(--white); --chip-dot: var(--responded); --chip-ring: rgb(255 255 255 / 0.28); }
+.chip--resolved  { --chip-bg: var(--resolved-soft);  --chip-fg: var(--green); --chip-dot: var(--green); --chip-ring: var(--resolved-line); }
+.chip--overdue   { --chip-bg: var(--open);           --chip-fg: var(--gray-950); --chip-dot: var(--gray-950); --chip-ring: transparent; }
+
+.chip--overdue::before,
+.chip--soon::before {
+  box-shadow: none;
+}
+
+/* "Jald aa raha hai" / "Misal" jaise neutral chips */
+.chip--soon {
+  --chip-bg: transparent;
+  --chip-fg: var(--muted);
+  --chip-ring: var(--line-strong);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.chip--soon::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+
+/* Gehre background (hero) ke liye */
+.chip--on-dark {
+  --chip-bg: rgb(255 255 255 / 0.07);
+  --chip-fg: var(--white);
+  --chip-dot: var(--green);
+  --chip-ring: rgb(255 255 255 / 0.2);
+}
+
+/* "Live" chip: nuqta dhadakta hai (platform ban raha hai) */
+.chip--live::before {
+  animation: live-dot 1.8s ease-out infinite;
+}
+
+@keyframes live-dot {
+  0%   { box-shadow: 0 0 0 0 var(--green-a55), 0 0 8px var(--green); }
+  70%  { box-shadow: 0 0 0 0.5rem rgb(57 255 20 / 0), 0 0 8px var(--green); }
+  100% { box-shadow: 0 0 0 0 rgb(57 255 20 / 0), 0 0 8px var(--green); }
+}
+
+/* ---------- 5. PIN ----------
+   Map ka pin, brand ka asli nishan. CSS se bana hai (koi image nahi).
+   <span class="pin"></span>   <span class="pin pin--resolved pin--lg"></span> */
+.pin {
+  --pin-size: 1.25rem;
+  --pin-color: var(--open);
+  --pin-glow: var(--open-glow);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--pin-size);
+  height: var(--pin-size);
+  border-radius: 50% 50% 50% 0;
+  background: var(--pin-color);
+  transform: rotate(-45deg);
+  filter: drop-shadow(0 0 7px var(--pin-glow));
+}
+
+.pin::after {
+  content: "";
+  position: absolute;
+  inset: 29%;
+  border-radius: 50%;
+  background: var(--gray-950);
+}
+
+.pin--review    { --pin-color: var(--pending);   --pin-glow: var(--pending-glow); }
+.pin--responded { --pin-color: var(--responded); --pin-glow: var(--responded-glow); }
+.pin--resolved  { --pin-color: var(--green);     --pin-glow: var(--green-a55); }
+.pin--sm { --pin-size: 0.9rem; }
+.pin--lg { --pin-size: 2.5rem; }
+.pin--xl { --pin-size: 4.5rem; }

@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Masla-e-Karachi — pages.css
+   --------------------------------------------------------------------------
+   Har page / section ka apna design.
+
+   A. HOME      hero, ticker, problem, solution, steps, features, departments,
+                privacy promise, roadmap, final CTA
+   B. SUB-PAGES page-hero (shared header band), page-cta
+   C. HOW IT WORKS   story timeline, status legend
+   D. PRIVACY        compare columns, explain cards
+   E. FAQ            layout, contact card
+   F. TERMS          toc + prose + rules
+   G. 404
+
+   Yaad rakhein: sirf logical properties (inline/block) use hui hain,
+   taake Urdu RTL khud sahi chale. Animation sirf transform/opacity/translate
+   par hai (GPU), isliye phone par bhi smooth.
+   ========================================================================== */
+
+/* MANIFEST: yeh file ab sirf @import ki list hai. Asli CSS css/pages/ ke andar hai.
+   Tarteeb (order) mat badlo, cascade isi par chalta hai. */
+@import url("pages/bg-fx.css");
+@import url("pages/hero.css");
+@import url("pages/ticker.css");
+@import url("pages/stats.css");
+@import url("pages/problem.css");
+@import url("pages/solution.css");
+@import url("pages/steps.css");
+@import url("pages/features.css");
+@import url("pages/departments.css");
+@import url("pages/promise.css");
+@import url("pages/roadmap.css");
+@import url("pages/cta-band.css");
+@import url("pages/credits.css");
+@import url("pages/subpage-hero.css");
+@import url("pages/how-it-works.css");
+@import url("pages/privacy.css");
+@import url("pages/faq.css");
+@import url("pages/terms.css");
+@import url("pages/error-404.css");
