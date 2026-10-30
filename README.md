@@ -1,96 +1,95 @@
 <div align="center">
 
-<img src="docs/assets/.readme/01-hero.png" alt="Masla-e-Karachi — مسئلہ Karachi" width="100%">
+<img src="docs/assets/.readme/01-hero.png" alt="Masla-e-Karachi" width="100%">
 
-<br><br>
+<br>
+<br>
 
 # MASLA-E-KARACHI
-### Masla batao, <ins>hisaab lo.</ins>
 
-**Karachi ke shehri masle report karo — anonymously. Public map par. Bina login ke.**
+**Masla batao, hisaab lo.**
 
-<br>
-
-[![Live Site](https://img.shields.io/badge/LIVE_SITE-visit-39FF14?style=for-the-badge&labelColor=111111)](https://buildsbyaliyan.github.io/masla-e-karachi-landing/)
-[![Platform](https://img.shields.io/badge/PLATFORM-maslaekarachi.pk-39FF14?style=for-the-badge&labelColor=111111)](https://maslaekarachi.pk)
-[![Status](https://img.shields.io/badge/PLATFORM_STATUS-under_development-FFB020?style=for-the-badge&labelColor=111111)](#-yeh-repo-kya-hai)
-
-![HTML](https://img.shields.io/badge/HTML5-111111?style=flat-square&logo=html5&logoColor=39FF14)
-![CSS](https://img.shields.io/badge/CSS3-111111?style=flat-square&logo=css3&logoColor=39FF14)
-![JavaScript](https://img.shields.io/badge/Vanilla_JS-111111?style=flat-square&logo=javascript&logoColor=39FF14)
-![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-111111?style=flat-square&logo=github&logoColor=39FF14)
-![No Framework](https://img.shields.io/badge/frameworks-none-111111?style=flat-square&labelColor=111111&color=39FF14)
-![No Build](https://img.shields.io/badge/build_step-none-111111?style=flat-square&labelColor=111111&color=39FF14)
+An anonymous civic reporting platform for the people of Karachi.<br>
+Report a problem. Pin it on a public map. Hold the system accountable.
 
 <br>
 
-[**Yeh repo kya hai**](#-yeh-repo-kya-hai) &nbsp;·&nbsp;
-[**Problem → Solution**](#-problem--solution) &nbsp;·&nbsp;
-[**How it works**](#-how-it-works) &nbsp;·&nbsp;
-[**Accountability**](#-built-for-accountability) &nbsp;·&nbsp;
-[**Quick start**](#-quick-start) &nbsp;·&nbsp;
-[**Edit guide**](#-kaise-edit-karein) &nbsp;·&nbsp;
-[**Deploy**](#-deploy-github-pages) &nbsp;·&nbsp;
-[**Credits**](#-credits)
+[![Live Site](https://img.shields.io/badge/Live_Site-Visit-39FF14?style=for-the-badge&labelColor=0d0d0d)](https://buildsbyaliyan.github.io/masla-e-karachi-landing/)
+&nbsp;
+[![Platform](https://img.shields.io/badge/Platform-maslaekarachi.pk-39FF14?style=for-the-badge&labelColor=0d0d0d)](https://maslaekarachi.pk)
+
+![HTML5](https://img.shields.io/badge/HTML5-0d0d0d?style=flat-square&logo=html5&logoColor=39FF14)
+![CSS3](https://img.shields.io/badge/CSS3-0d0d0d?style=flat-square&logo=css3&logoColor=39FF14)
+![JavaScript](https://img.shields.io/badge/Vanilla_JS-0d0d0d?style=flat-square&logo=javascript&logoColor=39FF14)
+![GitHub Pages](https://img.shields.io/badge/Hosted_on-GitHub_Pages-0d0d0d?style=flat-square&logo=github&logoColor=39FF14)
+![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-0d0d0d?style=flat-square&labelColor=0d0d0d&color=39FF14)
+
+<br>
+
+[Overview](#overview) &nbsp;•&nbsp;
+[The Problem](#the-problem--the-solution) &nbsp;•&nbsp;
+[How It Works](#how-it-works) &nbsp;•&nbsp;
+[Accountability](#built-for-accountability) &nbsp;•&nbsp;
+[Getting Started](#getting-started) &nbsp;•&nbsp;
+[Customization](#customization) &nbsp;•&nbsp;
+[Deployment](#deployment) &nbsp;•&nbsp;
+[Credits](#credits)
 
 </div>
 
 <br>
 
----
+## Overview
 
-## 📍 Yeh repo kya hai
-
-Masla-e-Karachi ka **introduction (landing) website**: ek anonymous platform jahan Karachi ke log shehri masle report kar sakein.
+This repository contains the **official landing website** for Masla-e-Karachi: a clean, fast, framework-free introduction to the platform and its mission.
 
 > [!NOTE]
-> Yeh repo **sirf landing website** hai. Asli platform abhi **under development** hai — [maslaekarachi.pk](https://maslaekarachi.pk).
+> This repo is the landing site only. The full reporting platform is currently **under development** at [maslaekarachi.pk](https://maslaekarachi.pk).
 
-| | |
+|  |  |
 | :-- | :-- |
-| 🌐 **Landing site** | [buildsbyaliyan.github.io/masla-e-karachi-landing](https://buildsbyaliyan.github.io/masla-e-karachi-landing/) |
-| 🚀 **Asli platform** | [maslaekarachi.pk](https://maslaekarachi.pk) |
-| 🧱 **Stack** | Plain HTML + CSS + vanilla JavaScript |
-| 🚫 **Nahi hai** | Koi framework, npm ya build step |
-| 🗣️ **Language** | Sirf English |
-| 🎨 **Theme** | Dark charcoal + neon green |
-
-**Pages:** `index.html` (Home) · `how-it-works.html` · `privacy.html` · `faq.html` · `terms.html` · `404.html`
+| **Live site** | [buildsbyaliyan.github.io/masla-e-karachi-landing](https://buildsbyaliyan.github.io/masla-e-karachi-landing/) |
+| **Platform** | [maslaekarachi.pk](https://maslaekarachi.pk) *(in development)* |
+| **Stack** | Plain HTML, CSS and vanilla JavaScript |
+| **Tooling** | No frameworks. No npm. No build step. |
+| **Language** | English |
+| **Theme** | Dark charcoal with neon green |
+| **Pages** | Home · How It Works · Privacy · FAQ · Terms · 404 |
 
 <br>
 
-## ⚡ Problem → Solution
+## The Problem / The Solution
 
 <div align="center">
-<img src="docs/assets/.readme/02-problem-solution.png" alt="The Problem: open gutters, broken roads, uncollected garbage, fear of being exposed. The Solution: report anonymously, public problem map, officer must respond, proof plus community check." width="100%">
+<img src="docs/assets/.readme/02-problem-solution.png" alt="The problem: open gutters, broken roads, uncollected garbage, fear of being exposed. The solution: report anonymously, public problem map, officer must respond, proof plus community check." width="100%">
 </div>
 
 <br>
 
-Karachi ke masle har roz nazar aate hain — par shikayat karne walay ko dar hota hai ke woh expose ho jayega. Masla-e-Karachi yeh dar khatam karta hai: **naam nahi, login nahi, bas masla aur proof.**
+Karachi's everyday problems are visible to everyone, yet most go unreported because people fear being exposed. Masla-e-Karachi removes that barrier: **no name, no login, just the problem and the proof.**
 
 <br>
 
-## 🧭 How it works
+## How It Works
 
 <div align="center">
-<img src="docs/assets/.readme/03-how-it-works.png" alt="How it works: four steps — Category, Location, Photo or Video, Details — then a secret tracking code." width="100%">
+<img src="docs/assets/.readme/03-how-it-works.png" alt="How it works: four steps — Category, Location, Photo or Video, Details — followed by a secret tracking code." width="100%">
 </div>
 
 <br>
 
-| Step | Kya karna hai |
-| :-: | :-- |
-| **01** | **Category** — masle ki type chuno |
-| **02** | **Location** — map par pin lagao |
-| **03** | **Photo / Video** — photo ya 30-second ki video |
-| **04** | **Details** — masla likh kar batao |
+| Step | Action | Description |
+| :-: | :-- | :-- |
+| **01** | **Category** | Pick the type of problem |
+| **02** | **Location** | Drop a pin on the map |
+| **03** | **Photo / Video** | Attach a photo or a 30-second video |
+| **04** | **Details** | Describe the issue |
 
-Submit karte hi aapko ek **secret tracking code** milta hai (jaise `MEK-8F3K-92`). Isay save karo aur kisi bhi waqt apni complaint follow karo.
+On submission, every report receives a **secret tracking code** (e.g. `MEK-8F3K-92`), so the reporter can follow progress at any time without ever creating an account.
 
 <br>
 
-## 🔒 Built for accountability
+## Built for Accountability
 
 <div align="center">
 <img src="docs/assets/.readme/04-accountability.png" alt="Built for accountability: anonymous, public map, 7-day overdue flag, department ranking." width="100%">
@@ -98,105 +97,101 @@ Submit karte hi aapko ek **secret tracking code** milta hai (jaise `MEK-8F3K-92`
 
 <br>
 
-| | Feature | Matlab |
-| :-: | :-- | :-- |
-| 🥷 | **Anonymous** | Naam, phone ya login nahi chahiye |
-| 🗺️ | **Public Map** | Har masla pin hua aur sab ko nazar aata hai |
-| 🚩 | **7-Day Overdue Flag** | 7 din tak jawab nahi aaya to flag lag jata hai |
-| 🏆 | **Department Ranking** | Ranking data par, likes par nahi |
+| Feature | What it means |
+| :-- | :-- |
+| **Anonymous** | No name, phone number or login required |
+| **Public Map** | Every problem is pinned and visible to everyone |
+| **7-Day Overdue Flag** | Reports with no response after 7 days are flagged |
+| **Department Ranking** | Departments are ranked on real data, not likes |
 
 > [!WARNING]
-> Yeh **emergency service nahi** hai. Agar jaan khatray mein ho to **15** par call karo.
+> Masla-e-Karachi is **not an emergency service**. If life is in danger, call **15**.
 
 <br>
 
 ---
 
-## 🚀 Quick start
+<br>
+
+## Getting Started
+
+Run the site locally with a single command from the project root:
 
 ```bash
 python3 -m http.server 8000 -d docs
 ```
 
-Phir browser mein **http://localhost:8000** kholo. Bas — install ya build kuch nahi.
+Then open **http://localhost:8000** in your browser. There is nothing to install or build.
 
-<br>
-
-## 📁 Folder structure
+### Project Structure
 
 ```text
 masla-e-karachi-landing/
-├── docs/                    ← poori website (GitHub Pages yahin se chalta hai)
-│   ├── *.html               6 pages
-│   ├── css/                 variables, base, layout, components, pages (5 files, bundle ho chuki)
-│   ├── js/                  config, i18n (text loader), main, counter, faq, base-404
-│   ├── lang/en.json         saara text — sirf yehi ek file
-│   ├── assets/              fonts, images, favicons
+├── docs/                      # The complete website (served by GitHub Pages)
+│   ├── *.html                 # 6 pages
+│   ├── css/                   # variables, base, layout, components, pages (bundled)
+│   ├── js/                    # config, i18n, main, counter, faq, base-404
+│   ├── lang/en.json           # All site text, in one file
+│   ├── assets/                # Fonts, images, favicons
 │   └── humans.txt · robots.txt · sitemap.xml · .nojekyll
-├── tools/                   helper scripts, developer.json, favicon source (deploy nahi hote)
-└── project-reference/       project ki context files (deploy nahi hoti)
+├── tools/                     # Helper scripts and sources (not deployed)
+└── project-reference/         # Project context files (not deployed)
 ```
 
 <br>
 
-## 🔧 Kaise edit karein
+## Customization
 
-| Kya badalna hai | Kahan |
+| To change | Edit |
 | :-- | :-- |
-| 🔗 **Links aur settings** | `docs/js/config.js` — asli website ka link, contact email, site URL, developer info |
-| ✉️ **Contact email** | `docs/js/config.js` mein `CONTACT_EMAIL: 'hello@example.pk'` likho. Khali rahe to FAQ par *"Contact email will be added at launch"* dikhta hai |
-| 📝 **Text** | `docs/lang/en.json` (sirf yeh ek file) |
-| 🎨 **Colors, fonts, spacing** | `docs/css/variables.css` |
-| 🧩 **Design** | `docs/css/layout.css`, `components.css`, `pages.css` — har hissa `/* >>> ... */` se alag nazar aata hai |
+| **Links and settings** | `docs/js/config.js` — platform link, contact email, site URL, developer info |
+| **Contact email** | `CONTACT_EMAIL` in `docs/js/config.js`. If left empty, the FAQ shows *"Contact email will be added at launch."* |
+| **Text content** | `docs/lang/en.json` — the only file that holds site copy |
+| **Colors, fonts, spacing** | `docs/css/variables.css` |
+| **Layout and components** | `docs/css/layout.css`, `components.css`, `pages.css` — each section is marked with `/* >>> ... */` |
 
 <details>
-<summary><b>📝 Text edit karne ka tareeqa (i18n)</b></summary>
+<summary><b>Adding or editing text</b></summary>
 
 <br>
 
-HTML mein English text pehle se likha hota hai; JSON se wahi text update hota hai.
+English text is already written inline in the HTML, and the JSON file keeps it in sync. To add a new string:
 
-Nayi key lagani ho to:
-
-1. HTML mein `data-i18n="key"` lagao
-2. Wohi `key` `docs/lang/en.json` mein dalo
+1. Add `data-i18n="your.key"` to the element in the HTML.
+2. Add the matching `your.key` entry to `docs/lang/en.json`.
 
 </details>
 
 > [!IMPORTANT]
-> **Rules (Content-Security-Policy):** inline `style=""`, inline `<script>` aur CDN **mana** hain. Sab paths **relative** rakho.
+> The site enforces a strict **Content-Security-Policy**. Inline `style=""` attributes, inline `<script>` tags and CDN resources are **not allowed**. Keep all paths **relative**.
 
-<br>
+### Developer Tools
 
-## 🧰 Tools
+Run from the project root: `python3 tools/<script>.py docs`
 
-Helper scripts `tools/` mein hain. Chalane ka tareeqa (project root se):
-
-```bash
-python3 tools/<script>.py docs
-```
-
-| File | Kaam |
+| Script | Purpose |
 | :-- | :-- |
-| `make_favicons.py` | `tools/favicon-source/favicon.png` se saare favicon sizes banata hai *(Pillow chahiye)* |
-| `apply_author_meta.py` | `developer.json` se author meta aur JSON-LD (`sameAs` links) lagata hai |
-| `find_unused.py` | faltu files, CSS classes aur language keys dhoondta hai *(kuch delete nahi karta)* |
-| `developer.json` | developer ka naam aur links — `docs/js/config.js` ke `DEVELOPER` jaisa rakho |
+| `make_favicons.py` | Generates every favicon size from `tools/favicon-source/favicon.png` *(requires Pillow)* |
+| `apply_author_meta.py` | Applies author meta tags and JSON-LD `sameAs` links from `developer.json` |
+| `find_unused.py` | Reports unused files, CSS classes and language keys *(read-only, deletes nothing)* |
+| `developer.json` | Developer name and links. Keep in sync with `DEVELOPER` in `docs/js/config.js` |
 
 <br>
 
-## 🌍 Deploy (GitHub Pages)
+## Deployment
 
-1. Repo GitHub par push karo.
-2. **Settings → Pages** → Branch `main`, folder `/docs`.
-3. Site `https://<username>.github.io/<repo-name>/` par khulti hai.
+The site deploys to **GitHub Pages** straight from the `docs/` folder.
+
+1. Push the repository to GitHub.
+2. Go to **Settings → Pages** and select branch `main`, folder `/docs`.
+3. The site goes live at `https://<username>.github.io/<repo-name>/`.
 
 <details>
-<summary><b>🔁 Username ya repo ka naam badalna ho to</b></summary>
+<summary><b>Renaming the repository or username</b></summary>
 
 <br>
 
-Purane link ki jagah naya link in files mein badlo:
+Replace the old URL with the new one in:
 
 - `docs/*.html` — canonical, `og:url`, `og:image`, JSON-LD
 - `docs/sitemap.xml`
@@ -206,14 +201,14 @@ Purane link ki jagah naya link in files mein badlo:
 </details>
 
 <details>
-<summary><b>🌐 Custom domain lagani ho to</b></summary>
+<summary><b>Using a custom domain</b></summary>
 
 <br>
 
-`docs/CNAME` file banao aur usmein **sirf domain ki ek line** likho (`https://` ke baghair, koi khali line nahi).
+Create `docs/CNAME` containing **one line**: the domain only, with no `https://` and no blank lines.
 
 > [!CAUTION]
-> Agar custom domain nahi hai to `docs/CNAME` file rakhni hi nahi hai — khali `CNAME` file GitHub Pages ko tod sakti hai.
+> If you are not using a custom domain, do not keep a `docs/CNAME` file. An empty `CNAME` can break GitHub Pages.
 
 </details>
 
@@ -221,25 +216,30 @@ Purane link ki jagah naya link in files mein badlo:
 
 ---
 
-## 👤 Credits
+<br>
+
+## Credits
 
 <div align="center">
-<img src="docs/assets/.readme/05-credits-footer.png" alt="Designed and built by Aliyan Saleem — HTML, CSS, JavaScript, GitHub Pages. Plain code. No frameworks. No build step." width="100%">
+<img src="docs/assets/.readme/05-credits-footer.png" alt="Designed and built by Aliyan Saleem. HTML, CSS, JavaScript, GitHub Pages. Plain code. No frameworks. No build step." width="100%">
 
-<br><br>
+<br>
+<br>
 
-**Design & development — Aliyan Saleem**
+**Designed & developed by Aliyan Saleem**
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-111111?style=for-the-badge&logo=vercel&logoColor=39FF14)](https://portfolio-aliyan-saleem.vercel.app)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-111111?style=for-the-badge&logo=linkedin&logoColor=39FF14)](https://www.linkedin.com/in/aliyan-saleem-02a596378/)
-[![YouTube](https://img.shields.io/badge/YouTube-111111?style=for-the-badge&logo=youtube&logoColor=39FF14)](https://www.youtube.com/@apexmotive.official)
-[![Instagram](https://img.shields.io/badge/Instagram-111111?style=for-the-badge&logo=instagram&logoColor=39FF14)](https://www.instagram.com/creativestudi0.pk_/)
-[![GitHub](https://img.shields.io/badge/GitHub-111111?style=for-the-badge&logo=github&logoColor=39FF14)](https://github.com/BuildsByAliyan)
-
-<sub>**Fonts:** Inter · Space Grotesk · DM Mono — SIL Open Font License 1.1 · License texts: <code>docs/assets/fonts/licenses/</code></sub>
+[![Portfolio](https://img.shields.io/badge/Portfolio-0d0d0d?style=for-the-badge&logo=vercel&logoColor=39FF14)](https://portfolio-aliyan-saleem.vercel.app)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0d0d0d?style=for-the-badge&logo=linkedin&logoColor=39FF14)](https://www.linkedin.com/in/aliyan-saleem-02a596378/)
+[![YouTube](https://img.shields.io/badge/YouTube-0d0d0d?style=for-the-badge&logo=youtube&logoColor=39FF14)](https://www.youtube.com/@apexmotive.official)
+[![Instagram](https://img.shields.io/badge/Instagram-0d0d0d?style=for-the-badge&logo=instagram&logoColor=39FF14)](https://www.instagram.com/creativestudi0.pk_/)
+[![GitHub](https://img.shields.io/badge/GitHub-0d0d0d?style=for-the-badge&logo=github&logoColor=39FF14)](https://github.com/BuildsByAliyan)
 
 <br>
 
-### Masla batao, <ins>hisaab lo.</ins>
+<sub>Fonts: Inter, Space Grotesk and DM Mono, licensed under the SIL Open Font License 1.1.<br>License texts are in <code>docs/assets/fonts/licenses/</code>.</sub>
+
+<br>
+
+**Masla batao, hisaab lo.**
 
 </div>
