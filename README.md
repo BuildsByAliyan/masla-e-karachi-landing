@@ -39,7 +39,7 @@ Report a problem. Pin it on a public map. Hold the system accountable.
 
 <br>
 
-## Overview
+## OVERVIEW
 
 This repository contains the **official landing website** for Masla-e-Karachi: a clean, fast, framework-free introduction to the platform and its mission.
 
@@ -58,7 +58,7 @@ This repository contains the **official landing website** for Masla-e-Karachi: a
 
 <br>
 
-## The Problem / The Solution
+## THE PROBLEM / THE SOLUTION
 
 <div align="center">
 <img src="docs/assets/.readme/02-problem-solution.png" alt="The problem: open gutters, broken roads, uncollected garbage, fear of being exposed. The solution: report anonymously, public problem map, officer must respond, proof plus community check." width="100%">
@@ -70,7 +70,7 @@ Karachi's everyday problems are visible to everyone, yet most go unreported beca
 
 <br>
 
-## How It Works
+## HOW IT WORKS
 
 <div align="center">
 <img src="docs/assets/.readme/03-how-it-works.png" alt="How it works: four steps — Category, Location, Photo or Video, Details — followed by a secret tracking code." width="100%">
@@ -89,7 +89,7 @@ On submission, every report receives a **secret tracking code** (e.g. `MEK-8F3K-
 
 <br>
 
-## Built for Accountability
+## BUILT FOR ACCOUNTABILITY
 
 <div align="center">
 <img src="docs/assets/.readme/04-accountability.png" alt="Built for accountability: anonymous, public map, 7-day overdue flag, department ranking." width="100%">
@@ -113,7 +113,7 @@ On submission, every report receives a **secret tracking code** (e.g. `MEK-8F3K-
 
 <br>
 
-## Getting Started
+## GETTING STARTED
 
 Run the site locally with a single command from the project root:
 
@@ -123,7 +123,7 @@ python3 -m http.server 8000 -d docs
 
 Then open **http://localhost:8000** in your browser. There is nothing to install or build.
 
-### Project Structure
+### PROJECT STRUCTURE
 
 ```text
 masla-e-karachi-landing/
@@ -140,7 +140,7 @@ masla-e-karachi-landing/
 
 <br>
 
-## Customization
+## CUSTOMIZATION
 
 | To change | Edit |
 | :-- | :-- |
@@ -165,7 +165,7 @@ English text is already written inline in the HTML, and the JSON file keeps it i
 > [!IMPORTANT]
 > The site enforces a strict **Content-Security-Policy**. Inline `style=""` attributes, inline `<script>` tags and CDN resources are **not allowed**. Keep all paths **relative**.
 
-### Developer Tools
+### DEVELOPER TOOLS
 
 Run from the project root: `python3 tools/<script>.py docs`
 
@@ -178,7 +178,7 @@ Run from the project root: `python3 tools/<script>.py docs`
 
 <br>
 
-## Deployment
+## DEPLOYMENT
 
 The site deploys to **GitHub Pages** straight from the `docs/` folder.
 
@@ -218,7 +218,7 @@ Create `docs/CNAME` containing **one line**: the domain only, with no `https://`
 
 <br>
 
-## Credits
+## CREDITS
 
 <div align="center">
 <img src="docs/assets/.readme/05-credits-footer.png" alt="Designed and built by Aliyan Saleem. HTML, CSS, JavaScript, GitHub Pages. Plain code. No frameworks. No build step." width="100%">
